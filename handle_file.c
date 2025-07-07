@@ -12,7 +12,7 @@ bool	check_file_type(char *path)
 		if (ft_strcmp(&path[len - 4], ".cub") == 0)
 			return (true);
 	}
-	ft_printf_fd(2, "ERROR\nInvalid file format, expected .cub format\n");
+	ft_printf_fd(2, FILE_FORM);
 	return (false);
 }
 
@@ -25,12 +25,12 @@ bool    safe_open(char *path, int *fd)
     temp = 0;
     temp = open(path, O_RDONLY);
     if (temp < 0)
-        return (perror("ERROR\nOpen error"), false);
+        return (perror(FILE_OPEN), false);
     tn = read(temp, t, 1);
     if (tn == -1)
-        return (perror("ERROR\nRead error"), close(temp), false);
+        return (perror(FILE_READ), close(temp), false);
     if (tn == 0)
-        return (ft_printf_fd(2, "ERROR\nEmpty file as argument.\n"), close(temp), false);
+        return (ft_printf_fd(2, FILE_EMPTY), close(temp), false);
     close(temp);
     *fd = open(path, O_RDONLY);
     return (true);
@@ -49,7 +49,7 @@ char    **add_line(char *line, char **mat)
 		len = ft_matlen(mat);
 	r = malloc((len + 2) * sizeof(char *));
 	if (!r)
-		return (ft_printf_fd(2, "ERROR\nMalloc\n")
+		return (ft_printf_fd(2, E_ALLOC)
 				, ft_freemat((void **)mat, ft_matlen(mat)), NULL);
 	while (mat && mat[i])
 	{
