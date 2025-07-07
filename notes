@@ -3,15 +3,14 @@
                             PARSING
 -----------------------------------------------------------------
 
-ARGUMENTS:
-    -gli elemnti possono essere in qualsiasi ordine tranne per la mappa che è sempre l'ultima.
-    -ci devono essere tutti gli elemnti(NO, SO, EA, WE textures e colore pavimento e soffitto, F e C)
-    -gli elementi vanno scritti con questa sintassi: (numero indefinito di spazi)<type>(numero indefinto di spazi)<path al file>
-    -pavimento e soffitto: (numero indefinito di spazi)<type>(numero indefinto di spazi)<colore rgb (n,n,n)>
-    -infine salvare la mappa e parsing della mappa
-
 MAPPA:
     -6 caratteri: 1 muro, 0 libero, WSNE starting position e orientazione
     -mappa chiusa da muri
     -no linee vuote (\n)
     -spazi sono validi(quelli esterni danno la forma alla mappa, quelli interni sono muri)
+
+
+
+-----------------------------------------------------------------
+                        INIZIALIZZAZIONE
+-----------------------------------------------------------------
