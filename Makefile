@@ -17,7 +17,7 @@
 CC	  	= cc
 CFLAGS  = -Wall -Wextra -Werror -g
 NAME	= cub3D
-SRC	 	= main.c handle_file.c parsing_utils.c extract_elements.c extract_colors.c
+SRC	 	= main.c handle_file.c parsing_utils.c extract_elements.c extract_colors.c parse_map.c parse_map_utils.c
 HEADERS = cub3D.h
 OBJ_DIR = obj
 OBJ	 	= $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))

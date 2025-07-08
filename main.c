@@ -18,8 +18,12 @@ void	print_data(t_data *data)
 	ft_printf("| CEALING color is: %d |\n", data->c_clr);
 	ft_printf("-----------------------------\n");
 	for (int i = 0; i < ft_matlen(data->map); ++i)
-		ft_printf("%s", data->map[i]);
-	ft_printf("\n-----------------------------\n");
+		ft_printf("%s\n", data->map[i]);
+	ft_printf("-----------------------------\n");
+	ft_printf("| PX is: %d | PY is: %d | Facing: %c |\n", data->p_x, data->p_y, data->facing);
+	ft_printf("-----------------------------\n");
+	ft_printf("| Map H is: %d | Map W is: %d |\n", data->map_h, data->map_w);
+	ft_printf("-----------------------------\n");
 }
 
 bool    parsing(t_data *data, int ac, char **av)
@@ -30,15 +34,20 @@ bool    parsing(t_data *data, int ac, char **av)
     if (!data->file)
 		return (false);
     if (!get_data(data->file, data))
-	{
-		ft_freemat((void **)data->file, ft_matlen(data->file));
 		return (false);
-	}
-    // if (!parse_map(data->map))//parse della mappa
-    //     return (false);
+    if (!parse_map(data->map, data))
+		return (false);
 	print_data(data);
     return (true);
 }
+
+void	free_data(t_data *data)
+ {
+	if (data->file)
+		ft_freemat((void **)data->file, ft_matlen(data->file));
+	if (data->map)
+		ft_freemat((void **)data->map, ft_matlen(data->map));
+ }
 
 int main(int ac, char **av)
 {
@@ -46,8 +55,8 @@ int main(int ac, char **av)
 
     data = (t_data){0};
     if (!parsing(&data, ac, av))
-		return (1);
-	ft_freemat((void **)data.file, ft_matlen(data.file));
+		return (free_data(&data), 1);
+	free_data(&data);
 	return (0);
 }
 

@@ -14,6 +14,12 @@
 # define FILE_READ "ERROR\nRead error"
 # define FILE_EMPTY "ERROR\nEmpty file as argument.\n"
 # define FILE_FORM "ERROR\nInvalid file format, expected .cub format.\n"
+# define MAP_MSTART "ERROR\nMultiple starting positions.\n"
+# define MAP_INV "ERROR\nUnknown character in map.\n"
+# define MAP_EMPTY "ERROR\nEmpty line in map.\n"
+# define MAP_NULL "ERROR\nNo map found.\n"
+# define MAP_NSTART "ERROR\nNo starting position was set.\n"
+# define MAP_INC "ERROR\nMap is not incased.\n"
 
 typedef struct  s_parse
 {
@@ -29,6 +35,11 @@ typedef struct  s_parse
 typedef struct  s_data
 {
     char    **map;
+    int     map_w;
+    int     map_h;
+    char    facing;
+    int     p_x;
+    int     p_y;
     char    *n_path;
     char    *s_path;
     char    *e_path;
@@ -60,7 +71,19 @@ bool	get_data(char **file, t_data *data);
 // extract_colors.c
 bool	check_int(char **comp, int *r, int *g, int *b);
 bool	check_syntax(char *s);
-int	convert_color(char *s);
+int     convert_color(char *s);
 bool	extract_colors(t_parse *parse, t_data *data);
+
+// parse_map.c
+bool	parse_map(char **map, t_data *data);
+bool	incased(char **map, t_data *data);
+bool	check_characters(char **map, t_data *data);
+char	**normalize_map(char **map, t_data *data);
+
+// parse_map_utils.c
+bool	bool_fill(char **map, t_data *data, int y, int x);
+void	copy_row(char *r, char *s, int y, t_data *data);
+bool	invalid_char(char *s, t_data *data);
+bool	multiple_start(char c);
 
 #endif
