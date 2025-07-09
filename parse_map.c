@@ -60,6 +60,7 @@ bool	incased(char **map, t_data *data)
 	j = 0;
 	if (!bool_fill(map, data, data->p_y, data->p_x))
 		return (false);
+	clean_up(data);
 	while (map[i])
 	{
 		j = 0;

@@ -32,22 +32,51 @@ typedef struct  s_parse
     int     e_set;
 }           t_parse;
 
+// typedef struct  s_ray
+// {
+//     double  p_x;
+//     double  p_y;
+//     double  dir_x;
+//     double  dir_y;
+//     double  dir_len;
+//     double  cam_x;
+//     double  cam_y;
+//     double  cam_len;
+// }           t_ray;
+
+// typedef struct  s_txtr
+// {
+//     n_img;
+//     s_img;
+//     e_img;
+//     w_img;
+//     int f_clr;
+//     int c_clr;
+// }       t_txtr;
+
 typedef struct  s_data
 {
+    char    **file;
     char    **map;
     int     map_w;
     int     map_h;
-    char    facing;
-    int     p_x;
-    int     p_y;
-    char    *n_path;
-    char    *s_path;
-    char    *e_path;
-    char    *w_path;
-    int     f_clr;
-    int     c_clr;
-    char    **file;
+    // ptr display
+    // ptr window
+    // ptr w_img
+    // ptr txtr
+    // ptr ray
+    char    facing;//
+    int     p_x;//
+    int     p_y;//
+    char    *n_path;//
+    char    *s_path;//
+    char    *e_path;//
+    char    *w_path;//
+    int     f_clr;//
+    int     c_clr;//
 }           t_data;
+
+void	print_data(t_data *data);
 
 // handle_file.c
 char    **read_file(char *path);
@@ -85,5 +114,6 @@ bool	bool_fill(char **map, t_data *data, int y, int x);
 void	copy_row(char *r, char *s, int y, t_data *data);
 bool	invalid_char(char *s, t_data *data);
 bool	multiple_start(char c);
+void	clean_up(t_data *data);
 
 #endif

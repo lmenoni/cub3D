@@ -69,3 +69,23 @@ bool	bool_fill(char **map, t_data *data, int y, int x)
 			&& bool_fill(map, data, y, x + 1)
 			&& bool_fill(map, data, y, x - 1));
 }
+
+void	clean_up(t_data *data)
+{
+	int	i;
+	int j;
+
+	i = 0;
+	j = 0;
+	while (data->map[i])
+	{
+		j = 0;
+		while (data->map[i][j])
+		{
+			if (data->map[i][j] == '0')
+				data->map[i][j] = ' ';
+			j++;
+		}
+		i++;
+	}
+}
