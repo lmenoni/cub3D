@@ -1,5 +1,5 @@
 
-#include "cub3D.h"
+#include "../cub3D.h"
 
 char	**normalize_map(char **map, t_data *data)
 {

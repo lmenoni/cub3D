@@ -1,5 +1,5 @@
 
-#include "cub3D.h"
+#include "../cub3D.h"
 
 bool	check_int(char **comp, int *r, int *g, int *b)
 {
@@ -82,11 +82,11 @@ bool	extract_colors(t_parse *parse, t_data *data)
 	parse->c_clr = clean_value(&parse->c_clr[1]);
 	if (!parse->c_clr)
 		return (false);
-	data->f_clr = convert_color(parse->f_clr);
-	if (data->f_clr == -1)
+	data->txtr->f_clr = convert_color(parse->f_clr);
+	if (data->txtr->f_clr == -1)
 		return (false);
-	data->c_clr = convert_color(parse->c_clr);
-	if (data->c_clr == -1)
+	data->txtr->c_clr = convert_color(parse->c_clr);
+	if (data->txtr->c_clr == -1)
 		return (false);
 	return (true);
 }

@@ -1,5 +1,5 @@
 
-#include "cub3D.h"
+#include "../cub3D.h"
 
 bool	is_int(char *s)
 {

@@ -1,7 +1,7 @@
 
-#include "cub3D.h"
+#include "../cub3D.h"
 
-bool	check_file_type(char *path)
+bool	check_file_type(char *path, char *format)
 {
 	int	len;
 
@@ -9,10 +9,10 @@ bool	check_file_type(char *path)
 	len = ft_strlen(path);
 	if (len >= 4 )
 	{
-		if (ft_strcmp(&path[len - 4], ".cub") == 0)
+		if (ft_strcmp(&path[len - 4], format) == 0)
 			return (true);
 	}
-	ft_printf_fd(2, FILE_FORM);
+	ft_printf_fd(2, FILE_FORM, format);
 	return (false);
 }
 
@@ -72,7 +72,7 @@ char    **read_file(char *path)
     fd = 0;
     r = NULL;
     line = NULL;
-	if (!check_file_type(path))
+	if (!check_file_type(path, ".cub"))
 		return (NULL);
     if (!safe_open(path, &fd))
         return (NULL);

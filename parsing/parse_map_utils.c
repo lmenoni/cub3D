@@ -1,5 +1,5 @@
 
-#include "cub3D.h"
+#include "../cub3D.h"
 
 bool	multiple_start(char c)
 {

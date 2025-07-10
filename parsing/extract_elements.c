@@ -1,5 +1,5 @@
 
-#include "cub3D.h"
+#include "../cub3D.h"
 
 bool	get_element(char *line, t_parse *parse, int nc)
 {
@@ -45,19 +45,19 @@ bool	parse_line(char *line, t_parse *parse, int line_n)
 	return (true);
 }
 
-bool	extract_paths(t_parse *parse, t_data *data)
+bool	extract_paths(t_parse *parse)
 {
-	data->n_path = clean_value(&parse->n_path[2]);
-	if (!data->n_path)
+	parse->n_path = clean_value(&parse->n_path[2]);
+	if (!parse->n_path)
 		return (false);
-	data->s_path = clean_value(&parse->s_path[2]);
-	if (!data->s_path)
+	parse->s_path = clean_value(&parse->s_path[2]);
+	if (!parse->s_path)
 		return (false);
-	data->e_path = clean_value(&parse->e_path[2]);
-	if (!data->e_path)
+	parse->e_path = clean_value(&parse->e_path[2]);
+	if (!parse->e_path)
 		return (false);
-	data->w_path = clean_value(&parse->w_path[2]);
-	if (!data->w_path)
+	parse->w_path = clean_value(&parse->w_path[2]);
+	if (!parse->w_path)
 		return (false);
 	return (true);
 }
@@ -65,36 +65,43 @@ bool	extract_paths(t_parse *parse, t_data *data)
 bool	extract_data(t_parse *parse, t_data *data)
 {
 	if (!all_set(parse))
+	{
+		data->map = NULL;
 		return (false);
-	if (!extract_paths(parse, data))
+	}
+	if (!extract_paths(parse))
+	{
+		data->map = NULL;
 		return (false);
+	}
 	if (!extract_colors(parse, data))
+	{
+		data->map = NULL;
 		return (false);
+	}
 	return (true);
 }
 
-bool	get_data(char **file, t_data *data)
+bool	get_data(char **file, t_data *data, t_parse *parse)
 {
-	t_parse	parse;
 	int		i;
 
-	parse = (t_parse){0};
 	i = 0;
 	while (file[i])
 	{
 		if (!is_empty(file[i]))
 		{
-			if (parse.e_set == 6)
+			if (parse->e_set == 6)
 			{
 				data->map = &file[i];
 				break ;
 			}
-			if (!parse_line(file[i], &parse, i))
+			if (!parse_line(file[i], parse, i))
 				return (false);
 		}
 		i++;
 	}
-	if (!extract_data(&parse, data))
+	if (!extract_data(parse, data))
 		return (false);
 	return (true);
 }
