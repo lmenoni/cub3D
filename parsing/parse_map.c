@@ -1,7 +1,7 @@
 
 #include "../cub3D.h"
 
-char	**normalize_map(char **map, t_data *data)
+char	**normalize_map(char **map, t_data *data, t_parse *parse)
 {
 	char	**r;
 	int		i;
@@ -21,7 +21,7 @@ char	**normalize_map(char **map, t_data *data)
 		}
 		r[i] = (char *)ft_memset((void *)r[i], '0', data->map_w);
 		r[i][data->map_w] = '\0';
-		copy_row(r[i], map[i], i, data);
+		copy_row(r[i], map[i], i, parse);
 		i++;
 	}
 	r[i] = NULL;
@@ -51,14 +51,14 @@ bool	check_characters(char **map, t_data *data)
 	return (true);
 }
 
-bool	incased(char **map, t_data *data)
+bool	incased(char **map, t_data *data, t_parse *parse)
 {
 	int	i;
 	int j;
 
 	i = 0;
 	j = 0;
-	if (!bool_fill(map, data, data->p_y, data->p_x))
+	if (!bool_fill(map, data, parse->p_y, parse->p_x))
 		return (false);
 	clean_up(data);
 	while (map[i])
@@ -75,16 +75,16 @@ bool	incased(char **map, t_data *data)
 	return (true);
 }
 
-bool	parse_map(char **map, t_data *data)
+bool	parse_map(char **map, t_data *data, t_parse *parse)
 {
 	if (!map)
 		return (ft_printf_fd(2, MAP_NULL), false);
 	if (!check_characters(map, data))
 		return (false);
-	data->map = normalize_map(map, data);
-	if (data->facing == '\0')
+	data->map = normalize_map(map, data, parse);
+	if (parse->facing == '\0')
 		return (ft_printf_fd(2, MAP_NSTART), false);
-	if (!incased(data->map, data))
+	if (!incased(data->map, data, parse))
 		return (ft_printf_fd(2, MAP_INC), false);
 	return (true);
 }

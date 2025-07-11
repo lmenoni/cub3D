@@ -23,33 +23,33 @@ extern struct s_col_name mlx_col_name[];
 
 
 
-char	*mlx_int_get_line(char *ptr,int *pos,int size)
+char	*mlx_int_get_line(char *ptr,int *p_pos,int size)
 {
   int	pos2;
   int	pos3;
   int	pos4;
 
-  if ((pos2 = mlx_int_str_str(ptr+*pos,"\"",size-*pos))==-1)
+  if ((pos2 = mlx_int_str_str(ptr+*p_pos,"\"",size-*p_pos))==-1)
     return ((char *)0);
-  if ((pos3 = mlx_int_str_str(ptr+*pos+pos2+1,"\"",size-*pos-pos2-1))==-1)
+  if ((pos3 = mlx_int_str_str(ptr+*p_pos+pos2+1,"\"",size-*p_pos-pos2-1))==-1)
     return ((char *)0);
-  *(ptr+*pos+pos2) = 0;
-  *(ptr+*pos+pos2+1+pos3) = 0;
-  pos4 = *pos+pos2+1;
-  *pos += pos2+pos3+2;
+  *(ptr+*p_pos+pos2) = 0;
+  *(ptr+*p_pos+pos2+1+pos3) = 0;
+  pos4 = *p_pos+pos2+1;
+  *p_pos += pos2+pos3+2;
   return (ptr+pos4);
 }
 
 
 
-char	*mlx_int_static_line(char **xpm_data,int *pos,int size)
+char	*mlx_int_static_line(char **xpm_data,int *p_pos,int size)
 {
   static char	*copy = 0;
   static int	len = 0;
   int		len2;
   char		*str;
 
-  str = xpm_data[(*pos)++];
+  str = xpm_data[(*p_pos)++];
   if ((len2 = strlen(str))>len)
     {
       if (copy)
@@ -109,7 +109,7 @@ int	mlx_int_xpm_set_pixel(t_img *img, char *data, int opp, int col, int x)
 
 void	*mlx_int_parse_xpm(t_xvar *xvar,void *info,int info_size,char *(*f)())
 {
-  int	pos;
+  int	p_pos;
   char	*line;
   char	**tab;
   char	*data;
@@ -137,8 +137,8 @@ void	*mlx_int_parse_xpm(t_xvar *xvar,void *info,int info_size,char *(*f)())
   colors_direct = 0;
   img = 0;
   tab = 0;
-  pos = 0;
-  if (!(line = f(info,&pos,info_size)) ||
+  p_pos = 0;
+  if (!(line = f(info,&p_pos,info_size)) ||
       !(tab = mlx_int_str_to_wordtab(line)) || !(width = atoi(tab[0])) ||
       !(height = atoi(tab[1])) || !(nc = atoi(tab[2])) ||
       !(cpp = atoi(tab[3])) )
@@ -162,7 +162,7 @@ void	*mlx_int_parse_xpm(t_xvar *xvar,void *info,int info_size,char *(*f)())
   i = nc;
   while (i--)
     {
-      if (!(line = f(info,&pos,info_size)) ||
+      if (!(line = f(info,&p_pos,info_size)) ||
 	  !(tab = mlx_int_str_to_wordtab(line+cpp)) )
 	RETURN;
       j = 0;
@@ -200,7 +200,7 @@ void	*mlx_int_parse_xpm(t_xvar *xvar,void *info,int info_size,char *(*f)())
   data = img->data;
   while (i--)
     {
-      if (!(line = f(info,&pos,info_size)))
+      if (!(line = f(info,&p_pos,info_size)))
 	RETURN;
       x = 0;
       while (x<width)

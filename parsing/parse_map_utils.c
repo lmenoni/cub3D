@@ -37,7 +37,7 @@ bool	invalid_char(char *s, t_data *data)
 	return (false);
 }
 
-void	copy_row(char *r, char *s, int y, t_data *data)
+void	copy_row(char *r, char *s, int y, t_parse *parse)
 {
 	int	i;
 
@@ -46,9 +46,9 @@ void	copy_row(char *r, char *s, int y, t_data *data)
 	{
 		if (ft_strchr("NSEW", s[i]))
 		{
-			data->facing = s[i];
-			data->p_x = i;
-			data->p_y = y;
+			parse->facing = s[i];
+			parse->p_x = i + 0.5;
+			parse->p_y = y + 0.5;
 			r[i] = '0';
 		}
 		else if (!is_space(s[i]))

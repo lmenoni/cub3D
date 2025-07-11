@@ -34,13 +34,13 @@ double rayDirY = dirY + planeY * cameraX;
 * `rayDir`: direzione del singolo raggio, ottenuta **spostandosi lateralmente nel piano** visivo
 
 📌 **Visualizzazione**:
-Immagina un triangolo. `dir` è il lato centrale, `plane` è la base del campo visivo. Per ogni `x`, crei un `rayDir` inclinato, così:
+Immagina un triangolo. `p_dir` è il lato centrale, `plane` è la base del campo visivo. Per ogni `x`, crei un `rayDir` inclinato, così:
 
 ```
           \
            \ rayDir
             \
-dir ---> *----->  (giocatore)
+p_dir ---> *----->  (giocatore)
             /
            / rayDir
 ```
@@ -203,7 +203,7 @@ planeY = oldPlaneX * sin(rotSpeed) + planeY * cos(rotSpeed);
 
 | Passaggio        | Formula principale                         | Spiegazione                        |
 | ---------------- | ------------------------------------------ | ---------------------------------- |
-| Direzione raggio | `rayDir = dir + plane * cameraX`           | Proietta il raggio sulla colonna x |
+| Direzione raggio | `rayDir = p_dir + plane * cameraX`           | Proietta il raggio sulla colonna x |
 | Distanza X       | `deltaDistX = fabs(1 / rayDirX)`           | Quanto dista la prossima linea X   |
 | DDA Loop         | `sideDist += deltaDist`                    | Avanza fino al muro                |
 | Distanza muro    | `perpWallDist = ...`                       | Distanza vera al muro              |
@@ -309,13 +309,13 @@ Per ogni colonna x:
 > Cosa fa: legge i tasti (WASD, ← →) e aggiorna la posizione e la direzione del player
 
 * Muoversi in avanti/indietro: aggiorni `posX` e `posY` in direzione `dirX`, `dirY`
-* Ruotare: aggiorni `dir` e `plane` usando una matrice di rotazione
+* Ruotare: aggiorni `p_dir` e `plane` usando una matrice di rotazione
 
 🎯 Mentalmente:
 
 ```
-if (W) pos += dir * moveSpeed
-if (S) pos -= dir * moveSpeed
+if (W) p_pos += p_dir * moveSpeed
+if (S) p_pos -= p_dir * moveSpeed
 if (←) ruota a sinistra
 if (→) ruota a destra
 ```
@@ -390,8 +390,8 @@ Costruire una **base di progetto ordinata** per `cub3D`, con:
 
 Contiene tutto ciò che serve al **giocatore**:
 
-* `pos`: posizione attuale
-* `dir`: direzione in cui guarda
+* `p_pos`: posizione attuale
+* `p_dir`: direzione in cui guarda
 * `plane`: camera plane (per campo visivo)
 * `move_speed`, `rot_speed`: velocità
 
@@ -560,8 +560,8 @@ Per restare dentro i limiti della Norme 42 (max 5 funzioni/file, 25 righe max pe
 
 | Variabile    | Tipo       | Utilità                                     |
 | ------------ | ---------- | ------------------------------------------- |
-| `pos`        | `t_vector` | Posizione attuale del giocatore sulla mappa |
-| `dir`        | `t_vector` | Direzione in cui guarda                     |
+| `p_pos`        | `t_vector` | Posizione attuale del giocatore sulla mappa |
+| `p_dir`        | `t_vector` | Direzione in cui guarda                     |
 | `plane`      | `t_vector` | Piano per il campo visivo (FOV)             |
 | `move_speed` | `double`   | Velocità di movimento                       |
 | `rot_speed`  | `double`   | Velocità di rotazione (← →)                 |
@@ -678,7 +678,7 @@ Per restare dentro i limiti della Norme 42 (max 5 funzioni/file, 25 righe max pe
 | `delta_dist.x/y`             | Distanza fra linee di griglia → può essere frazionaria         |
 | `side_dist.x/y`              | Distanza percorsa per colpire un bordo → decimale              |
 | `perp_wall_dist`             | Distanza finale al muro → deve essere precisa per il rendering |
-| `player.pos`, `dir`, `plane` | Posizioni e vettori in uno spazio continuo 2D                  |
+| `player.p_pos`, `p_dir`, `plane` | Posizioni e vettori in uno spazio continuo 2D                  |
 
 ---
 
@@ -701,4 +701,120 @@ Quindi:
 * `map_x/y`: **int**
 * `delta_dist`, `side_dist`, `perp_wall_dist`: **double**
 
-Se vuoi ti posso preparare uno schema strutturato solo delle variabili della `t_ray` suddiviso per tipo e funzione. Fammi sapere!
+---
+
+Questa è una delle **parti più importanti** e sottovalutate del parsing nel progetto `cub3D`. Serve a determinare:
+
+* **dove** inizia il giocatore nella mappa (`player.p_pos`)
+* **in che direzione guarda** (`player.p_dir`)
+* **come costruire il campo visivo** per il raycasting (`player.plane`)
+
+---
+
+## 🎯 Scopo:
+
+Quando nel file `.cub` leggi un carattere `N`, `S`, `E` o `W`, stai trovando la **posizione iniziale** e **l'orientamento** del giocatore.
+
+---
+
+## 📌 Esempio di mappa
+
+```txt
+111111
+100001
+10N001
+111111
+```
+
+* Qui il giocatore è nella cella `[2][2]` (righe e colonne si contano da 0)
+* Il carattere `N` indica che guarda a **Nord**, cioè **in direzione (0, -1)**
+
+---
+
+## 📍 1. **player.p_pos**
+
+> È la **posizione precisa** del giocatore nello spazio 2D
+
+Anche se la mappa è una griglia discreta (`int`), noi usiamo `double` per gestire bene i movimenti continui nel raycasting.
+
+🔧 Quindi:
+
+```c
+player.p_pos.x = colonna + 0.5;
+player.p_pos.y = riga + 0.5;
+```
+
+* Aggiungi `0.5` per posizionare il player **al centro della cella**, non sul bordo.
+
+---
+
+## 🧭 2. **player.p_dir**
+
+> È il **vettore direzionale**: dice **dove sta guardando** il giocatore.
+
+### Conversione dei caratteri:
+
+| Carattere | Direzione           | `player.p_dir.x` | `player.p_dir.y` |
+| --------- | ------------------- | -------------- | -------------- |
+| `N`       | Nord (↑ su schermo) | 0.0            | -1.0           |
+| `S`       | Sud (↓)             | 0.0            | +1.0           |
+| `E`       | Est (→)             | +1.0           | 0.0            |
+| `W`       | Ovest (←)           | -1.0           | 0.0            |
+
+> Questi sono **vettori unitari**, cioè lunghi 1
+
+---
+
+## 🖼 3. **player.plane**
+
+> È il **vettore perpendicolare a `p_dir`**, che serve a costruire il **campo visivo** (FOV)
+> La sua **lunghezza controlla l’ampiezza del FOV** — di solito `0.66` per ≈ 66° di FOV
+
+### Come calcolarlo?
+
+Serve trovare il **vettore ortogonale a `p_dir`**, ruotato di 90°:
+
+| `player.p_dir`          | `player.plane` (perpendicolare) |
+| --------------------- | ------------------------------- |
+| ( 0.0, -1.0 ) → Nord  | ( +0.66, 0.0 )                  |
+| ( 0.0, +1.0 ) → Sud   | ( -0.66, 0.0 )                  |
+| ( +1.0, 0.0 ) → Est   | ( 0.0, +0.66 )                  |
+| ( -1.0, 0.0 ) → Ovest | ( 0.0, -0.66 )                  |
+
+📌 Formula:
+Se `p_dir = (dx, dy)`, allora
+→ `plane = (-dy * FOV, dx * FOV)`
+
+✔️ Questo ti garantisce che `p_dir` e `plane` siano **ortogonali**
+✔️ Serve per generare i `rayDir` come:
+
+```c
+rayDir = p_dir + plane * cameraX;
+```
+
+---
+
+## 🔄 Riepilogo
+
+Quando nel parsing trovi `N`, `S`, `E` o `W`:
+
+1. Memorizza la **posizione del giocatore** come centro della cella → `player.p_pos = (col + 0.5, row + 0.5)`
+2. Assegna il **vettore di direzione** (`player.p_dir`) in base al carattere
+3. Calcola il **camera plane** perpendicolare a `p_dir`, con lunghezza ≈ 0.66
+
+---
+
+## 📌 Esempio finale (Nord)
+
+```
+Mappa:
+[2][3] = 'N'
+
+player.p_pos   = (3.5, 2.5)
+player.p_dir   = (0.0, -1.0)
+player.plane = (+0.66, 0.0)
+```
+
+---
+
+Se vuoi, posso anche aiutarti a disegnare un diagramma vettoriale (immagine) per visualizzare `p_dir` e `plane` per ciascuna direzione. Vuoi che lo faccia?

@@ -6,7 +6,7 @@
 #    By: igilani <igilani@student.42firenze.it>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/03 15:09:24 by igilani           #+#    #+#              #
-#    Updated: 2025/07/10 17:04:45 by igilani          ###   ########.fr        #
+#    Updated: 2025/07/11 16:38:43 by igilani          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,13 +20,15 @@ NAME	= cub3D
 
 # Struttura sorgenti in diverse cartelle
 SRC_MAIN   = main.c
-SRC_PARSE  = parsing/extract_colors.c parsing/extract_elements.c parsing/handle_file.c parsing/parse_map.c parsing/parse_map_utils.c parsing/parsing_utils.c
+SRC_PARSE  = parsing/extract_colors.c parsing/extract_elements.c parsing/handle_file.c parsing/parse_map.c parsing/parse_map_utils.c parsing/parsing_utils.c parsing/init_data.c
+SRC_ENGINE = engine/engine.c
 # Per aggiungere altre cartelle:
 # SRC_RENDER = rendering/file1.c rendering/file2.c
 # SRC_LOGIC  = logic/file1.c logic/file2.c
 
 # Combinazione di tutti i sorgenti
 SRC	 = $(SRC_MAIN) $(SRC_PARSE)
+SRC += $(SRC_ENGINE)
 # Aggiungi qui altre cartelle quando necessario:
 # SRC += $(SRC_RENDER) $(SRC_LOGIC)
 
@@ -77,6 +79,7 @@ $(THA_LIB):
 
 # Crea VPATH per indicare a Make dove cercare i file sorgente
 VPATH = .:parsing
+VPATH += :engine
 # Per aggiungere altre cartelle al percorso di ricerca:
 # VPATH += :rendering:logic
 
