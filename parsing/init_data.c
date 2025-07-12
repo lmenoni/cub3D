@@ -50,58 +50,42 @@ void	get_dir_vector(char face, t_ray *ray)
 {
 	if (face == 'N')
 	{
-		ray->p_dir->x = 0;
-		ray->p_dir->y = -1;
-		ray->p_dir_ori->x = 0;
-		ray->p_dir_ori->y = -1;
+		ray->p_dir.x = 0;
+		ray->p_dir.y = -1;
 	}
 	else if (face == 'S')
 	{
-		ray->p_dir->x = 0;
-		ray->p_dir->y = 1;
-		ray->p_dir_ori->x = 0;
-		ray->p_dir_ori->y = 1;
+		ray->p_dir.x = 0;
+		ray->p_dir.y = 1;
 	}
 	else if (face == 'E')
 	{
-		ray->p_dir->x = 1;
-		ray->p_dir->y = 0;
-		ray->p_dir_ori->x = 1;
-		ray->p_dir_ori->y = 0;
+		ray->p_dir.x = 1;
+		ray->p_dir.y = 0;
 	}
 	else if (face == 'W')
 	{
-		ray->p_dir->x = -1;
-		ray->p_dir->y = 0;
-		ray->p_dir_ori->x = -1;
-		ray->p_dir_ori->y = 0;
+		ray->p_dir.x = -1;
+		ray->p_dir.y = 0;
 	}
 }
 
 bool	get_vector(t_parse *parse, t_ray *ray)
 {
-	ray->p_pos = malloc(1 * sizeof(t_vctr));
-	if (!ray->p_pos)
-		return (ft_printf_fd(2, E_ALLOC), false);
-	ray->p_pos_ori = malloc(1 * sizeof(t_vctr));
-	if (!ray->p_pos_ori)
-		return (ft_printf_fd(2, E_ALLOC), false);
-	ray->p_dir = malloc(1 * sizeof(t_vctr));
-	if (!ray->p_dir)
-		return (ft_printf_fd(2, E_ALLOC), false);
-	ray->p_dir_ori = malloc(1 * sizeof(t_vctr));
-	if (!ray->p_dir_ori)
-		return (ft_printf_fd(2, E_ALLOC), false);
-	ray->plane = malloc(1 * sizeof(t_vctr));
-	if (!ray->plane)
-		return (ft_printf_fd(2, E_ALLOC), false);
-	ray->p_pos->x = parse->p_x;
-	ray->p_pos_ori->x = parse->p_x;
-	ray->p_pos->y = parse->p_y;
-	ray->p_pos_ori->y = parse->p_y;
+	ray->p_pos = (t_vctr){0};
+	ray->p_dir = (t_vctr){0};
+	ray->plane = (t_vctr){0};
+	ray->p_pos_ori = (t_vctr){0};
+	ray->p_dir_ori = (t_vctr){0};
+	ray->p_pos.x = parse->p_x;
+	ray->p_pos.y = parse->p_y;
 	get_dir_vector(parse->facing, ray);
-	ray->plane->x = -ray->p_dir->y * 0.66;
-	ray->plane->y = ray->p_dir->x * 0.66;
+	ray->plane.x = -ray->p_dir.y * 0.66;
+	ray->plane.y = ray->p_dir.x * 0.66;
+	ray->p_pos_ori.x = parse->p_x;
+	ray->p_pos_ori.y = parse->p_y;
+	ray->p_dir_ori.x = ray->p_dir.x;
+	ray->p_dir_ori.y = ray->p_dir.y;
 	ray->move_speed = 0.05;
 	return (true);
 }
