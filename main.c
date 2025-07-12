@@ -91,82 +91,6 @@ void	free_data(t_data *data)
 	free(data->xdis);
 }
 
-void	move_forward(t_data *data)
-{
-	data->ray->p_pos.x += data->ray->p_dir.x * data->ray->move_speed;
-	data->ray->p_pos.y += data->ray->p_dir.y * data->ray->move_speed;
-}
-
-void	move_backward(t_data *data)
-{
-	data->ray->p_pos.x -= data->ray->p_dir.x * data->ray->move_speed;
-	data->ray->p_pos.y -= data->ray->p_dir.y * data->ray->move_speed;
-}
-
-void	move_left(t_data *data)
-{
-	data->ray->p_pos.x -= data->ray->plane.x * data->ray->move_speed;
-	data->ray->p_pos.y -= data->ray->plane.y * data->ray->move_speed;
-}
-
-void	move_right(t_data *data)
-{
-	data->ray->p_pos.x += data->ray->plane.x * data->ray->move_speed;
-	data->ray->p_pos.y += data->ray->plane.y * data->ray->move_speed;
-}
-
-int	handle_keys(int keycode, t_data *data)
-{
-	double rotSpeed = 0.05;
-	if (keycode == 65307)
-	{
-		free_data(data);
-		exit(0);
-	}
-	if (keycode == 119)
-		move_forward(data);
-	if (keycode == 115)
-		move_backward(data);
-	if (keycode == 97)
-		move_left(data);
-	if (keycode == 100)
-		move_right(data);
-	if (keycode == 61)
-		data->ray->move_speed += 0.05;
-	if (keycode == 45 && data->ray->move_speed > 0.05)
-		data->ray->move_speed -= 0.05;
-	if (keycode == 114)
-	{
-		data->ray->p_pos.x = data->ray->p_pos_ori.x;
-		data->ray->p_pos.y = data->ray->p_pos_ori.y;
-		data->ray->p_dir.x = data->ray->p_dir_ori.x;
-		data->ray->p_dir.y = data->ray->p_dir_ori.y;
-	}
-	if (keycode == 65361)
-	{
-		double old_dir_x = data->ray->p_dir.x;
-		data->ray->p_dir.x = data->ray->p_dir.x * cos(-rotSpeed) - data->ray->p_dir.y * sin(-rotSpeed);
-		data->ray->p_dir.y = old_dir_x * sin(-rotSpeed) + data->ray->p_dir.y * cos(-rotSpeed);
-
-		double old_plane_x = data->ray->plane.x;
-		data->ray->plane.x = data->ray->plane.x * cos(-rotSpeed) - data->ray->plane.y * sin(-rotSpeed);
-		data->ray->plane.y = old_plane_x * sin(-rotSpeed) + data->ray->plane.y * cos(-rotSpeed);
-	}
-
-	// Rotazione a sinistra (←)
-	if (keycode == 65363)
-	{
-		double old_dir_x = data->ray->p_dir.x;
-		data->ray->p_dir.x = data->ray->p_dir.x * cos(rotSpeed) - data->ray->p_dir.y * sin(rotSpeed);
-		data->ray->p_dir.y = old_dir_x * sin(rotSpeed) + data->ray->p_dir.y * cos(rotSpeed);
-
-		double old_plane_x = data->ray->plane.x;
-		data->ray->plane.x = data->ray->plane.x * cos(rotSpeed) - data->ray->plane.y * sin(rotSpeed);
-		data->ray->plane.y = old_plane_x * sin(rotSpeed) + data->ray->plane.y * cos(rotSpeed);
-	}
-	return (0);
-}
-
 int main(int ac, char **av)
 {
     t_data  data;
@@ -182,9 +106,7 @@ int main(int ac, char **av)
     if (!parsing(&data, ac, av))
 		return (free_data(&data), 1);
 	mlx_hook(data.xwin, 2, 1L<<0, handle_keys, &data);
-	// mlx_key_hook(data.xwin, handle_keys, &data);
 	mlx_loop_hook(data.xdis, engine_render, &data);
 	mlx_loop(data.xdis);
-	// free_data(&data);
 	return (0);
 }

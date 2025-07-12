@@ -9,6 +9,7 @@
 
 # define W_W 1280
 # define W_H 768
+# define ROT_SPEED 0.05
 
 # define E_ARG "ERROR\nInvalid n of arguments.\n"
 # define E_ALLOC "ERROR\nMalloc.\n"
@@ -169,6 +170,7 @@ typedef struct  s_data
 }           t_data;
 
 void	print_data(t_data *data, t_parse *parse);
+void	free_data(t_data *data);
 
 // handle_file.c
 char    **read_file(char *path);
@@ -225,5 +227,11 @@ bool	render_outside(t_data *data, t_ray *ray, int *rendered);
 void	take_step(t_ray *ray);
 void	prepare_ray(t_ray *ray, int x);
 void	prepare_steps(t_ray *ray);
+
+// handle_keys.c
+int		handle_keys(int keycode, t_data *data);
+void	reset(t_ray *ray);
+void	key_rotate(t_ray *ray, double rot);
+void	move(t_ray *ray, int keycode);
 
 #endif

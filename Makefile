@@ -21,7 +21,7 @@ NAME	= cub3D
 # Struttura sorgenti in diverse cartelle
 SRC_MAIN   = main.c
 SRC_PARSE  = parsing/extract_colors.c parsing/extract_elements.c parsing/handle_file.c parsing/parse_map.c parsing/parse_map_utils.c parsing/parsing_utils.c parsing/init_data.c
-SRC_ENGINE = engine/engine.c engine/dda.c
+SRC_ENGINE = engine/engine.c engine/dda.c engine/handle_keys.c
 # Per aggiungere altre cartelle:
 # SRC_RENDER = rendering/file1.c rendering/file2.c
 # SRC_LOGIC  = logic/file1.c logic/file2.c
