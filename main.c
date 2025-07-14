@@ -22,6 +22,25 @@ void	print_data(t_data *data, t_parse *parse)
 	ft_printf("-----------------------------\n");
 }
 
+int	engine(t_data *data)
+{
+	int x;
+
+	x = 0;
+	check_for_movement(data);
+	set_background(data);
+	while (x < W_W)
+	{
+		prepare_ray(data->ray, x);
+		perform_dda(data, data->ray);
+		compute_projection(data);
+		draw_wall_column(data, x);
+		x++;
+	}
+	mlx_put_image_to_window(data->xdis, data->xwin, data->ximg->ptr, 0, 0);
+	return (0);
+}
+
 bool    parsing(t_data *data, int ac, char **av)
 {
 	t_parse	parse;
@@ -49,54 +68,6 @@ bool    parsing(t_data *data, int ac, char **av)
     return (true);
 }
 
-void	free_images(t_data *data)
-{
-	if (data->ximg)
-	{
-		mlx_destroy_image(data->xdis, data->ximg->ptr);
-		free(data->ximg);
-	}
-	if (data->txtr->n_img)
-	{
-		mlx_destroy_image(data->xdis, data->txtr->n_img->ptr);
-		free(data->txtr->n_img);
-	}
-	if (data->txtr->s_img)
-	{
-		mlx_destroy_image(data->xdis, data->txtr->s_img->ptr);
-		free(data->txtr->s_img);
-	}
-	if (data->txtr->e_img)
-	{
-		mlx_destroy_image(data->xdis, data->txtr->e_img->ptr);
-		free(data->txtr->e_img);
-	}
-	if (data->txtr->w_img)
-	{
-		mlx_destroy_image(data->xdis, data->txtr->w_img->ptr);
-		free(data->txtr->w_img);
-	}
-}
-
-void	free_data(t_data *data)
-{
-	if (data->file)
-		ft_freemat((void **)data->file, ft_matlen(data->file));
-	if (data->map)
-		ft_freemat((void **)data->map, ft_matlen(data->map));
-	if (data->xwin)
-		mlx_destroy_window(data->xdis, data->xwin);
-	free_images(data);
-	mlx_destroy_display(data->xdis);
-	free(data->xdis);
-}
-
-int	close_window(t_data *data)
-{
-	free_data(data);
-	exit(0);
-}
-
 int main(int ac, char **av)
 {
     t_data  data;
@@ -111,9 +82,10 @@ int main(int ac, char **av)
 	data.xdis = mlx_init();
     if (!parsing(&data, ac, av))
 		return (free_data(&data), 1);
-	mlx_hook(data.xwin, 2, 1L<<0, handle_keys, &data);
+	mlx_hook(data.xwin, 2, 1L<<0, handle_key_press, &data);
+	mlx_hook(data.xwin, 3, 1L<<1, handle_key_release, &data);
 	mlx_hook(data.xwin, 17, 1L << 2, close_window, &data);
-	mlx_loop_hook(data.xdis, engine_render, &data);
+	mlx_loop_hook(data.xdis, engine, &data);
 	mlx_loop(data.xdis);
 	return (0);
 }

@@ -1,9 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   extract_elements.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lmenoni <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/14 17:17:04 by lmenoni           #+#    #+#             */
+/*   Updated: 2025/07/14 17:17:06 by lmenoni          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../cub3D.h"
 
 bool	get_element(char *line, t_parse *parse, int nc)
 {
-	char *temp;
+	char	*temp;
 
 	temp = ft_strdup(line);
 	if (!temp)
@@ -31,7 +42,7 @@ bool	get_element(char *line, t_parse *parse, int nc)
 bool	parse_line(char *line, t_parse *parse, int line_n)
 {
 	int	i;
-	int j;
+	int	j;
 
 	i = 0;
 	j = 0;

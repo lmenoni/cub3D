@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   extract_colors.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lmenoni <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/14 17:18:52 by lmenoni           #+#    #+#             */
+/*   Updated: 2025/07/14 17:18:53 by lmenoni          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../cub3D.h"
 
@@ -19,14 +30,14 @@ bool	check_int(char **comp, int *r, int *g, int *b)
 	*b = ft_atoi(comp[2]);
 	if (*r < 0 || *r > 255
 		|| *g < 0 || *g > 255
-		|| *b < 0 || *b > 255 )
+		|| *b < 0 || *b > 255)
 		return (false);
 	return (true);
 }
 
 bool	check_syntax(char *s)
 {
-	int	i;
+	int		i;
 	bool	comma;
 
 	i = 0;
@@ -52,9 +63,9 @@ bool	check_syntax(char *s)
 
 int	convert_color(char *s)
 {
-	int	r;
-	int	g;
-	int	b;
+	int		r;
+	int		g;
+	int		b;
 	char	**cmpnts;
 
 	r = 0;

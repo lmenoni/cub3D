@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing_utils.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lmenoni <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/14 17:19:26 by lmenoni           #+#    #+#             */
+/*   Updated: 2025/07/14 17:19:27 by lmenoni          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../cub3D.h"
 
@@ -16,7 +27,7 @@ bool	is_int(char *s)
 
 bool	is_empty(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	skip_spaces(str, &i);
@@ -27,8 +38,8 @@ bool	is_empty(char *str)
 
 char	*clean_value(char	*line)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
 	char	*r;
 
 	i = 0;

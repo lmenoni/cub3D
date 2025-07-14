@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_map.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lmenoni <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/14 17:18:25 by lmenoni           #+#    #+#             */
+/*   Updated: 2025/07/14 17:18:27 by lmenoni          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../cub3D.h"
 
@@ -30,7 +41,7 @@ char	**normalize_map(char **map, t_data *data, t_parse *parse)
 
 bool	check_characters(char **map, t_data *data)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (map[i])
@@ -54,7 +65,7 @@ bool	check_characters(char **map, t_data *data)
 bool	incased(char **map, t_data *data, t_parse *parse)
 {
 	int	i;
-	int j;
+	int	j;
 
 	i = 0;
 	j = 0;

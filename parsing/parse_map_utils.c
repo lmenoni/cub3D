@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_map_utils.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lmenoni <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/14 17:18:09 by lmenoni           #+#    #+#             */
+/*   Updated: 2025/07/14 17:18:11 by lmenoni          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../cub3D.h"
 
@@ -59,21 +70,21 @@ void	copy_row(char *r, char *s, int y, t_parse *parse)
 
 bool	bool_fill(char **map, t_data *data, int y, int x)
 {
-    if (y < 0 || y >= data->map_h || x < 0 || x >= data->map_w)
-        return false;
-    if (map[y][x] != '0')
-        return true;
-    map[y][x] = 'V';
-    return (bool_fill(map, data, y + 1, x)
-			&& bool_fill(map, data, y - 1, x)
-			&& bool_fill(map, data, y, x + 1)
-			&& bool_fill(map, data, y, x - 1));
+	if (y < 0 || y >= data->map_h || x < 0 || x >= data->map_w)
+		return (false);
+	if (map[y][x] != '0')
+		return (true);
+	map[y][x] = 'V';
+	return (bool_fill(map, data, y + 1, x)
+		&& bool_fill(map, data, y - 1, x)
+		&& bool_fill(map, data, y, x + 1)
+		&& bool_fill(map, data, y, x - 1));
 }
 
 void	clean_up(t_data *data)
 {
 	int	i;
-	int j;
+	int	j;
 
 	i = 0;
 	j = 0;
