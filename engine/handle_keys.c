@@ -48,10 +48,7 @@ void	reset(t_ray *ray)
 int	handle_keys(int keycode, t_data *data)
 {
 	if (keycode == 65307)
-	{
-		free_data(data);
-		exit(0);
-	}
+		close_window(data);
 	if (keycode == 119 || keycode == 115
 		|| keycode == 97 || keycode == 100)
 		move(data->ray, keycode);

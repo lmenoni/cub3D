@@ -9,7 +9,7 @@
 
 # define W_W 1280
 # define W_H 768
-# define ROT_SPEED 0.05
+# define ROT_SPEED 0.09
 
 # define E_ARG "ERROR\nInvalid n of arguments.\n"
 # define E_ALLOC "ERROR\nMalloc.\n"
@@ -133,6 +133,7 @@ typedef struct  s_ray
 	int     	side; // Indica se il raggio ha colpito un muro verticale
 	int	 		draw_start; // Inizio della linea da disegnare
 	int	 		draw_end; // Fine della linea da disegnare
+	int			draw_len;
 }         t_ray;
 
 typedef struct  s_oimg
@@ -171,6 +172,7 @@ typedef struct  s_data
 
 void	print_data(t_data *data, t_parse *parse);
 void	free_data(t_data *data);
+int		close_window(t_data *data);
 
 // handle_file.c
 char    **read_file(char *path);

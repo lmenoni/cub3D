@@ -91,6 +91,12 @@ void	free_data(t_data *data)
 	free(data->xdis);
 }
 
+int	close_window(t_data *data)
+{
+	free_data(data);
+	exit(0);
+}
+
 int main(int ac, char **av)
 {
     t_data  data;
@@ -106,6 +112,7 @@ int main(int ac, char **av)
     if (!parsing(&data, ac, av))
 		return (free_data(&data), 1);
 	mlx_hook(data.xwin, 2, 1L<<0, handle_keys, &data);
+	mlx_hook(data.xwin, 17, 1L << 2, close_window, &data);
 	mlx_loop_hook(data.xdis, engine_render, &data);
 	mlx_loop(data.xdis);
 	return (0);
