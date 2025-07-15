@@ -100,7 +100,7 @@ bool	get_vector(t_parse *parse, t_ray *ray)
 	ray->p_dir_ori.y = ray->p_dir.y;
 	ray->plane_ori.x = ray->plane.x;
 	ray->plane_ori.y = ray->plane.y;
-	ray->move_speed = 0.05;
+	ray->move_speed = 0.01;
 	return (true);
 }
 

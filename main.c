@@ -31,6 +31,7 @@ int	engine(t_data *data)
 	set_background(data);
 	while (x < W_W)
 	{
+		// check_for_movement(data);
 		prepare_ray(data->ray, x);
 		perform_dda(data, data->ray);
 		compute_projection(data);
