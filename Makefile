@@ -6,7 +6,7 @@
 #    By: igilani <igilani@student.42firenze.it>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/03 15:09:24 by igilani           #+#    #+#              #
-#    Updated: 2025/07/11 16:38:43 by igilani          ###   ########.fr        #
+#    Updated: 2025/07/15 15:53:57 by igilani          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,8 +14,8 @@
 .DEFAULT_GOAL := silent
 
 # Configurazioni principali
-CC	  = cc
-CFLAGS  = -Wall -Wextra -Werror -g -fPIE -O3
+CC	  = clang
+CFLAGS  = -Wall -Wextra -Werror -fPIE -ofast -march=native 
 NAME	= cub3D
 
 # Struttura sorgenti in diverse cartelle

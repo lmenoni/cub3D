@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmenoni <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: igilani <igilani@student.42firenze.it>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 17:30:55 by lmenoni           #+#    #+#             */
-/*   Updated: 2025/07/14 17:30:56 by lmenoni          ###   ########.fr       */
+/*   Updated: 2025/07/15 15:26:12 by igilani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,11 @@ int	get_texture_x_coordinate(t_draw *temp, t_data *data)
 void	drawing_loop(t_draw *temp, t_data *data, int x)
 {
 	int	y;
+	int	offset = 0;
 
 	y = 0;
 	y = data->ray->draw_start;
+	
 	while (y < data->ray->draw_end)
 	{
 		temp->tex_y = (int)temp->tex_pos & (temp->texture->height - 1);
@@ -60,7 +62,9 @@ void	drawing_loop(t_draw *temp, t_data *data, int x)
 		temp->color = *(int *)(temp->texture->addr
 				+ temp->tex_y * temp->texture->l_l
 				+ temp->tex_x * (temp->texture->bpp / 8));
-		my_pixel_put(x, y, data, temp->color);
+		// my_pixel_put(x, y, data, temp->color);
+		offset = (y * data->ximg->l_l) + (x * (data->ximg->bpp / 8));
+	*((unsigned int *)(data->ximg->addr + offset)) = temp->color;
 		y++;
 	}
 }

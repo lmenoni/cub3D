@@ -22,19 +22,40 @@ void	print_data(t_data *data, t_parse *parse)
 	ft_printf("-----------------------------\n");
 }
 
+void	draw_remaining_background(t_data *data, int x)
+{
+	int y;
+	int offset;
+
+	y = 0;
+	while (y < data->ray->draw_start)
+	{
+		offset = (y * data->ximg->l_l) + (x * (data->ximg->bpp / 8));
+		*((unsigned int *)(data->ximg->addr + offset)) = data->txtr->c_clr;
+		y++;
+	}
+	y = data->ray->draw_end;
+	while (y < data->ximg->height)
+	{
+		offset = (y * data->ximg->l_l) + (x * (data->ximg->bpp / 8));
+		*((unsigned int *)(data->ximg->addr + offset)) = data->txtr->f_clr;
+		y++;
+	}
+}
+
 int	engine(t_data *data)
 {
 	int x;
 
 	x = 0;
 	check_for_movement(data);
-	set_background(data);
+	// set_background(data);
 	while (x < W_W)
 	{
-		// check_for_movement(data);
 		prepare_ray(data->ray, x);
 		perform_dda(data, data->ray);
 		compute_projection(data);
+		draw_remaining_background(data, x);
 		draw_wall_column(data, x);
 		x++;
 	}

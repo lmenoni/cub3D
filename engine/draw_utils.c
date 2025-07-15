@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmenoni <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: igilani <igilani@student.42firenze.it>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 17:31:22 by lmenoni           #+#    #+#             */
-/*   Updated: 2025/07/14 17:31:23 by lmenoni          ###   ########.fr       */
+/*   Updated: 2025/07/15 16:36:08 by igilani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,13 @@ void	my_pixel_put(int x, int y, t_data *data, int color)
 
 void	compute_projection(t_data *data)
 {
+	if (data->ray->perp_dist == 0)
+	{
+		data->ray->draw_len = data->ximg->height;
+		data->ray->draw_start = W_H / 2;
+		data->ray->draw_end = W_H / 2;
+		return ;
+	}
 	data->ray->draw_len = (int)(data->ximg->height / data->ray->perp_dist);
 	data->ray->draw_start = (-data->ray->draw_len / 2)
 		+ (data->ximg->height / 2);
@@ -36,6 +43,7 @@ void	set_background(t_data *data)
 {
 	int	x;
 	int	y;
+	int offset = 0;
 
 	y = 0;
 	while (y < data->ximg->height)
@@ -44,9 +52,17 @@ void	set_background(t_data *data)
 		while (x < data->ximg->width)
 		{
 			if (y < data->ximg->height / 2)
-				my_pixel_put(x, y, data, data->txtr->c_clr);
+			{
+					offset = (y * data->ximg->l_l) + (x * (data->ximg->bpp / 8));
+	*((unsigned int *)(data->ximg->addr + offset)) = data->txtr->c_clr;
+			}
+				// my_pixel_put(x, y, data, data->txtr->c_clr);
 			else if (y >= data->ximg->height / 2)
-				my_pixel_put(x, y, data, data->txtr->f_clr);
+			{
+					offset = (y * data->ximg->l_l) + (x * (data->ximg->bpp / 8));
+	*((unsigned int *)(data->ximg->addr + offset)) = data->txtr->f_clr;
+			}
+				// my_pixel_put(x, y, data, data->txtr->f_clr);
 			x++;
 		}
 		y++;

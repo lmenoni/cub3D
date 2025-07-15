@@ -45,8 +45,14 @@ void	prepare_ray(t_ray *ray, int x)
 	ray->ray_dir.y = ray->p_dir.y + ray->plane.y * ray->cam_len;
 	ray->map_x = (int)ray->p_pos.x;
 	ray->map_y = (int)ray->p_pos.y;
-	ray->delta_dist.x = fabs(1 / ray->ray_dir.x);
-	ray->delta_dist.y = fabs(1 / ray->ray_dir.y);
+	if (ray->ray_dir.x == 0)
+		ray->delta_dist.x = 1e30;
+	else
+		ray->delta_dist.x = fabs(1 / ray->ray_dir.x);
+	if (ray->ray_dir.y == 0)
+		ray->delta_dist.y = 1e30;
+	else
+   		ray->delta_dist.y = fabs(1 / ray->ray_dir.y);
 	prepare_steps(ray);
 }
 
@@ -96,7 +102,9 @@ void	perform_dda(t_data *data, t_ray *ray)
 		if (data->map[ray->map_y][ray->map_x] == '1')
 			hit = 1;
 	}
-	if (ray->side == 0)
+	if (ray->side == -1)
+		ray->perp_dist = 0;
+	else if (ray->side == 0)
 		ray->perp_dist = (ray->map_x - ray->p_pos.x
 				+ ((1 - ray->step_x) / 2)) / ray->ray_dir.x;
 	else

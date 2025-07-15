@@ -21,7 +21,7 @@
 
 # define W_W 1280
 # define W_H 768
-# define ROT_SPEED 0.005
+# define ROT_SPEED 0.05
 
 # define E_ARG "ERROR\nInvalid n of arguments.\n"
 # define E_ALLOC "ERROR\nMalloc.\n"
