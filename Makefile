@@ -14,8 +14,8 @@
 .DEFAULT_GOAL := silent
 
 # Configurazioni principali
-CC	  = clang
-CFLAGS  = -Wall -Wextra -Werror -fPIE -ofast -march=native 
+CC	  = cc
+CFLAGS  = -Wall -Wextra -Werror -fPIE -o3
 NAME	= cub3D
 
 # Struttura sorgenti in diverse cartelle
