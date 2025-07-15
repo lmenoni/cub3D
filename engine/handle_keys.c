@@ -36,9 +36,9 @@ int	handle_key_press(int keycode, t_data *data)
 		|| keycode == 97 || keycode == 100)
 		data->moving = keycode;
 	if (keycode == 61)
-		data->ray->move_speed += 0.05;
+		data->ray->move_speed += MOV_SPEED;
 	if (keycode == 45 && data->ray->move_speed > 0.05)
-		data->ray->move_speed -= 0.05;
+		data->ray->move_speed -= MOV_SPEED;
 	if (keycode == 114)
 		reset(data->ray);
 	if (keycode == 65361 || keycode == 65363)
