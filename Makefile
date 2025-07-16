@@ -26,12 +26,14 @@ SRC_BONUS = $(SRC_MAIN_BONUS) $(SRC_PARSE_BONUS) $(SRC_ENGINE_BONUS)
 
 HEADERS = cub3D.h
 OBJ_DIR = obj
+OBJ_BONUS_DIR = obj_bonus  # Aggiungi questa linea
+
 # Trasforma tutti i percorsi in nomi oggetto nella directory obj
 OBJ = $(SRC:.c=.o)
 OBJ := $(addprefix $(OBJ_DIR)/, $(OBJ))
 
 OBJ_BONUS = $(SRC_BONUS:.c=.o)
-OBJ_BONUS := $(addprefix $(OBJ_DIR)/, $(OBJ_BONUS))
+OBJ_BONUS := $(addprefix $(OBJ_BONUS_DIR)/, $(OBJ_BONUS))  # Usa directory separata
 LIB_DIR = my_libft
 MLX_DIR = minilibx-linux
 BUILD = 0
@@ -86,7 +88,7 @@ $(OBJ_DIR)/%.o: %.c $(HEADERS) | $(OBJ_DIR)
 		exit 1; \
 	}
 
-$(OBJ_BONUS_DIR)/%.o: %.c $(HEADERS) | $(OBJ_DIR)
+$(OBJ_BONUS_DIR)/%.o: %.c $(HEADERS) | $(OBJ_BONUS_DIR)  # Correggi qui
 	@mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) -c $< -o $@ || { \
 		echo "$(ERROR) Errore nella compilazione di $<$(RESET)"; \
@@ -98,11 +100,14 @@ bonus: $(MLX_LIB) $(THA_LIB) $(OBJ_BONUS)
 		echo "$(ERROR) Errore durante il linking finale per la versione bonus$(RESET)"; \
 		exit 1; \
 	}
-	@echo "$(BLUE)➜ Creazione eseguibile $(NAME)_bonus...$(RESET)"
-	@echo "$(GREEN)✔ Eseguibile $(NAME)_bonus generato$(RESET)"
+	@echo "$(BLUE)➜ Creazione eseguibile $(NAME) (versione bonus)...$(RESET)"
+	@echo "$(GREEN)✔ Eseguibile $(NAME) (bonus) generato$(RESET)"
 
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
+
+$(OBJ_BONUS_DIR):  # Aggiungi questo target
+	@mkdir -p $(OBJ_BONUS_DIR)
 
 $(NAME): $(OBJ) $(MLX_LIB) $(THA_LIB)
 	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(MLX_LIB) -L$(LIB_DIR) -l:$(notdir $(THA_LIB)) -lm -lX11 -lXext || { \
@@ -118,7 +123,7 @@ clean:
 	@echo "$(BLUE)➜ File oggetto da $(YELLOW)$(LIB_DIR)$(RESET) $(BLUE)rimossi$(RESET)"
 	@$(MAKE) -s -C $(MLX_DIR) clean > /dev/null 2>&1
 	@echo "$(BLUE)➜ File oggetto da $(YELLOW)$(MLX_DIR)$(RESET) $(BLUE)rimossi$(RESET)"
-	@rm -rf $(OBJ_DIR)
+	@rm -rf $(OBJ_DIR) $(OBJ_BONUS_DIR)  # Rimuovi entrambe le directory
 	@echo "$(BLUE)➜ File oggetto $(YELLOW)$(NAME)$(RESET) $(BLUE)rimossi$(RESET)"
 
 fclean: clean

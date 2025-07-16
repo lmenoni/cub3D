@@ -24,6 +24,7 @@
 # define ROT_SPEED 0.03
 # define MOV_SPEED 0.03
 # define MAP_POS 0
+# define CHR_OK "01NSWEP \t\n\r\v\f"
 
 # define E_ARG "ERROR\nInvalid n of arguments.\n"
 # define E_ALLOC "ERROR\nMalloc.\n"
@@ -126,7 +127,10 @@ typedef struct s_data
 	t_txtr	*txtr;
 	t_ray	*ray;
 	t_oimg	*ximg;
-	t_oimg	player;
+	t_oimg	player_n;
+	t_oimg	player_s;
+	t_oimg	player_e;
+	t_oimg	player_w;
 	t_oimg	empty;
 	void	*xdis;
 	void	*xwin;
@@ -214,6 +218,7 @@ void	reset(t_ray *ray);
 void	key_rotate(t_ray *ray, double rot);
 void	move(t_data *data, t_ray *ray, int keycode);
 void	set_new_pos(t_vctr *new_pos, t_ray *ray, int keycode);
+int mouse_move(int x, int y,t_data *data);
 
 // free_mem.c
 void	free_data(t_data *data);

@@ -37,7 +37,7 @@ bool	invalid_char(char *s, t_data *data)
 	{
 		if (multiple_start(s[i]))
 			return (ft_printf_fd(2, MAP_MSTART), true);
-		if (!ft_strchr("01NSWE \t\n\r\v\f", s[i]))
+		if (!ft_strchr(CHR_OK, s[i]))
 			return (ft_printf_fd(2, MAP_INV), true);
 		if (s[i] != '\n' && s[i] != '\r')
 			line_len++;

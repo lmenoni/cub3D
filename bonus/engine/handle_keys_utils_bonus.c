@@ -6,7 +6,7 @@
 /*   By: igilani <igilani@student.42firenze.it>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 17:30:34 by lmenoni           #+#    #+#             */
-/*   Updated: 2025/07/16 16:39:57 by igilani          ###   ########.fr       */
+/*   Updated: 2025/07/16 18:27:36 by igilani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	move(t_data *data, t_ray *ray, int keycode)
 	set_new_pos(&new_pos, ray, keycode);
 	if (new_pos.x >= data->map_w || new_pos.y >= data->map_h
 		|| new_pos.x <= 0 || new_pos.y <= 0
-		|| data->map[(int)(new_pos.y)][(int)(new_pos.x)] == '1')
+		|| data->map[(int)floor(new_pos.y)][(int)floor(new_pos.x)] == '1')
 		return ;
 	ray->p_pos.x = new_pos.x;
 	ray->p_pos.y = new_pos.y;
@@ -67,7 +67,7 @@ void	key_rotate(t_ray *ray, double rot)
 {
 	double	old_dir;
 	double	old_plane;
-
+	
 	old_dir = ray->p_dir.x;
 	old_plane = ray->plane.x;
 	ray->p_dir.x = ray->p_dir.x * cos(rot) - ray->p_dir.y * sin(rot);

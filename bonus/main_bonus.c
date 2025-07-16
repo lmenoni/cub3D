@@ -43,7 +43,7 @@ void	draw_remaining_background(t_data *data, int x)
 	}
 }
 
-void	render_map(t_data *data)
+void	render_map(t_data *data, t_oimg *player)
 {
 	int	x;
 	int y;
@@ -63,7 +63,7 @@ void	render_map(t_data *data)
 			if (i < data->map_w && i >= 0 && j < data->map_h && j >= 0 && data->map[j][i] == '0')
 			{
 				if (j == (int)data->ray->p_pos.y && i == (int)data->ray->p_pos.x)
-					mlx_put_image_to_window(data->xdis, data->xwin, data->player.ptr, x, y);
+					mlx_put_image_to_window(data->xdis, data->xwin, player->ptr, x, y);
 				else
 					mlx_put_image_to_window(data->xdis, data->xwin, data->empty.ptr, x, y);
 			}
@@ -75,13 +75,30 @@ void	render_map(t_data *data)
 	}
 }
 
+void	map_rendering(t_data *data)
+{
+	if (fabs(data->ray->p_dir.x) > fabs(data->ray->p_dir.y))
+	{
+    	if (data->ray->p_dir.x > 0)
+        	render_map(data, &data->player_e);
+    	else
+        	render_map(data, &data->player_w);
+	}
+	else
+	{
+    	if (data->ray->p_dir.y > 0)
+        	render_map(data, &data->player_s);
+    	else
+        	render_map(data, &data->player_n);
+	}
+}
+
 int	engine(t_data *data)
 {
-	int x;
+	int				x;
 
 	x = 0;
 	check_for_movement(data);
-	// set_background(data);
 	while (x < W_W)
 	{
 		prepare_ray(data->ray, x);
@@ -92,7 +109,7 @@ int	engine(t_data *data)
 		x++;
 	}
 	mlx_put_image_to_window(data->xdis, data->xwin, data->ximg->ptr, 0, 0);
-	render_map(data);
+	map_rendering(data);
 	return (0);
 }
 
@@ -135,12 +152,17 @@ int main(int ac, char **av)
 	data.txtr = &txtr;
 	data.ray = &ray;
 	data.xdis = mlx_init();
-	data.player.ptr = mlx_xpm_file_to_image(data.xdis, "texture/player.xpm", &data.player.width, &data.player.height);
+	data.player_n.ptr = mlx_xpm_file_to_image(data.xdis, "texture/player_n.xpm", &data.player_n.width, &data.player_n.height);
+	data.player_s.ptr = mlx_xpm_file_to_image(data.xdis, "texture/player_s.xpm", &data.player_s.width, &data.player_s.height);
+	data.player_e.ptr = mlx_xpm_file_to_image(data.xdis, "texture/player_e.xpm", &data.player_e.width, &data.player_e.height);
+	data.player_w.ptr = mlx_xpm_file_to_image(data.xdis, "texture/player_w.xpm", &data.player_w.width, &data.player_w.height);
 	data.empty.ptr = mlx_xpm_file_to_image(data.xdis, "texture/empty.xpm", &data.empty.width, &data.empty.height);
     if (!parsing(&data, ac, av))
 		return (free_data(&data), 1);
+	mlx_mouse_hide(data.xdis, data.xwin);
 	mlx_hook(data.xwin, 2, 1L<<0, handle_key_press, &data);
 	mlx_hook(data.xwin, 3, 1L<<1, handle_key_release, &data);
+	mlx_hook(data.xwin, 6, 1L << 6, mouse_move, &data);
 	mlx_hook(data.xwin, 17, 1L << 2, close_window, &data);
 	mlx_loop_hook(data.xdis, engine, &data);
 	mlx_loop(data.xdis);
