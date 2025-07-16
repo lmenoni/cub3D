@@ -15,9 +15,9 @@
 
 # include <X11/keysym.h>
 # include <math.h>
-# include "my_libft/libft.h"
-# include "minilibx-linux/mlx.h"
-# include "minilibx-linux/mlx_int.h"
+# include "../my_libft/libft.h"
+# include "../minilibx-linux/mlx.h"
+# include "../minilibx-linux/mlx_int.h"
 
 # define W_W 1280
 # define W_H 768

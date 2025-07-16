@@ -1,15 +1,3 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: igilani <igilani@student.42firenze.it>     +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/03/03 15:09:24 by igilani           #+#    #+#              #
-#    Updated: 2025/07/15 15:53:57 by igilani          ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 # Comportamento predefinito
 .DEFAULT_GOAL := silent
 
@@ -19,23 +7,31 @@ CFLAGS  = -Wall -Wextra -Werror -fPIE -o3
 NAME	= cub3D
 
 # Struttura sorgenti in diverse cartelle
-SRC_MAIN   = main.c
-SRC_PARSE  = parsing/extract_colors.c parsing/extract_elements.c parsing/handle_file.c parsing/parse_map.c parsing/parse_map_utils.c parsing/parsing_utils.c parsing/init_data.c
-SRC_ENGINE = engine/dda.c engine/handle_keys.c engine/draw.c engine/draw_utils.c engine/handle_keys_utils.c engine/free_mem.c
+SRC_MAIN   = mandatory/main.c
+SRC_PARSE  = mandatory/parsing/extract_colors.c mandatory/parsing/extract_elements.c mandatory/parsing/handle_file.c mandatory/parsing/parse_map.c mandatory/parsing/parse_map_utils.c mandatory/parsing/parsing_utils.c mandatory/parsing/init_data.c
+SRC_ENGINE = mandatory/engine/dda.c mandatory/engine/handle_keys.c mandatory/engine/draw.c mandatory/engine/draw_utils.c mandatory/engine/handle_keys_utils.c mandatory/engine/free_mem.c
+
+SRC_MAIN_BONUS   = bonus/main_bonus.c
+SRC_PARSE_BONUS  = bonus/parsing/extract_colors_bonus.c bonus/parsing/extract_elements_bonus.c bonus/parsing/handle_file_bonus.c bonus/parsing/parse_map_bonus.c bonus/parsing/parse_map_utils_bonus.c bonus/parsing/parsing_utils_bonus.c bonus/parsing/init_data_bonus.c
+SRC_ENGINE_BONUS = bonus/engine/dda_bonus.c bonus/engine/handle_keys_bonus.c bonus/engine/draw_bonus.c bonus/engine/draw_utils_bonus.c bonus/engine/handle_keys_utils_bonus.c bonus/engine/free_mem_bonus.c
 # Per aggiungere altre cartelle:
 # SRC_RENDER = rendering/file1.c rendering/file2.c
 # SRC_LOGIC  = logic/file1.c logic/file2.c
 
 # Combinazione di tutti i sorgenti
-SRC	 = $(SRC_MAIN) $(SRC_PARSE)
-SRC += $(SRC_ENGINE)
+SRC	 = $(SRC_MAIN) $(SRC_PARSE) $(SRC_ENGINE)
+SRC_BONUS = $(SRC_MAIN_BONUS) $(SRC_PARSE_BONUS) $(SRC_ENGINE_BONUS)
 # Aggiungi qui altre cartelle quando necessario:
 # SRC += $(SRC_RENDER) $(SRC_LOGIC)
 
 HEADERS = cub3D.h
 OBJ_DIR = obj
 # Trasforma tutti i percorsi in nomi oggetto nella directory obj
-OBJ	 = $(addprefix $(OBJ_DIR)/, $(notdir $(SRC:.c=.o)))
+OBJ = $(SRC:.c=.o)
+OBJ := $(addprefix $(OBJ_DIR)/, $(OBJ))
+
+OBJ_BONUS = $(SRC_BONUS:.c=.o)
+OBJ_BONUS := $(addprefix $(OBJ_DIR)/, $(OBJ_BONUS))
 LIB_DIR = my_libft
 MLX_DIR = minilibx-linux
 BUILD = 0
@@ -78,17 +74,32 @@ $(THA_LIB):
 	@echo "$(GREEN)✔ tha_supreme compilata$(RESET)"
 
 # Crea VPATH per indicare a Make dove cercare i file sorgente
-VPATH = .:parsing
-VPATH += :engine
+VPATH = mandatory:mandatory/parsing:mandatory/engine:bonus:bonus/parsing:bonus/engine
 # Per aggiungere altre cartelle al percorso di ricerca:
 # VPATH += :rendering:logic
 
 # Una singola regola di compilazione per tutti i file
 $(OBJ_DIR)/%.o: %.c $(HEADERS) | $(OBJ_DIR)
+	@mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) -c $< -o $@ || { \
 		echo "$(ERROR) Errore nella compilazione di $<$(RESET)"; \
 		exit 1; \
 	}
+
+$(OBJ_BONUS_DIR)/%.o: %.c $(HEADERS) | $(OBJ_DIR)
+	@mkdir -p $(dir $@)
+	@$(CC) $(CFLAGS) -c $< -o $@ || { \
+		echo "$(ERROR) Errore nella compilazione di $<$(RESET)"; \
+		exit 1; \
+	}
+
+bonus: $(MLX_LIB) $(THA_LIB) $(OBJ_BONUS)
+	@$(CC) $(CFLAGS) $(OBJ_BONUS) -o $(NAME) $(MLX_LIB) -L$(LIB_DIR) -l:$(notdir $(THA_LIB)) -lm -lX11 -lXext || { \
+		echo "$(ERROR) Errore durante il linking finale per la versione bonus$(RESET)"; \
+		exit 1; \
+	}
+	@echo "$(BLUE)➜ Creazione eseguibile $(NAME)_bonus...$(RESET)"
+	@echo "$(GREEN)✔ Eseguibile $(NAME)_bonus generato$(RESET)"
 
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
@@ -121,4 +132,4 @@ re: fclean all
 silent:
 	@$(MAKE) all 2>&1 | grep -v '^make\[.*\]:'
 
-.PHONY: all clean fclean re lib_check silent
+.PHONY: all clean fclean re lib_check silent bonus
