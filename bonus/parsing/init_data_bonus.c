@@ -6,7 +6,7 @@
 /*   By: igilani <igilani@student.42firenze.it>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 17:19:15 by lmenoni           #+#    #+#             */
-/*   Updated: 2025/07/16 16:34:10 by igilani          ###   ########.fr       */
+/*   Updated: 2025/07/16 19:59:45 by igilani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,8 @@ bool	get_vector(t_parse *parse, t_ray *ray)
 	ray->p_dir_ori.y = ray->p_dir.y;
 	ray->plane_ori.x = ray->plane.x;
 	ray->plane_ori.y = ray->plane.y;
-	ray->move_speed = MOV_SPEED;
+	ray->move_speed = 0.03;
+	ray->fps = 0;
 	return (true);
 }
 

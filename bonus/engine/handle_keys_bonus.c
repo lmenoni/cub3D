@@ -37,10 +37,12 @@ int	handle_key_press(int keycode, t_data *data)
 		data->moving = keycode;
 	if (keycode == 61)
 		data->ray->move_speed += MOV_SPEED;
-	if (keycode == 45 && data->ray->move_speed > 0.05)
+	if (keycode == 45 && data->ray->move_speed > 0.01)
 		data->ray->move_speed -= MOV_SPEED;
 	if (keycode == 114)
 		reset(data->ray);
+	if (keycode == 105)
+		data->show_menu = !data->show_menu;
 	if (keycode == 65361 || keycode == 65363)
 		data->rotating = keycode;
 	return (0);
@@ -48,13 +50,11 @@ int	handle_key_press(int keycode, t_data *data)
 
 int	mouse_move(int x, int y, t_data *data)
 {
-	static int prev_x = -1;
-	int delta_x;
-	double rot_speed;
+	static int	prev_x = -1;
+	int			delta_x;
+	double		rot_speed;
 
 	(void)y;
-	delta_x = 0;
-	rot_speed = 0;
 	if (prev_x == -1)
 		prev_x = x;
 	delta_x = x - prev_x;

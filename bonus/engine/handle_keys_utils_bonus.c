@@ -6,7 +6,7 @@
 /*   By: igilani <igilani@student.42firenze.it>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 17:30:34 by lmenoni           #+#    #+#             */
-/*   Updated: 2025/07/16 18:27:36 by igilani          ###   ########.fr       */
+/*   Updated: 2025/07/16 20:28:26 by igilani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	key_rotate(t_ray *ray, double rot)
 {
 	double	old_dir;
 	double	old_plane;
-	
+
 	old_dir = ray->p_dir.x;
 	old_plane = ray->plane.x;
 	ray->p_dir.x = ray->p_dir.x * cos(rot) - ray->p_dir.y * sin(rot);

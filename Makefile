@@ -13,7 +13,7 @@ SRC_ENGINE = mandatory/engine/dda.c mandatory/engine/handle_keys.c mandatory/eng
 
 SRC_MAIN_BONUS   = bonus/main_bonus.c
 SRC_PARSE_BONUS  = bonus/parsing/extract_colors_bonus.c bonus/parsing/extract_elements_bonus.c bonus/parsing/handle_file_bonus.c bonus/parsing/parse_map_bonus.c bonus/parsing/parse_map_utils_bonus.c bonus/parsing/parsing_utils_bonus.c bonus/parsing/init_data_bonus.c
-SRC_ENGINE_BONUS = bonus/engine/dda_bonus.c bonus/engine/handle_keys_bonus.c bonus/engine/draw_bonus.c bonus/engine/draw_utils_bonus.c bonus/engine/handle_keys_utils_bonus.c bonus/engine/free_mem_bonus.c
+SRC_ENGINE_BONUS = bonus/engine/dda_bonus.c bonus/engine/handle_keys_bonus.c bonus/engine/draw_bonus.c bonus/engine/draw_utils_bonus.c bonus/engine/handle_keys_utils_bonus.c bonus/engine/free_mem_bonus.c bonus/engine/print_info.c
 # Per aggiungere altre cartelle:
 # SRC_RENDER = rendering/file1.c rendering/file2.c
 # SRC_LOGIC  = logic/file1.c logic/file2.c
@@ -25,15 +25,15 @@ SRC_BONUS = $(SRC_MAIN_BONUS) $(SRC_PARSE_BONUS) $(SRC_ENGINE_BONUS)
 # SRC += $(SRC_RENDER) $(SRC_LOGIC)
 
 HEADERS = cub3D.h
-OBJ_DIR = obj
-OBJ_BONUS_DIR = obj_bonus  # Aggiungi questa linea
+OBJ_DIR = obj/mandatory
+OBJ_BONUS_DIR = obj/bonus
 
 # Trasforma tutti i percorsi in nomi oggetto nella directory obj
 OBJ = $(SRC:.c=.o)
 OBJ := $(addprefix $(OBJ_DIR)/, $(OBJ))
 
 OBJ_BONUS = $(SRC_BONUS:.c=.o)
-OBJ_BONUS := $(addprefix $(OBJ_BONUS_DIR)/, $(OBJ_BONUS))  # Usa directory separata
+OBJ_BONUS := $(addprefix $(OBJ_BONUS_DIR)/, $(OBJ_BONUS))
 LIB_DIR = my_libft
 MLX_DIR = minilibx-linux
 BUILD = 0
@@ -68,19 +68,24 @@ $(MLX_LIB):
 	@echo "$(GREEN)✔ MinilibX compilata$(RESET)"
 
 $(THA_LIB):
-	@echo "$(BLUE)➜ Compilazione della libreria $(YELLOW)tha_supreme$(RESET)$(BLUE)...$(RESET)"
+	@echo "$(BLUE)➜ Compilazione della libreria $(YELLOW)my_libft$(RESET)$(BLUE)...$(RESET)"
 	@if ! $(MAKE) -C $(LIB_DIR) > /dev/null 2>&1; then \
-		echo "$(ERROR) Errore durante la compilazione della libreria tha_supreme_lib$(RESET)"; \
+		echo "$(ERROR) Errore durante la compilazione della libreria my_libft_lib$(RESET)"; \
 		exit 1; \
 	fi
-	@echo "$(GREEN)✔ tha_supreme compilata$(RESET)"
+	@echo "$(GREEN)✔ my_libft compilata$(RESET)"
 
-# Crea VPATH per indicare a Make dove cercare i file sorgente
+# Create object directories
+$(OBJ_DIR):
+	@mkdir -p $(OBJ_DIR)/mandatory/parsing $(OBJ_DIR)/mandatory/engine
+
+$(OBJ_BONUS_DIR):
+	@mkdir -p $(OBJ_BONUS_DIR)/bonus/parsing $(OBJ_BONUS_DIR)/bonus/engine
+
+# VPATH to find source files
 VPATH = mandatory:mandatory/parsing:mandatory/engine:bonus:bonus/parsing:bonus/engine
-# Per aggiungere altre cartelle al percorso di ricerca:
-# VPATH += :rendering:logic
 
-# Una singola regola di compilazione per tutti i file
+# Pattern rules for object files in different directories
 $(OBJ_DIR)/%.o: %.c $(HEADERS) | $(OBJ_DIR)
 	@mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) -c $< -o $@ || { \
@@ -88,26 +93,26 @@ $(OBJ_DIR)/%.o: %.c $(HEADERS) | $(OBJ_DIR)
 		exit 1; \
 	}
 
-$(OBJ_BONUS_DIR)/%.o: %.c $(HEADERS) | $(OBJ_BONUS_DIR)  # Correggi qui
+$(OBJ_BONUS_DIR)/%.o: %.c $(HEADERS) | $(OBJ_BONUS_DIR)
 	@mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) -c $< -o $@ || { \
 		echo "$(ERROR) Errore nella compilazione di $<$(RESET)"; \
 		exit 1; \
 	}
 
-bonus: $(MLX_LIB) $(THA_LIB) $(OBJ_BONUS)
-	@$(CC) $(CFLAGS) $(OBJ_BONUS) -o $(NAME) $(MLX_LIB) -L$(LIB_DIR) -l:$(notdir $(THA_LIB)) -lm -lX11 -lXext || { \
-		echo "$(ERROR) Errore durante il linking finale per la versione bonus$(RESET)"; \
-		exit 1; \
-	}
-	@echo "$(BLUE)➜ Creazione eseguibile $(NAME) (versione bonus)...$(RESET)"
-	@echo "$(GREEN)✔ Eseguibile $(NAME) (bonus) generato$(RESET)"
+bonus: bonus_check
 
-$(OBJ_DIR):
-	@mkdir -p $(OBJ_DIR)
-
-$(OBJ_BONUS_DIR):  # Aggiungi questo target
-	@mkdir -p $(OBJ_BONUS_DIR)
+bonus_check: $(MLX_LIB) $(THA_LIB) $(OBJ_BONUS)
+	@if [ ! -f "$(NAME)" ] || find $(SRC_BONUS) -newer "$(NAME)" 2>/dev/null | grep -q .; then \
+		echo "$(BLUE)➜ Creazione eseguibile $(NAME) (versione bonus)...$(RESET)"; \
+		$(CC) $(CFLAGS) $(OBJ_BONUS) -o $(NAME) $(MLX_LIB) -L$(LIB_DIR) -l:$(notdir $(THA_LIB)) -lm -lX11 -lXext || { \
+			echo "$(ERROR) Errore durante il linking finale per la versione bonus$(RESET)"; \
+			exit 1; \
+		}; \
+		echo "$(GREEN)✔ Eseguibile $(NAME) (bonus) generato$(RESET)"; \
+	else \
+		echo "$(GREEN)✔ Già tutto compilato$(RESET)"; \
+	fi
 
 $(NAME): $(OBJ) $(MLX_LIB) $(THA_LIB)
 	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(MLX_LIB) -L$(LIB_DIR) -l:$(notdir $(THA_LIB)) -lm -lX11 -lXext || { \
@@ -123,7 +128,7 @@ clean:
 	@echo "$(BLUE)➜ File oggetto da $(YELLOW)$(LIB_DIR)$(RESET) $(BLUE)rimossi$(RESET)"
 	@$(MAKE) -s -C $(MLX_DIR) clean > /dev/null 2>&1
 	@echo "$(BLUE)➜ File oggetto da $(YELLOW)$(MLX_DIR)$(RESET) $(BLUE)rimossi$(RESET)"
-	@rm -rf $(OBJ_DIR) $(OBJ_BONUS_DIR)  # Rimuovi entrambe le directory
+	@rm -rf obj  # Rimuovi tutta la directory obj
 	@echo "$(BLUE)➜ File oggetto $(YELLOW)$(NAME)$(RESET) $(BLUE)rimossi$(RESET)"
 
 fclean: clean
@@ -137,4 +142,4 @@ re: fclean all
 silent:
 	@$(MAKE) all 2>&1 | grep -v '^make\[.*\]:'
 
-.PHONY: all clean fclean re lib_check silent bonus
+.PHONY: all clean fclean re lib_check silent bonus bonus_check

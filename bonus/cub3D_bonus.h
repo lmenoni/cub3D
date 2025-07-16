@@ -15,6 +15,7 @@
 
 # include <X11/keysym.h>
 # include <math.h>
+# include <sys/time.h>
 # include "../my_libft/libft.h"
 # include "../minilibx-linux/mlx.h"
 # include "../minilibx-linux/mlx_int.h"
@@ -22,9 +23,13 @@
 # define W_W 1280
 # define W_H 768
 # define ROT_SPEED 0.03
-# define MOV_SPEED 0.03
+# define MOV_SPEED 0.01
 # define MAP_POS 0
 # define CHR_OK "01NSWEP \t\n\r\v\f"
+# define WHITE 0xFFFFFF
+# define GREY 0x808080
+# define YELLOW 0xFFFF00
+# define GREEN 0x00FF00
 
 # define E_ARG "ERROR\nInvalid n of arguments.\n"
 # define E_ALLOC "ERROR\nMalloc.\n"
@@ -110,6 +115,7 @@ typedef struct s_ray
 	int			draw_start; // Inizio della linea da disegnare
 	int			draw_end; // Fine della linea da disegnare
 	int			draw_len;
+	int			fps;
 }				t_ray;
 
 typedef struct s_txtr
@@ -140,6 +146,7 @@ typedef struct s_data
 	int		map_h;
 	int		moving;
 	int		rotating;
+	int		show_menu;
 }			t_data;
 
 void	print_data(t_data *data, t_parse *parse);
@@ -224,4 +231,6 @@ int mouse_move(int x, int y,t_data *data);
 void	free_data(t_data *data);
 void	free_images(t_data *data);
 
+
+void	print_menu(t_data *data);
 #endif

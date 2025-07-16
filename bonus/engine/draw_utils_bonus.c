@@ -6,7 +6,7 @@
 /*   By: igilani <igilani@student.42firenze.it>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 17:31:22 by lmenoni           #+#    #+#             */
-/*   Updated: 2025/07/16 16:34:10 by igilani          ###   ########.fr       */
+/*   Updated: 2025/07/16 20:39:14 by igilani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,9 @@ void	set_background(t_data *data)
 {
 	int	x;
 	int	y;
-	int offset = 0;
+	int	offset;
 
+	offset = 0;
 	y = 0;
 	while (y < data->ximg->height)
 	{
@@ -52,17 +53,9 @@ void	set_background(t_data *data)
 		while (x < data->ximg->width)
 		{
 			if (y < data->ximg->height / 2)
-			{
-					offset = (y * data->ximg->l_l) + (x * (data->ximg->bpp / 8));
-	*((unsigned int *)(data->ximg->addr + offset)) = data->txtr->c_clr;
-			}
-				// my_pixel_put(x, y, data, data->txtr->c_clr);
+				my_pixel_put(x, y, data, data->txtr->c_clr);
 			else if (y >= data->ximg->height / 2)
-			{
-					offset = (y * data->ximg->l_l) + (x * (data->ximg->bpp / 8));
-	*((unsigned int *)(data->ximg->addr + offset)) = data->txtr->f_clr;
-			}
-				// my_pixel_put(x, y, data, data->txtr->f_clr);
+				my_pixel_put(x, y, data, data->txtr->f_clr);
 			x++;
 		}
 		y++;

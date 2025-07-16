@@ -79,23 +79,23 @@ void	map_rendering(t_data *data)
 {
 	if (fabs(data->ray->p_dir.x) > fabs(data->ray->p_dir.y))
 	{
-    	if (data->ray->p_dir.x > 0)
-        	render_map(data, &data->player_e);
-    	else
-        	render_map(data, &data->player_w);
+		if (data->ray->p_dir.x > 0)
+			render_map(data, &data->player_e);
+		else
+			render_map(data, &data->player_w);
 	}
 	else
 	{
-    	if (data->ray->p_dir.y > 0)
-        	render_map(data, &data->player_s);
-    	else
-        	render_map(data, &data->player_n);
+		if (data->ray->p_dir.y > 0)
+			render_map(data, &data->player_s);
+		else
+			render_map(data, &data->player_n);
 	}
 }
 
 int	engine(t_data *data)
 {
-	int				x;
+	int	x;
 
 	x = 0;
 	check_for_movement(data);
@@ -109,6 +109,7 @@ int	engine(t_data *data)
 		x++;
 	}
 	mlx_put_image_to_window(data->xdis, data->xwin, data->ximg->ptr, 0, 0);
+	print_menu(data);
 	map_rendering(data);
 	return (0);
 }
@@ -118,12 +119,12 @@ bool    parsing(t_data *data, int ac, char **av)
 	t_parse	parse;
 
 	parse = (t_parse){0};
-    if (ac != 2)
-        return (ft_printf_fd(2, E_ARG), false);
-    data->file = read_file(av[1]);
-    if (!data->file)
+	if (ac != 2)
+		return (ft_printf_fd(2, E_ARG), false);
+	data->file = read_file(av[1]);
+	if (!data->file)
 		return (false);
-    if (!get_data(data->file, data, &parse))
+	if (!get_data(data->file, data, &parse))
 		return (false);
 	if (!parse_textures(data->txtr, &parse, data->xdis))
 	{
@@ -137,16 +138,16 @@ bool    parsing(t_data *data, int ac, char **av)
 	if (!init_mlx_data(data))
 		return (false);
 	print_data(data, &parse);
-    return (true);
+	return (true);
 }
 
 int main(int ac, char **av)
 {
-    t_data  data;
+	t_data  data;
 	t_txtr	txtr;
 	t_ray	ray;
 
-    data = (t_data){0};
+	data = (t_data){0};
 	txtr = (t_txtr){0};
 	ray = (t_ray){0};
 	data.txtr = &txtr;
@@ -157,7 +158,7 @@ int main(int ac, char **av)
 	data.player_e.ptr = mlx_xpm_file_to_image(data.xdis, "texture/player_e.xpm", &data.player_e.width, &data.player_e.height);
 	data.player_w.ptr = mlx_xpm_file_to_image(data.xdis, "texture/player_w.xpm", &data.player_w.width, &data.player_w.height);
 	data.empty.ptr = mlx_xpm_file_to_image(data.xdis, "texture/empty.xpm", &data.empty.width, &data.empty.height);
-    if (!parsing(&data, ac, av))
+	if (!parsing(&data, ac, av))
 		return (free_data(&data), 1);
 	mlx_mouse_hide(data.xdis, data.xwin);
 	mlx_hook(data.xwin, 2, 1L<<0, handle_key_press, &data);
