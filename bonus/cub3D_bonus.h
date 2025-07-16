@@ -124,6 +124,11 @@ typedef struct s_txtr
 	t_oimg	*s_img;
 	t_oimg	*e_img;
 	t_oimg	*w_img;
+	t_oimg	player_n;
+	t_oimg	player_s;
+	t_oimg	player_e;
+	t_oimg	player_w;
+	t_oimg	empty;
 	int		f_clr;
 	int		c_clr;
 }			t_txtr;

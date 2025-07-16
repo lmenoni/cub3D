@@ -109,8 +109,8 @@ int	engine(t_data *data)
 		x++;
 	}
 	mlx_put_image_to_window(data->xdis, data->xwin, data->ximg->ptr, 0, 0);
-	print_menu(data);
 	map_rendering(data);
+	print_menu(data);
 	return (0);
 }
 
