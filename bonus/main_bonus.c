@@ -43,6 +43,38 @@ void	draw_remaining_background(t_data *data, int x)
 	}
 }
 
+void	render_map(t_data *data)
+{
+	int	x;
+	int y;
+	int i;
+	int j;
+
+	x = MAP_POS;
+	y = MAP_POS;
+	i = (int)data->ray->p_pos.x - 7;
+	j = (int)data->ray->p_pos.y - 7;
+	while (j < (int)data->ray->p_pos.y + 7)
+	{
+		i = (int)data->ray->p_pos.x - 7;
+		x = 0;
+		while (i < (int)data->ray->p_pos.x + 7)
+		{
+			if (i < data->map_w && i >= 0 && j < data->map_h && j >= 0 && data->map[j][i] == '0')
+			{
+				if (j == (int)data->ray->p_pos.y && i == (int)data->ray->p_pos.x)
+					mlx_put_image_to_window(data->xdis, data->xwin, data->player.ptr, x, y);
+				else
+					mlx_put_image_to_window(data->xdis, data->xwin, data->empty.ptr, x, y);
+			}
+			i++;
+			x += data->empty.width;
+		}
+		j++;
+		y += data->empty.height;
+	}
+}
+
 int	engine(t_data *data)
 {
 	int x;
@@ -60,6 +92,7 @@ int	engine(t_data *data)
 		x++;
 	}
 	mlx_put_image_to_window(data->xdis, data->xwin, data->ximg->ptr, 0, 0);
+	render_map(data);
 	return (0);
 }
 
@@ -102,6 +135,8 @@ int main(int ac, char **av)
 	data.txtr = &txtr;
 	data.ray = &ray;
 	data.xdis = mlx_init();
+	data.player.ptr = mlx_xpm_file_to_image(data.xdis, "texture/player.xpm", &data.player.width, &data.player.height);
+	data.empty.ptr = mlx_xpm_file_to_image(data.xdis, "texture/empty.xpm", &data.empty.width, &data.empty.height);
     if (!parsing(&data, ac, av))
 		return (free_data(&data), 1);
 	mlx_hook(data.xwin, 2, 1L<<0, handle_key_press, &data);

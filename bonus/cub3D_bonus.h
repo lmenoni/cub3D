@@ -23,6 +23,7 @@
 # define W_H 768
 # define ROT_SPEED 0.03
 # define MOV_SPEED 0.03
+# define MAP_POS 0
 
 # define E_ARG "ERROR\nInvalid n of arguments.\n"
 # define E_ALLOC "ERROR\nMalloc.\n"
@@ -125,6 +126,8 @@ typedef struct s_data
 	t_txtr	*txtr;
 	t_ray	*ray;
 	t_oimg	*ximg;
+	t_oimg	player;
+	t_oimg	empty;
 	void	*xdis;
 	void	*xwin;
 	char	**file;
@@ -209,7 +212,8 @@ void	compute_projection(t_data *data);
 void	check_for_movement(t_data *data);
 void	reset(t_ray *ray);
 void	key_rotate(t_ray *ray, double rot);
-void	move(t_ray *ray, int keycode);
+void	move(t_data *data, t_ray *ray, int keycode);
+void	set_new_pos(t_vctr *new_pos, t_ray *ray, int keycode);
 
 // free_mem.c
 void	free_data(t_data *data);
