@@ -6,7 +6,7 @@
 /*   By: igilani <igilani@student.42firenze.it>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 17:31:22 by lmenoni           #+#    #+#             */
-/*   Updated: 2025/07/16 20:39:14 by igilani          ###   ########.fr       */
+/*   Updated: 2025/07/17 20:00:05 by igilani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	my_pixel_put(int x, int y, t_data *data, int color)
 {
+	//Se il colore e' <X>, allora non disegnare il pixel. Cosi rimane cio' che c'era prima (trasparenza)
 	int	offset;
 
 	offset = (y * data->ximg->l_l) + (x * (data->ximg->bpp / 8));
