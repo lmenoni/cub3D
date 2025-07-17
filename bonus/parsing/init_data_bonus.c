@@ -6,7 +6,7 @@
 /*   By: igilani <igilani@student.42firenze.it>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 17:19:15 by lmenoni           #+#    #+#             */
-/*   Updated: 2025/07/16 19:59:45 by igilani          ###   ########.fr       */
+/*   Updated: 2025/07/17 18:24:01 by igilani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,41 @@ t_oimg	*get_img_ptr(char *path, void *mlx)
 	return (temp);
 }
 
+bool	get_isma_animation(t_txtr *tx, t_oimg *isma_arr, void *xdis)
+{
+	int		temp_fd;
+	char	*temp_path;
+	int		frame;
+	char	*temp_n;
+
+	temp_fd = 0;
+	frame = 0;
+	temp_path = NULL;
+	temp_n = NULL;
+	isma_arr = malloc(48 * sizeof(t_oimg));
+	if (!isma_arr)
+		return (ft_printf_fd(2, E_ALLOC), false);
+	while (frame < 48)
+	{
+		temp_path = "texture/animation/frame_";
+		temp_n = ft_itoa(frame);
+		temp_path = ft_strjoin(temp_path, temp_n);
+		free(temp_n);
+		temp_path = ft_buffjoin(temp_path, ".xpm");
+		temp_fd = open(temp_path, O_RDONLY);
+		if (temp_fd == -1)
+			return (free(temp_path), perror(FILE_OPEN), free(tx->isma_arr), false);
+		close(temp_fd);
+		isma_arr[frame].ptr = mlx_xpm_file_to_image(xdis, temp_path, &isma_arr[frame].width, &isma_arr[frame].height);
+		isma_arr[frame].addr = mlx_get_data_addr(isma_arr[frame].ptr, &isma_arr[frame].bpp, &isma_arr[frame].l_l, &isma_arr[frame].endian);
+		free(temp_path);
+		frame++;
+	}
+	tx->n_isma = 48;
+	tx->isma_arr = isma_arr;
+	return (true);
+}
+
 bool	parse_textures(t_txtr *tx, t_parse *parse, void *xdis)
 {
 	if (!check_file_type(parse->n_path, ".xpm"))
@@ -67,6 +102,8 @@ bool	parse_textures(t_txtr *tx, t_parse *parse, void *xdis)
 	tx->player_e = get_img_ptr(parse->pimg_e, xdis);
 	tx->player_w = get_img_ptr(parse->pimg_w, xdis);
 	tx->empty = get_img_ptr(parse->empty_img, xdis);
+	if (!get_isma_animation(tx, tx->isma_arr, xdis))
+		return (false);
 	if (!tx->n_img || !tx->s_img
 		|| !tx->e_img || !tx->w_img
 		|| !tx->player_n || !tx->player_s

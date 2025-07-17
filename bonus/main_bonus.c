@@ -109,6 +109,7 @@ int	engine(t_data *data)
 		x++;
 	}
 	mlx_put_image_to_window(data->xdis, data->xwin, data->ximg->ptr, 0, 0);
+	// animation(data, data->txtr, data->txtr->n_isma);
 	map_rendering(data, data->txtr);
 	print_menu(data);
 	return (0);

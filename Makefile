@@ -6,7 +6,7 @@
 #    By: igilani <igilani@student.42firenze.it>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/03 15:09:24 by igilani           #+#    #+#              #
-#    Updated: 2025/07/17 15:59:16 by igilani          ###   ########.fr        #
+#    Updated: 2025/07/17 19:21:32 by igilani          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ SRC_ENGINE = mandatory/engine/dda.c mandatory/engine/handle_keys.c mandatory/eng
 
 SRC_MAIN_BONUS   = bonus/main_bonus.c
 SRC_PARSE_BONUS  = bonus/parsing/extract_colors_bonus.c bonus/parsing/extract_elements_bonus.c bonus/parsing/handle_file_bonus.c bonus/parsing/parse_map_bonus.c bonus/parsing/parse_map_utils_bonus.c bonus/parsing/parsing_utils_bonus.c bonus/parsing/init_data_bonus.c
-SRC_ENGINE_BONUS = bonus/engine/dda_bonus.c bonus/engine/handle_keys_bonus.c bonus/engine/draw_bonus.c bonus/engine/draw_utils_bonus.c bonus/engine/handle_keys_utils_bonus.c bonus/engine/free_mem_bonus.c bonus/engine/print_info.c
+SRC_ENGINE_BONUS = bonus/engine/dda_bonus.c bonus/engine/handle_keys_bonus.c bonus/engine/draw_bonus.c bonus/engine/draw_utils_bonus.c bonus/engine/handle_keys_utils_bonus.c bonus/engine/free_mem_bonus.c bonus/engine/print_info_bonus.c bonus/engine/animation_bonus.c
 
 HEADERS = mandatory/cub3D.h
 HEADERS_BONUS = bonus/cub3D_bonus.h
@@ -71,12 +71,12 @@ $(MLX_LIB):
 	@echo "$(GREEN)✔ MinilibX compilata$(RESET)"
 
 $(THA_LIB):
-	@echo "$(BLUE)➜ Compilazione della libreria $(YELLOW)tha_supreme$(RESET)$(BLUE)...$(RESET)"
+	@echo "$(BLUE)➜ Compilazione della libreria $(YELLOW)my_libft$(RESET)$(BLUE)...$(RESET)"
 	@if ! $(MAKE) -C $(LIB_DIR) > /dev/null 2>&1; then \
-		echo "$(ERROR) Errore durante la compilazione della libreria tha_supreme_lib$(RESET)"; \
+		echo "$(ERROR) Errore durante la compilazione della libreria my_libft_lib$(RESET)"; \
 		exit 1; \
 	fi
-	@echo "$(GREEN)✔ tha_supreme compilata$(RESET)"
+	@echo "$(GREEN)✔ my_libft compilata$(RESET)"
 
 $(OBJ_DIR)/mandatory/%.o: mandatory/%.c $(HEADERS)
 	@mkdir -p $(dir $@)
@@ -113,6 +113,16 @@ bonus: $(NAME_BONUS)
 		fi \
 	fi
 
+meme: CFLAGS += -D ISMA=1
+meme: $(NAME_BONUS)
+	@if [ $(BUILD) -eq 1 ]; then \
+		echo "$(GREEN)✔ Build meme completato$(RESET)"; \
+	else \
+		if [ $(BUILD) -eq 0 ]; then \
+			echo "$(GREEN)✔ Meme già tutto compilato$(RESET)"; \
+		fi \
+	fi
+
 $(NAME_BONUS): $(OBJ_BONUS) $(MLX_LIB) $(THA_LIB)
 	@$(CC) $(CFLAGS) $(OBJ_BONUS) -o $(NAME_BONUS) $(MLX_LIB) $(THA_LIB) -lm -lX11 -lXext || { \
 		echo "$(ERROR) Errore durante il linking finale bonus$(RESET)"; \
@@ -141,4 +151,4 @@ re: fclean all
 silent:
 	@$(MAKE) all 2>&1 | grep -v '^make\[.*\]:'
 
-.PHONY: all bonus clean fclean re lib_check silent
+.PHONY: all bonus meme clean fclean re lib_check silent

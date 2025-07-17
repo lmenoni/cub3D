@@ -6,23 +6,36 @@
 /*   By: igilani <igilani@student.42firenze.it>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 17:30:55 by lmenoni           #+#    #+#             */
-/*   Updated: 2025/07/16 16:34:10 by igilani          ###   ########.fr       */
+/*   Updated: 2025/07/17 19:25:22 by igilani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3D_bonus.h"
+
+t_oimg	*get_texture_meme(t_data *data)
+{
+	if (data->ray->side == 0) // Colpito muro verticale (est-ovest)
+	{
+		if (data->ray->ray_dir.x > 0)
+			return (data->txtr->e_img); // EAST
+		return (data->txtr->w_img); // WEST
+	}
+	if (data->ray->ray_dir.y > 0)
+		return (data->txtr->s_img); // SOUTH
+	return (wall_animation(data, data->txtr, data->txtr->n_isma)); // NORTH
+}
 
 t_oimg	*get_texture(t_data *data)
 {
 	if (data->ray->side == 0) // Colpito muro verticale (est-ovest)
 	{
 		if (data->ray->ray_dir.x > 0)
-			return (data->txtr->w_img);// WEST
-		return (data->txtr->e_img); // EAST
+			return (data->txtr->e_img); // EAST
+		return (data->txtr->w_img); // WEST
 	}
 	if (data->ray->ray_dir.y > 0)
-		return (data->txtr->n_img); // NORTH
-	return (data->txtr->s_img); // SOUTH
+		return (data->txtr->s_img); // SOUTH
+	return (data->txtr->n_img); // NORTH
 }
 
 int	get_texture_x_coordinate(t_draw *temp, t_data *data)
@@ -50,7 +63,6 @@ int	get_texture_x_coordinate(t_draw *temp, t_data *data)
 void	drawing_loop(t_draw *temp, t_data *data, int x)
 {
 	int	y;
-	int	offset = 0;
 
 	y = 0;
 	y = data->ray->draw_start;
@@ -62,9 +74,7 @@ void	drawing_loop(t_draw *temp, t_data *data, int x)
 		temp->color = *(int *)(temp->texture->addr
 				+ temp->tex_y * temp->texture->l_l
 				+ temp->tex_x * (temp->texture->bpp / 8));
-		// my_pixel_put(x, y, data, temp->color);
-		offset = (y * data->ximg->l_l) + (x * (data->ximg->bpp / 8));
-	*((unsigned int *)(data->ximg->addr + offset)) = temp->color;
+		my_pixel_put(x, y, data, temp->color);
 		y++;
 	}
 }
@@ -76,7 +86,10 @@ void	draw_wall_column(t_data *data, int x)
 	temp = (t_draw){0};
 	if (data->ray->side == -1)
 		return ;
-	temp.texture = get_texture(data);
+	if (ISMA == 1)
+		temp.texture = get_texture_meme(data);
+	else
+		temp.texture = get_texture(data);
 	temp.tex_x = get_texture_x_coordinate(&temp, data);
 	temp.step = 1.0 * temp.texture->height / data->ray->draw_len;
 	temp.tex_pos = (data->ray->draw_start - W_H / 2

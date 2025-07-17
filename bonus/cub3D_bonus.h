@@ -20,6 +20,9 @@
 # include "../minilibx-linux/mlx.h"
 # include "../minilibx-linux/mlx_int.h"
 
+# ifndef ISMA
+#  define ISMA 0
+# endif
 # define W_W 1280
 # define W_H 768
 # define ROT_SPEED 0.03
@@ -134,6 +137,8 @@ typedef struct s_txtr
 	t_oimg	*player_e;
 	t_oimg	*player_w;
 	t_oimg	*empty;
+	t_oimg	*isma_arr;
+	int		n_isma;
 	int		f_clr;
 	int		c_clr;
 }			t_txtr;
@@ -238,4 +243,5 @@ void	free_images(t_data *data);
 
 
 void	print_menu(t_data *data);
+t_oimg	*wall_animation(t_data *data, t_txtr *txtr, int n_img);
 #endif
