@@ -48,12 +48,30 @@ bool	parse_textures(t_txtr *tx, t_parse *parse, void *xdis)
 		return (false);
 	if (!check_file_type(parse->w_path, ".xpm"))
 		return (false);
+	if (!check_file_type(parse->pimg_n, ".xpm"))
+		return (false);
+	if (!check_file_type(parse->pimg_s, ".xpm"))
+		return (false);
+	if (!check_file_type(parse->pimg_e, ".xpm"))
+		return (false);
+	if (!check_file_type(parse->pimg_w, ".xpm"))
+		return (false);
+	if (!check_file_type(parse->empty_img, ".xpm"))
+		return (false);
 	tx->n_img = get_img_ptr(parse->n_path, xdis);
 	tx->s_img = get_img_ptr(parse->s_path, xdis);
 	tx->e_img = get_img_ptr(parse->e_path, xdis);
 	tx->w_img = get_img_ptr(parse->w_path, xdis);
+	tx->player_n = get_img_ptr(parse->pimg_n, xdis);
+	tx->player_s = get_img_ptr(parse->pimg_s, xdis);
+	tx->player_e = get_img_ptr(parse->pimg_e, xdis);
+	tx->player_w = get_img_ptr(parse->pimg_w, xdis);
+	tx->empty = get_img_ptr(parse->empty_img, xdis);
 	if (!tx->n_img || !tx->s_img
-		|| !tx->e_img || !tx->w_img)
+		|| !tx->e_img || !tx->w_img
+		|| !tx->player_n || !tx->player_s
+		|| !tx->player_e || !tx->player_w
+		|| !tx->empty)
 		return (false);
 	return (true);
 }

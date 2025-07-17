@@ -62,6 +62,9 @@ bool	all_set(t_parse *parse)
 {
 	if (!parse->n_path || !parse->s_path
 		|| !parse->e_path || !parse->w_path
+		|| !parse->pimg_n || !parse->pimg_s
+		|| !parse->pimg_e || !parse->pimg_w
+		|| !parse->empty_img
 		|| !parse->f_clr || !parse->c_clr)
 	{
 		ft_printf_fd(2, ELE_EMPTY);

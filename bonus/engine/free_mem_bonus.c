@@ -41,6 +41,35 @@ void	free_images(t_data *data)
 	}
 }
 
+void	free_minimap(t_data *data)
+{
+	if (data->txtr->player_n)
+	{
+		mlx_destroy_image(data->xdis, data->txtr->player_n->ptr);
+		free(data->txtr->player_n);
+	}
+	if (data->txtr->player_s)
+	{
+		mlx_destroy_image(data->xdis, data->txtr->player_s->ptr);
+		free(data->txtr->player_s);
+	}
+	if (data->txtr->player_e)
+	{
+		mlx_destroy_image(data->xdis, data->txtr->player_e->ptr);
+		free(data->txtr->player_e);
+	}
+	if (data->txtr->player_w)
+	{
+		mlx_destroy_image(data->xdis, data->txtr->player_w->ptr);
+		free(data->txtr->player_w);
+	}
+	if (data->txtr->empty)
+	{
+		mlx_destroy_image(data->xdis, data->txtr->empty->ptr);
+		free(data->txtr->empty);
+	}
+}
+
 void	free_data(t_data *data)
 {
 	if (data->file)
@@ -50,6 +79,7 @@ void	free_data(t_data *data)
 	if (data->xwin)
 		mlx_destroy_window(data->xdis, data->xwin);
 	free_images(data);
+	free_minimap(data);
 	mlx_destroy_display(data->xdis);
 	free(data->xdis);
 }
