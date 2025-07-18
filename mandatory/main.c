@@ -49,7 +49,6 @@ int	engine(t_data *data)
 
 	x = 0;
 	check_for_movement(data);
-	// set_background(data);
 	while (x < W_W)
 	{
 		prepare_ray(data->ray, x);

@@ -6,7 +6,7 @@
 /*   By: igilani <igilani@student.42firenze.it>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 17:30:34 by lmenoni           #+#    #+#             */
-/*   Updated: 2025/07/16 20:28:26 by igilani          ###   ########.fr       */
+/*   Updated: 2025/07/18 16:51:45 by igilani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,17 @@ void	check_for_movement(t_data *data)
 
 void	set_new_pos(t_vctr *new_pos, t_ray *ray, int keycode)
 {
+	// Questo serve per sistemare il movimento del player sul muro, gliding
+	// curr_x = p_pos.x;
+	// curr_y = p_pos.y;
+
+	// curr_x => new
+	// if (map[curr_y][curr_x] == '1')
+	// 	p_pos_x = curr_x;
+
+	// curr_y => new
+	// if (map[curr_y][curr_x] != '1')
+	// 	p_pos_y = curr_y;
 	if (keycode == 119)
 	{
 		new_pos->x = ray->p_pos.x + (ray->p_dir.x * ray->move_speed);
@@ -52,15 +63,28 @@ void	set_new_pos(t_vctr *new_pos, t_ray *ray, int keycode)
 void	move(t_data *data, t_ray *ray, int keycode)
 {
 	t_vctr	new_pos;
-
+	bool	valid_move_x;
+	bool	valid_move_y;
+	
 	new_pos = (t_vctr){0};
 	set_new_pos(&new_pos, ray, keycode);
+	valid_move_x = (new_pos.x > 0 && new_pos.x < data->map_w && data->map[(int)floor(ray->p_pos.y)][(int)floor(new_pos.x)] != '1');
+	valid_move_y = (new_pos.y > 0 && new_pos.y < data->map_h && data->map[(int)floor(new_pos.y)][(int)floor(ray->p_pos.x)] != '1');
 	if (new_pos.x >= data->map_w || new_pos.y >= data->map_h
 		|| new_pos.x <= 0 || new_pos.y <= 0
 		|| data->map[(int)floor(new_pos.y)][(int)floor(new_pos.x)] == '1')
+	{
+		if (valid_move_x)
+			ray->p_pos.x = new_pos.x;
+		if (valid_move_y)
+			ray->p_pos.y = new_pos.y;
 		return ;
-	ray->p_pos.x = new_pos.x;
-	ray->p_pos.y = new_pos.y;
+	}
+	if (valid_move_x || valid_move_y)
+	{
+		ray->p_pos.x = new_pos.x;
+		ray->p_pos.y = new_pos.y;
+	}
 }
 
 void	key_rotate(t_ray *ray, double rot)

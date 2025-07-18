@@ -6,7 +6,7 @@
 /*   By: igilani <igilani@student.42firenze.it>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 17:30:55 by lmenoni           #+#    #+#             */
-/*   Updated: 2025/07/17 19:25:22 by igilani          ###   ########.fr       */
+/*   Updated: 2025/07/18 14:15:56 by igilani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,16 @@
 
 t_oimg	*get_texture_meme(t_data *data)
 {
+	data->txtr->c_clr = 0X000000;//0X110e11
+	data->txtr->f_clr = 0X000000;
 	if (data->ray->side == 0) // Colpito muro verticale (est-ovest)
 	{
 		if (data->ray->ray_dir.x > 0)
-			return (data->txtr->e_img); // EAST
-		return (data->txtr->w_img); // WEST
+			return (wall_animation(data, data->txtr, data->txtr->n_isma)); // EAST
+		return (wall_animation(data, data->txtr, data->txtr->n_isma)); // WEST
 	}
 	if (data->ray->ray_dir.y > 0)
-		return (data->txtr->s_img); // SOUTH
+		return (wall_animation(data, data->txtr, data->txtr->n_isma)); // SOUTH
 	return (wall_animation(data, data->txtr, data->txtr->n_isma)); // NORTH
 }
 
