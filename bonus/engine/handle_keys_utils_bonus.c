@@ -27,17 +27,6 @@ void	check_for_movement(t_data *data)
 
 void	set_new_pos(t_vctr *new_pos, t_ray *ray, int keycode)
 {
-	// Questo serve per sistemare il movimento del player sul muro, gliding
-	// curr_x = p_pos.x;
-	// curr_y = p_pos.y;
-
-	// curr_x => new
-	// if (map[curr_y][curr_x] == '1')
-	// 	p_pos_x = curr_x;
-
-	// curr_y => new
-	// if (map[curr_y][curr_x] != '1')
-	// 	p_pos_y = curr_y;
 	if (keycode == 119)
 	{
 		new_pos->x = ray->p_pos.x + (ray->p_dir.x * ray->move_speed);
@@ -108,4 +97,13 @@ void	reset(t_ray *ray)
 	ray->p_dir.y = ray->p_dir_ori.y;
 	ray->plane.x = ray->plane_ori.x;
 	ray->plane.y = ray->plane_ori.y;
+}
+
+void	pause_game(t_data *data)
+{
+	if (!data->pause)
+		mlx_mouse_show(data->xdis, data->xwin);
+	else
+		mlx_mouse_hide(data->xdis, data->xwin);
+	data->pause = !data->pause;
 }

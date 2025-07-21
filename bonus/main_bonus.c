@@ -43,6 +43,32 @@ void	draw_remaining_background(t_data *data, int x)
 	}
 }
 
+void	put_image_to_image(t_data *data, t_oimg *in, int x, int y)
+{
+	int				i;
+	int				j;
+	unsigned int	color;
+
+	i = 0;
+	j = 0;
+	color = 0;
+	while (j < in->height)
+	{
+		i = 0;
+		while (i < in->width)
+		{
+			color = *(unsigned int *)(in->addr
+					+ (j * in->l_l)
+					+ (i * (in->bpp / 8)));
+			if ((x + i) >= 0 && (x + i) < data->ximg->width
+				&& (y + j) >= 0 && (y + j) < data->ximg->height)
+				my_pixel_put(x + i, y + j, data, color);
+			i++;
+		}
+		j++;
+	}
+}
+
 void	render_map(t_data *data, t_oimg *player, t_txtr *txtr)
 {
 	int	x;
@@ -57,15 +83,15 @@ void	render_map(t_data *data, t_oimg *player, t_txtr *txtr)
 	while (j < (int)data->ray->p_pos.y + 7)
 	{
 		i = (int)data->ray->p_pos.x - 7;
-		x = 0;
+		x = MAP_POS;
 		while (i < (int)data->ray->p_pos.x + 7)
 		{
 			if (i < data->map_w && i >= 0 && j < data->map_h && j >= 0 && data->map[j][i] == '0')
 			{
 				if (j == (int)data->ray->p_pos.y && i == (int)data->ray->p_pos.x)
-					mlx_put_image_to_window(data->xdis, data->xwin, player->ptr, x, y);
+					put_image_to_image(data, player, x, y);
 				else
-					mlx_put_image_to_window(data->xdis, data->xwin, txtr->empty->ptr, x, y);
+					put_image_to_image(data, txtr->empty, x, y);
 			}
 			i++;
 			x += txtr->empty->width;
@@ -98,20 +124,23 @@ int	engine(t_data *data)
 	int	x;
 
 	x = 0;
-	check_for_movement(data);
-	while (x < W_W)
+	if (!data->pause)
 	{
-		prepare_ray(data->ray, x);
-		perform_dda(data, data->ray);
-		compute_projection(data);
-		draw_remaining_background(data, x);
-		draw_wall_column(data, x);
-		x++;
+		check_for_movement(data);
+		while (x < W_W)
+		{
+			prepare_ray(data->ray, x);
+			perform_dda(data, data->ray);
+			compute_projection(data);
+			draw_remaining_background(data, x);
+			draw_wall_column(data, x);
+			x++;
+		}
+		map_rendering(data, data->txtr);
+		mlx_put_image_to_window(data->xdis, data->xwin, data->ximg->ptr, 0, 0);
+		// animation(data, data->txtr, data->txtr->n_isma);
+		print_menu(data);
 	}
-	mlx_put_image_to_window(data->xdis, data->xwin, data->ximg->ptr, 0, 0);
-	// animation(data, data->txtr, data->txtr->n_isma);
-	map_rendering(data, data->txtr);
-	print_menu(data);
 	return (0);
 }
 

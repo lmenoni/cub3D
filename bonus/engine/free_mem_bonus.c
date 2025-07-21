@@ -70,6 +70,24 @@ void	free_minimap(t_data *data)
 	}
 }
 
+void	free_isma_arr(t_data *data)
+{
+	int		i;
+	t_oimg	*t;
+
+	i = 0;
+	t = data->txtr->isma_arr;
+	if (t)
+	{
+		while (i < data->txtr->n_isma)
+		{
+			mlx_destroy_image(data->xdis, t[i].ptr);
+			i++;
+		}
+		free(t);
+	}
+}
+
 void	free_data(t_data *data)
 {
 	if (data->file)
@@ -80,6 +98,7 @@ void	free_data(t_data *data)
 		mlx_destroy_window(data->xdis, data->xwin);
 	free_images(data);
 	free_minimap(data);
+	free_isma_arr(data);
 	mlx_destroy_display(data->xdis);
 	free(data->xdis);
 }

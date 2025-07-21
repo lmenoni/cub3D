@@ -43,6 +43,8 @@ int	handle_key_press(int keycode, t_data *data)
 		reset(data->ray);
 	if (keycode == 105)
 		data->show_menu = !data->show_menu;
+	if (keycode == 112)
+		pause_game(data);
 	if (keycode == 65361 || keycode == 65363)
 		data->rotating = keycode;
 	return (0);
@@ -55,19 +57,22 @@ int	mouse_move(int x, int y, t_data *data)
 	double		rot_speed;
 
 	(void)y;
-	if (prev_x == -1)
-		prev_x = x;
-	delta_x = x - prev_x;
-	prev_x = x;
-	if (delta_x == 0)
-		return (0);
-	rot_speed = delta_x * 0.001;
-	if (x <= 250 || x >= W_W - 250 || y <= 250 || y >= W_H - 250)
+	if (!data->pause)
 	{
-		mlx_mouse_move(data->xdis, data->xwin, W_W / 2, W_H / 2);
-		prev_x = W_W / 2;
-		return (0);
+		if (prev_x == -1)
+			prev_x = x;
+		delta_x = x - prev_x;
+		prev_x = x;
+		if (delta_x == 0)
+			return (0);
+		rot_speed = delta_x * 0.001;
+		if (x <= 250 || x >= W_W - 250 || y <= 250 || y >= W_H - 250)
+		{
+			mlx_mouse_move(data->xdis, data->xwin, W_W / 2, W_H / 2);
+			prev_x = W_W / 2;
+			return (0);
+		}
+		key_rotate(data->ray, rot_speed);
 	}
-	key_rotate(data->ray, rot_speed);
 	return (0);
 }

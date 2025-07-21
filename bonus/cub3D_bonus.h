@@ -157,6 +157,7 @@ typedef struct s_data
 	int		moving;
 	int		rotating;
 	int		show_menu;
+	bool	pause;
 }			t_data;
 
 void	print_data(t_data *data, t_parse *parse);
@@ -244,4 +245,5 @@ void	free_images(t_data *data);
 
 void	print_menu(t_data *data);
 t_oimg	*wall_animation(t_data *data, t_txtr *txtr, int n_img);
+void	pause_game(t_data *data);
 #endif
