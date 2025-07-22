@@ -1,25 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   animation_bonus.c                                  :+:      :+:    :+:   */
+/*   doors.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: igilani <igilani@student.42firenze.it>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/17 16:32:38 by igilani           #+#    #+#             */
-/*   Updated: 2025/07/22 20:28:15 by igilani          ###   ########.fr       */
+/*   Created: 2025/07/22 18:28:40 by igilani           #+#    #+#             */
+/*   Updated: 2025/07/22 18:39:32 by igilani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3D_bonus.h"
 
-t_oimg	*wall_animation(t_txtr *txtr, int n_img, int ipf)
+void	open_door(t_ray *ray, char **map)
 {
-	static int i = -1;
+	int	x;
+	int	y;
 
-	if (n_img <= 0 || !txtr->isma_arr)
-		return (NULL);
-	i++;
-	if (i == (n_img * ipf) - 1)
-		i = 0;
-	return (&txtr->isma_arr[i / ipf]);
+	x = (int)floor(ray->p_pos.x + ray->p_dir.x);
+	y = (int)floor(ray->p_pos.y + ray->p_dir.y);
+	if (map[y][x] == 'D')
+		map[y][x] = 'd';
+	else if (map[y][x] == 'd')
+		map[y][x] = 'D';
 }

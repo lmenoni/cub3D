@@ -25,10 +25,10 @@
 # endif
 # define W_W 1280
 # define W_H 768
-# define ROT_SPEED 0.03
+# define ROT_SPEED 0.003
 # define MOV_SPEED 0.01
 # define MAP_POS 0
-# define CHR_OK "01NSWEP \t\n\r\v\f"
+# define CHR_OK "01NSWED \t\n\r\v\f"
 # define WHITE 0xFFFFFF
 # define GREY 0x808080
 # define YELLOW 0xFFFF00
@@ -148,6 +148,8 @@ typedef struct s_data
 	t_txtr	*txtr;
 	t_ray	*ray;
 	t_oimg	*ximg;
+	t_oimg	*door;
+	t_oimg	*hand;
 	void	*xdis;
 	void	*xwin;
 	char	**file;
@@ -198,7 +200,7 @@ bool	bool_fill(char **map, t_data *data, int y, int x);
 void	copy_row(char *r, char *s, int y, t_parse *parse);
 bool	invalid_char(char *s, t_data *data);
 bool	multiple_start(char c);
-void	clean_up(t_data *data);
+void	clean_up(t_data *data, char **temp);
 
 // init_data.c
 bool	init_mlx_data(t_data *data);
@@ -220,8 +222,8 @@ int		handle_key_release(int keycode, t_data *data);
 int		close_window(t_data *data);
 
 // draw.c
-void	draw_wall_column(t_data *data, int x);
-void	drawing_loop(t_draw *temp, t_data *data, int x);
+void	draw_wall_column(t_data *data, char *p_addr);
+void	drawing_loop(t_draw *temp, t_data *data, char *p_addr);
 int		get_texture_x_coordinate(t_draw *temp, t_data *data);
 t_oimg	*get_texture(t_data *data);
 
@@ -244,6 +246,7 @@ void	free_images(t_data *data);
 
 
 void	print_menu(t_data *data);
-t_oimg	*wall_animation(t_data *data, t_txtr *txtr, int n_img);
+t_oimg	*wall_animation(t_txtr *txtr, int n_img, int ipf);
 void	pause_game(t_data *data);
+void	open_door(t_ray *ray, char **map);
 #endif

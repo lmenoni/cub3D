@@ -66,23 +66,17 @@ bool	incased(char **map, t_data *data, t_parse *parse)
 {
 	int	i;
 	int	j;
+	char	**temp;
 
 	i = 0;
 	j = 0;
-	if (!bool_fill(map, data, parse->p_y, parse->p_x))
-		return (false);
-	clean_up(data);
-	while (map[i])
-	{
-		j = 0;
-		while (map[i][j])
-		{
-			if (map[i][j] == 'V')
-				map[i][j] = '0';
-			j++;
-		}
-		i++;
-	}
+	temp = ft_matdup(map);
+	if (!temp)
+		return (ft_printf_fd(2, E_ALLOC), false);
+	if (!bool_fill(temp, data, parse->p_y, parse->p_x))
+		return (ft_freemat((void **)temp, ft_matlen(temp)),  false);
+	clean_up(data, temp);
+	ft_freemat((void **)temp, ft_matlen(temp));
 	return (true);
 }
 

@@ -6,7 +6,7 @@
 #    By: igilani <igilani@student.42firenze.it>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/03 15:09:24 by igilani           #+#    #+#              #
-#    Updated: 2025/07/21 15:15:36 by igilani          ###   ########.fr        #
+#    Updated: 2025/07/22 18:41:06 by igilani          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ SRC_ENGINE = mandatory/engine/dda.c mandatory/engine/handle_keys.c mandatory/eng
 
 SRC_MAIN_BONUS   = bonus/main_bonus.c
 SRC_PARSE_BONUS  = bonus/parsing/extract_colors_bonus.c bonus/parsing/extract_elements_bonus.c bonus/parsing/handle_file_bonus.c bonus/parsing/parse_map_bonus.c bonus/parsing/parse_map_utils_bonus.c bonus/parsing/parsing_utils_bonus.c bonus/parsing/init_data_bonus.c
-SRC_ENGINE_BONUS = bonus/engine/dda_bonus.c bonus/engine/handle_keys_bonus.c bonus/engine/draw_bonus.c bonus/engine/draw_utils_bonus.c bonus/engine/handle_keys_utils_bonus.c bonus/engine/free_mem_bonus.c bonus/engine/print_info_bonus.c bonus/engine/animation_bonus.c
+SRC_ENGINE_BONUS = bonus/engine/dda_bonus.c bonus/engine/handle_keys_bonus.c bonus/engine/draw_bonus.c bonus/engine/draw_utils_bonus.c bonus/engine/handle_keys_utils_bonus.c bonus/engine/free_mem_bonus.c bonus/engine/print_info_bonus.c bonus/engine/animation_bonus.c bonus/engine/doors.c
 
 HEADERS = mandatory/cub3D.h
 HEADERS_BONUS = bonus/cub3D_bonus.h

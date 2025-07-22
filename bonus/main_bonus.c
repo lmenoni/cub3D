@@ -22,23 +22,20 @@ void	print_data(t_data *data, t_parse *parse)
 	ft_printf("-----------------------------\n");
 }
 
-void	draw_remaining_background(t_data *data, int x)
+void	draw_remaining_background(t_data *data, char *p_addr)
 {
 	int y;
-	int offset;
 
 	y = 0;
 	while (y < data->ray->draw_start)
 	{
-		offset = (y * data->ximg->l_l) + (x * (data->ximg->bpp / 8));
-		*((unsigned int *)(data->ximg->addr + offset)) = data->txtr->c_clr;
+		*((unsigned int *)(p_addr + (y * data->ximg->l_l))) = data->txtr->c_clr;
 		y++;
 	}
 	y = data->ray->draw_end;
 	while (y < data->ximg->height)
 	{
-		offset = (y * data->ximg->l_l) + (x * (data->ximg->bpp / 8));
-		*((unsigned int *)(data->ximg->addr + offset)) = data->txtr->f_clr;
+		*((unsigned int *)(p_addr + (y * data->ximg->l_l))) = data->txtr->f_clr;
 		y++;
 	}
 }
@@ -86,7 +83,7 @@ void	render_map(t_data *data, t_oimg *player, t_txtr *txtr)
 		x = MAP_POS;
 		while (i < (int)data->ray->p_pos.x + 7)
 		{
-			if (i < data->map_w && i >= 0 && j < data->map_h && j >= 0 && data->map[j][i] == '0')
+			if (i < data->map_w && i >= 0 && j < data->map_h && j >= 0 && (data->map[j][i] == '0' || data->map[j][i] == 'd'))
 			{
 				if (j == (int)data->ray->p_pos.y && i == (int)data->ray->p_pos.x)
 					put_image_to_image(data, player, x, y);
@@ -122,6 +119,7 @@ void	map_rendering(t_data *data, t_txtr *txtr)
 int	engine(t_data *data)
 {
 	int	x;
+	char *p_addr;
 
 	x = 0;
 	if (!data->pause)
@@ -129,17 +127,24 @@ int	engine(t_data *data)
 		check_for_movement(data);
 		while (x < W_W)
 		{
+			p_addr = data->ximg->addr + (x * (data->ximg->bpp >> 3)); 
 			prepare_ray(data->ray, x);
 			perform_dda(data, data->ray);
 			compute_projection(data);
-			draw_remaining_background(data, x);
-			draw_wall_column(data, x);
+			draw_remaining_background(data, p_addr);
+			draw_wall_column(data, p_addr);
 			x++;
 		}
 		map_rendering(data, data->txtr);
+		put_image_to_image(data, data->hand, W_W - data->hand->width, W_H - data->hand->height);
 		mlx_put_image_to_window(data->xdis, data->xwin, data->ximg->ptr, 0, 0);
-		// animation(data, data->txtr, data->txtr->n_isma);
 		print_menu(data);
+	}
+	else
+	{
+		t_oimg *pause_frame;
+		pause_frame = wall_animation(data->txtr, data->txtr->n_isma, 350);
+		mlx_put_image_to_window(data->xdis, data->xwin, pause_frame->ptr, ((W_W - pause_frame->width) / 2), ((W_H - pause_frame->height) / 2));
 	}
 	return (0);
 }
@@ -183,6 +188,17 @@ int main(int ac, char **av)
 	data.txtr = &txtr;
 	data.ray = &ray;
 	data.xdis = mlx_init();
+	
+	data.hand = malloc(1 * sizeof(t_oimg));
+	*data.hand = (t_oimg){0};
+	data.hand->ptr = mlx_xpm_file_to_image(data.xdis, "texture/hand.xpm", &data.hand->width, &data.hand->height);
+	data.hand->addr = mlx_get_data_addr(data.hand->ptr, &data.hand->bpp, &data.hand->l_l, &data.hand->endian);
+
+	data.door = malloc(1 * sizeof(t_oimg));
+	*data.door = (t_oimg){0};
+	data.door->ptr = mlx_xpm_file_to_image(data.xdis, "texture/door.xpm", &data.door->width, &data.door->height);
+	data.door->addr = mlx_get_data_addr(data.door->ptr, &data.door->bpp, &data.door->l_l, &data.door->endian);
+	
 	if (!parsing(&data, ac, av))
 		return (free_data(&data), 1);
 	mlx_mouse_hide(data.xdis, data.xwin);

@@ -72,7 +72,7 @@ bool	bool_fill(char **map, t_data *data, int y, int x)
 {
 	if (y < 0 || y >= data->map_h || x < 0 || x >= data->map_w)
 		return (false);
-	if (map[y][x] != '0')
+	if (map[y][x] != '0' && map[y][x] != 'D')
 		return (true);
 	map[y][x] = 'V';
 	return (bool_fill(map, data, y + 1, x)
@@ -81,19 +81,19 @@ bool	bool_fill(char **map, t_data *data, int y, int x)
 		&& bool_fill(map, data, y, x - 1));
 }
 
-void	clean_up(t_data *data)
+void	clean_up(t_data *data, char **temp)
 {
 	int	i;
 	int	j;
 
 	i = 0;
 	j = 0;
-	while (data->map[i])
+	while (data->map[i] && temp[i])
 	{
 		j = 0;
-		while (data->map[i][j])
+		while (data->map[i][j] && temp[i][j])
 		{
-			if (data->map[i][j] == '0')
+			if (temp[i][j] == '0')
 				data->map[i][j] = ' ';
 			j++;
 		}

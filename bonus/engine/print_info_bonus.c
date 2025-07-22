@@ -6,7 +6,7 @@
 /*   By: igilani <igilani@student.42firenze.it>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 17:38:17 by igilani           #+#    #+#             */
-/*   Updated: 2025/07/17 19:51:39 by igilani          ###   ########.fr       */
+/*   Updated: 2025/07/22 22:00:07 by igilani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	print_fps(t_data *data, int menu_x)
 
 void	print_commands(t_data *data, int menu_x)
 {
-	char	*str[7];
+	char	*str[8];
 	int		i;
 
 	if (data->show_menu)
@@ -61,8 +61,9 @@ void	print_commands(t_data *data, int menu_x)
 		str[2] = "Mouse/Arrows: Look";
 		str[3] = "E: Interact";
 		str[4] = "+/-: Speed";
-		str[5] = "R: Reset";
-		str[6] = "I: Toggle info";
+		str[5] = "P: Pause";
+		str[6] = "R: Reset";
+		str[7] = "I: Toggle info";
 		i = -1;
 		while (++i < 7)
 			mlx_string_put(data->xdis, data->xwin, menu_x, (i + 3) * 15,

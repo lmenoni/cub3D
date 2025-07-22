@@ -6,7 +6,7 @@
 /*   By: igilani <igilani@student.42firenze.it>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 17:30:55 by lmenoni           #+#    #+#             */
-/*   Updated: 2025/07/18 14:15:56 by igilani          ###   ########.fr       */
+/*   Updated: 2025/07/22 20:27:12 by igilani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,17 @@
 
 t_oimg	*get_texture_meme(t_data *data)
 {
+	t_oimg	*isma_arr;
+	isma_arr = wall_animation(data->txtr, data->txtr->n_isma, 20000);
 	data->txtr->c_clr = 0X000000;//0X110e11
 	data->txtr->f_clr = 0X000000;
-	if (data->ray->side == 0) // Colpito muro verticale (est-ovest)
-	{
-		if (data->ray->ray_dir.x > 0)
-			return (wall_animation(data, data->txtr, data->txtr->n_isma)); // EAST
-		return (wall_animation(data, data->txtr, data->txtr->n_isma)); // WEST
-	}
-	if (data->ray->ray_dir.y > 0)
-		return (wall_animation(data, data->txtr, data->txtr->n_isma)); // SOUTH
-	return (wall_animation(data, data->txtr, data->txtr->n_isma)); // NORTH
+	return (isma_arr); // NORTH
 }
 
 t_oimg	*get_texture(t_data *data)
 {
+	if (data->map[data->ray->map_y][data->ray->map_x] == 'D')
+		return(data->door);
 	if (data->ray->side == 0) // Colpito muro verticale (est-ovest)
 	{
 		if (data->ray->ray_dir.x > 0)
@@ -62,26 +58,26 @@ int	get_texture_x_coordinate(t_draw *temp, t_data *data)
 	return (tex_x);
 }
 
-void	drawing_loop(t_draw *temp, t_data *data, int x)
+void	drawing_loop(t_draw *temp, t_data *data, char *p_addr)
 {
 	int	y;
+	int height_mask;
 
-	y = 0;
 	y = data->ray->draw_start;
-	
+	height_mask = temp->texture->height - 1;
 	while (y < data->ray->draw_end)
 	{
-		temp->tex_y = (int)temp->tex_pos & (temp->texture->height - 1);
+		temp->tex_y = (int)temp->tex_pos & (height_mask);
 		temp->tex_pos += temp->step;
 		temp->color = *(int *)(temp->texture->addr
 				+ temp->tex_y * temp->texture->l_l
-				+ temp->tex_x * (temp->texture->bpp / 8));
-		my_pixel_put(x, y, data, temp->color);
+				+ temp->tex_x * (temp->texture->bpp >> 3));
+		*(int *)(p_addr + y * data->ximg->l_l) = temp->color;
 		y++;
 	}
 }
 
-void	draw_wall_column(t_data *data, int x)
+void	draw_wall_column(t_data *data, char *p_addr)
 {
 	t_draw	temp;
 
@@ -92,9 +88,9 @@ void	draw_wall_column(t_data *data, int x)
 		temp.texture = get_texture_meme(data);
 	else
 		temp.texture = get_texture(data);
-	temp.tex_x = get_texture_x_coordinate(&temp, data);
+	temp.tex_x = get_texture_x_coordinate(&temp, data); 
 	temp.step = 1.0 * temp.texture->height / data->ray->draw_len;
 	temp.tex_pos = (data->ray->draw_start - W_H / 2
 			+ data->ray->draw_len / 2) * temp.step;
-	drawing_loop(&temp, data, x);
+	drawing_loop(&temp, data, p_addr);
 }

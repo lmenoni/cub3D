@@ -37,8 +37,13 @@ int	handle_key_press(int keycode, t_data *data)
 		data->moving = keycode;
 	if (keycode == 61)
 		data->ray->move_speed += MOV_SPEED;
-	if (keycode == 45 && data->ray->move_speed > 0.01)
-		data->ray->move_speed -= MOV_SPEED;
+	if (keycode == 45)
+	{
+		if (data->ray->move_speed > MOV_SPEED)
+			data->ray->move_speed -= MOV_SPEED;
+		else
+			data->ray->move_speed = 0.0;
+	}
 	if (keycode == 114)
 		reset(data->ray);
 	if (keycode == 105)
@@ -47,6 +52,8 @@ int	handle_key_press(int keycode, t_data *data)
 		pause_game(data);
 	if (keycode == 65361 || keycode == 65363)
 		data->rotating = keycode;
+	if (keycode == 101)
+		open_door(data->ray, data->map);
 	return (0);
 }
 

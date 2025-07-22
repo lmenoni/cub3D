@@ -6,7 +6,7 @@
 /*   By: igilani <igilani@student.42firenze.it>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 17:30:34 by lmenoni           #+#    #+#             */
-/*   Updated: 2025/07/18 16:51:45 by igilani          ###   ########.fr       */
+/*   Updated: 2025/07/22 22:10:48 by igilani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,55 +25,120 @@ void	check_for_movement(t_data *data)
 	}
 }
 
-void	set_new_pos(t_vctr *new_pos, t_ray *ray, int keycode)
+// void	set_new_pos(t_vctr *new_pos, t_ray *ray, int keycode)
+// {
+// 	if (keycode == 119)
+// 	{
+// 		new_pos->x = ray->p_pos.x + (ray->p_dir.x * ray->move_speed);
+// 		new_pos->y = ray->p_pos.y + (ray->p_dir.y * ray->move_speed);
+// 	}
+// 	else if (keycode == 115)
+// 	{
+// 		new_pos->x = ray->p_pos.x - (ray->p_dir.x * ray->move_speed);
+// 		new_pos->y = ray->p_pos.y - (ray->p_dir.y * ray->move_speed);
+// 	}
+// 	else if (keycode == 97)
+// 	{
+// 		new_pos->x = ray->p_pos.x - (ray->plane.x * ray->move_speed);
+// 		new_pos->y = ray->p_pos.y - (ray->plane.y * ray->move_speed);
+// 	}
+// 	else if (keycode == 100)
+// 	{
+// 		new_pos->x = ray->p_pos.x + (ray->plane.x * ray->move_speed);
+// 		new_pos->y = ray->p_pos.y + (ray->plane.y * ray->move_speed);
+// 	}
+// }
+
+bool is_valid(t_vctr *pos, t_data *data)
 {
+	return ((pos->x >= 0 && pos->x < data->map_w && data->map[(int)pos->y][(int)pos->x] != '1' && data->map[(int)pos->y][(int)pos->x] != 'D'));
+}
+
+void	set_new_pos_x(t_data *data, t_vctr *new_pos, t_ray *ray, int keycode)
+{
+	double	prev;
+
+	prev = new_pos->x;
 	if (keycode == 119)
 	{
 		new_pos->x = ray->p_pos.x + (ray->p_dir.x * ray->move_speed);
-		new_pos->y = ray->p_pos.y + (ray->p_dir.y * ray->move_speed);
 	}
 	else if (keycode == 115)
 	{
 		new_pos->x = ray->p_pos.x - (ray->p_dir.x * ray->move_speed);
-		new_pos->y = ray->p_pos.y - (ray->p_dir.y * ray->move_speed);
 	}
 	else if (keycode == 97)
 	{
 		new_pos->x = ray->p_pos.x - (ray->plane.x * ray->move_speed);
-		new_pos->y = ray->p_pos.y - (ray->plane.y * ray->move_speed);
 	}
 	else if (keycode == 100)
 	{
 		new_pos->x = ray->p_pos.x + (ray->plane.x * ray->move_speed);
+	}
+	if (!is_valid(new_pos, data))
+		new_pos->x = prev;
+}
+
+
+void	set_new_pos_y(t_data *data, t_vctr *new_pos, t_ray *ray, int keycode)
+{
+	double	prev;
+
+	prev = new_pos->y;
+	if (keycode == 119)
+	{
+		new_pos->y = ray->p_pos.y + (ray->p_dir.y * ray->move_speed);
+	}
+	else if (keycode == 115)
+	{
+		new_pos->y = ray->p_pos.y - (ray->p_dir.y * ray->move_speed);
+	}
+	else if (keycode == 97)
+	{
+		new_pos->y = ray->p_pos.y - (ray->plane.y * ray->move_speed);
+	}
+	else if (keycode == 100)
+	{
 		new_pos->y = ray->p_pos.y + (ray->plane.y * ray->move_speed);
 	}
+	if (!is_valid(new_pos, data))
+		new_pos->y = prev;
 }
 
 void	move(t_data *data, t_ray *ray, int keycode)
 {
 	t_vctr	new_pos;
-	bool	valid_move_x;
-	bool	valid_move_y;
+	// bool	valid_move_x;
+	// bool	valid_move_y;
 	
 	new_pos = (t_vctr){0};
-	set_new_pos(&new_pos, ray, keycode);
-	valid_move_x = (new_pos.x > 0 && new_pos.x < data->map_w && data->map[(int)floor(ray->p_pos.y)][(int)floor(new_pos.x)] != '1');
-	valid_move_y = (new_pos.y > 0 && new_pos.y < data->map_h && data->map[(int)floor(new_pos.y)][(int)floor(ray->p_pos.x)] != '1');
-	if (new_pos.x >= data->map_w || new_pos.y >= data->map_h
-		|| new_pos.x <= 0 || new_pos.y <= 0
-		|| data->map[(int)floor(new_pos.y)][(int)floor(new_pos.x)] == '1')
-	{
-		if (valid_move_x)
-			ray->p_pos.x = new_pos.x;
-		if (valid_move_y)
-			ray->p_pos.y = new_pos.y;
-		return ;
-	}
-	if (valid_move_x || valid_move_y)
-	{
-		ray->p_pos.x = new_pos.x;
-		ray->p_pos.y = new_pos.y;
-	}
+	new_pos.y = ray->p_pos.y;
+	new_pos.x = ray->p_pos.x;
+	
+	set_new_pos_x(data, &new_pos, ray, keycode);
+	set_new_pos_y(data, &new_pos, ray, keycode);
+	// set_new_pos(&new_pos, ray, keycode);
+	// valid_move_x = (new_pos.x >= 0 && new_pos.x < data->map_w && data->map[(int)floor(ray->p_pos.y)][(int)floor(new_pos.x)] != '1' && data->map[(int)floor(ray->p_pos.y)][(int)floor(new_pos.x)] != 'D');
+	// valid_move_y = (new_pos.y >= 0 && new_pos.y < data->map_h && data->map[(int)floor(new_pos.y)][(int)floor(ray->p_pos.x)] != '1' && data->map[(int)floor(new_pos.y)][(int)floor(ray->p_pos.x)] != 'D');
+	// if (valid_move_x)
+	ray->p_pos.x = new_pos.x;
+	// if (valid_move_y)
+	ray->p_pos.y = new_pos.y;
+	// if (new_pos.x >= data->map_w || new_pos.y >= data->map_h
+	// 	|| new_pos.x <= 0 || new_pos.y <= 0
+	// 	|| data->map[(int)floor(new_pos.y)][(int)floor(new_pos.x)] == '1' || data->map[(int)floor(new_pos.y)][(int)floor(new_pos.x)] == 'D')
+	// {
+	// 	if (valid_move_x)
+	// 		ray->p_pos.x = new_pos.x;
+	// 	if (valid_move_y)
+	// 		ray->p_pos.y = new_pos.y;
+	// 	return ;
+	// }
+	// if (valid_move_x || valid_move_y)
+	// {
+	// 	ray->p_pos.x = new_pos.x;
+	// 	ray->p_pos.y = new_pos.y;
+	// }
 }
 
 void	key_rotate(t_ray *ray, double rot)
@@ -97,6 +162,7 @@ void	reset(t_ray *ray)
 	ray->p_dir.y = ray->p_dir_ori.y;
 	ray->plane.x = ray->plane_ori.x;
 	ray->plane.y = ray->plane_ori.y;
+	ray->move_speed = MOV_SPEED;
 }
 
 void	pause_game(t_data *data)
