@@ -6,7 +6,7 @@
 /*   By: igilani <igilani@student.42firenze.it>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 17:30:55 by lmenoni           #+#    #+#             */
-/*   Updated: 2025/07/22 20:27:12 by igilani          ###   ########.fr       */
+/*   Updated: 2025/07/24 00:13:54 by igilani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,12 @@ t_oimg	*get_texture_meme(t_data *data)
 
 t_oimg	*get_texture(t_data *data)
 {
+	if (data->door_animation_state > 0 && data->ray->map_x == data->door_pos_x && data->ray->map_y == data->door_pos_y)
+    	return(get_door_frame(data));
 	if (data->map[data->ray->map_y][data->ray->map_x] == 'D')
-		return(data->door);
+		return(&data->txtr->door_arr[0]);
+	if (data->map[data->ray->map_y][data->ray->map_x] == 'd')
+		return(&data->txtr->door_arr[15]);
 	if (data->ray->side == 0) // Colpito muro verticale (est-ovest)
 	{
 		if (data->ray->ray_dir.x > 0)
@@ -65,6 +69,7 @@ void	drawing_loop(t_draw *temp, t_data *data, char *p_addr)
 
 	y = data->ray->draw_start;
 	height_mask = temp->texture->height - 1;
+	
 	while (y < data->ray->draw_end)
 	{
 		temp->tex_y = (int)temp->tex_pos & (height_mask);
@@ -72,7 +77,8 @@ void	drawing_loop(t_draw *temp, t_data *data, char *p_addr)
 		temp->color = *(int *)(temp->texture->addr
 				+ temp->tex_y * temp->texture->l_l
 				+ temp->tex_x * (temp->texture->bpp >> 3));
-		*(int *)(p_addr + y * data->ximg->l_l) = temp->color;
+		if (temp->color != 0x75ff75)
+			*(int *)(p_addr + y * data->ximg->l_l) = temp->color;
 		y++;
 	}
 }

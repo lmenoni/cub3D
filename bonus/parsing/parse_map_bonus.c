@@ -64,12 +64,8 @@ bool	check_characters(char **map, t_data *data)
 
 bool	incased(char **map, t_data *data, t_parse *parse)
 {
-	int	i;
-	int	j;
 	char	**temp;
 
-	i = 0;
-	j = 0;
 	temp = ft_matdup(map);
 	if (!temp)
 		return (ft_printf_fd(2, E_ALLOC), false);

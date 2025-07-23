@@ -6,11 +6,46 @@
 /*   By: igilani <igilani@student.42firenze.it>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:32:38 by igilani           #+#    #+#             */
-/*   Updated: 2025/07/23 19:09:04 by igilani          ###   ########.fr       */
+/*   Updated: 2025/07/23 23:52:16 by igilani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3D_bonus.h"
+
+bool	get_door_animation(t_txtr *tx, t_oimg *door_arr, void *xdis)
+{
+	int		temp_fd;
+	char	*temp_path;
+	int		frame;
+	char	*temp_n;
+
+	temp_fd = 0;
+	frame = 0;
+	temp_path = NULL;
+	temp_n = NULL;
+	door_arr = malloc(16 * sizeof(t_oimg));
+	if (!door_arr)
+		return (ft_printf_fd(2, E_ALLOC), false);
+	while (frame < 16)
+	{
+		temp_path = "texture/animation/door/frame_";
+		temp_n = ft_itoa(frame);
+		temp_path = ft_strjoin(temp_path, temp_n);
+		free(temp_n);
+		temp_path = ft_buffjoin(temp_path, ".xpm");
+		temp_fd = open(temp_path, O_RDONLY);
+		if (temp_fd == -1)
+			return (free(temp_path), perror(FILE_OPEN), free(tx->door_arr), false);
+		close(temp_fd);
+		door_arr[frame].ptr = mlx_xpm_file_to_image(xdis, temp_path, &door_arr[frame].width, &door_arr[frame].height);
+		door_arr[frame].addr = mlx_get_data_addr(door_arr[frame].ptr, &door_arr[frame].bpp, &door_arr[frame].l_l, &door_arr[frame].endian);
+		free(temp_path);
+		frame++;
+	}
+	tx->n_door = 16;
+	tx->door_arr = door_arr;
+	return (true);
+}
 
 t_oimg	*wall_animation(t_txtr *txtr, int n_img, int ipf)
 {
@@ -24,23 +59,11 @@ t_oimg	*wall_animation(t_txtr *txtr, int n_img, int ipf)
 	return (&txtr->isma_arr[i / ipf]);
 }
 
-void hand_open_door(t_data *data)
+t_oimg	*door_animation(t_txtr *txtr, int frame_index)
 {
-	if (data->hand_status && data->hand_timer > 0)
-	{
-		data->hand_timer--;
-		if (data->hand_timer <= 0)
-			data->hand_status = false;
-	}
-	if (data->hand_status == 0)
-		put_image_to_image(data, data->hand_sword, data->hand_width - data->hand_sword->width, data->hand_height - data->hand_sword->height);
-	else if (data->hand_status == 1)
-	{
-		put_image_to_image(data, data->right_hand, W_W - data->right_hand->width, W_H - data->right_hand->height);
-		put_image_to_image(data, data->left_hand, 0, W_H - data->left_hand->height);
-	}
-	else if (data->hand_status == 2)
-		put_image_to_image(data, data->right_hand, W_W - data->right_hand->width, W_H - data->right_hand->height);
+	if (frame_index < 0 || frame_index >= 16 || !txtr->door_arr)
+		return (NULL);
+	return (&txtr->door_arr[frame_index]);
 }
 
 void	hand_animation(t_data *data, t_ray *ray, t_vctr *new_pos)

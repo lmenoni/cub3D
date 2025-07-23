@@ -15,7 +15,7 @@
 
 # include <X11/keysym.h>
 # include <math.h>
-# include <string.h>
+# include <stdio.h>
 # include <sys/time.h>
 # include "../my_libft/libft.h"
 # include "../minilibx-linux/mlx.h"
@@ -29,7 +29,7 @@
 # define ROT_SPEED 0.003
 # define MOV_SPEED 0.01
 # define MAP_POS 0
-# define CHR_OK "01NSWED \t\n\r\v\f"
+# define CHR_OK "01NSWEDO \t\n\r\v\f"
 # define WHITE 0xFFFFFF
 # define GREY 0x808080
 # define YELLOW 0xFFFF00
@@ -140,6 +140,8 @@ typedef struct s_txtr
 	t_oimg	*empty;
 	t_oimg	*isma_arr;
 	int		n_isma;
+	t_oimg	*door_arr;
+	int		n_door;
 	int		f_clr;
 	int		c_clr;
 }			t_txtr;
@@ -168,6 +170,11 @@ typedef struct s_data
 	bool	pause;
 	int		hand_status;
 	int		hand_timer;
+	int		door_animation_state;
+	int		door_animation_frame;
+	int		door_animation_timer;
+	int		door_pos_x;
+	int		door_pos_y;
 }			t_data;
 
 void	print_data(t_data *data, t_parse *parse);
@@ -215,6 +222,8 @@ bool	init_mlx_data(t_data *data);
 bool	get_vector(t_parse *parse, t_ray *ray);
 void	get_dir_vector(char face, t_ray *ray);
 bool	parse_textures(t_txtr *tx, t_parse *parse, void *xdis);
+bool	get_isma_animation(t_txtr *tx, t_oimg *isma_arr, void *xdis);
+bool	get_door_animation(t_txtr *tx, t_oimg *door_arr, void *xdis);
 t_oimg	*get_img_ptr(char *path, void *mlx);
 
 // dda.c
@@ -254,8 +263,11 @@ void	free_images(t_data *data);
 
 void	print_menu(t_data *data);
 t_oimg	*wall_animation(t_txtr *txtr, int n_img, int ipf);
+t_oimg	*door_animation(t_txtr *txtr, int frame_index);
 void	pause_game(t_data *data);
 void	open_door(t_data *data, t_ray *ray, char **map);
+void	update_door_animation(t_data *data);
+t_oimg	*get_door_frame(t_data *data);
 void	hand_open_door(t_data *data);
 void	hand_animation(t_data *data, t_ray *ray, t_vctr *new_pos);
 void	put_image_to_image(t_data *data, t_oimg *in, int x, int y);

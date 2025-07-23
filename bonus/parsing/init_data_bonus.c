@@ -6,7 +6,7 @@
 /*   By: igilani <igilani@student.42firenze.it>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 17:19:15 by lmenoni           #+#    #+#             */
-/*   Updated: 2025/07/22 21:42:02 by igilani          ###   ########.fr       */
+/*   Updated: 2025/07/23 22:59:45 by igilani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ bool	get_isma_animation(t_txtr *tx, t_oimg *isma_arr, void *xdis)
 		return (ft_printf_fd(2, E_ALLOC), false);
 	while (frame < 48)
 	{
-		temp_path = "texture/animation/frame_";
+		temp_path = "texture/animation/isma/frame_";
 		temp_n = ft_itoa(frame);
 		temp_path = ft_strjoin(temp_path, temp_n);
 		free(temp_n);
@@ -103,6 +103,8 @@ bool	parse_textures(t_txtr *tx, t_parse *parse, void *xdis)
 	tx->player_w = get_img_ptr(parse->pimg_w, xdis);
 	tx->empty = get_img_ptr(parse->empty_img, xdis);
 	if (!get_isma_animation(tx, tx->isma_arr, xdis))
+		return (false);
+	if (!get_door_animation(tx, tx->door_arr, xdis))
 		return (false);
 	if (!tx->n_img || !tx->s_img
 		|| !tx->e_img || !tx->w_img

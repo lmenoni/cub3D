@@ -99,10 +99,8 @@ void	perform_dda(t_data *data, t_ray *ray)
 			continue ;
 		else
 			rendered = 0;
-		if (data->map[ray->map_y][ray->map_x] == '1' || data->map[ray->map_y][ray->map_x] == 'D')
+		if (data->map[ray->map_y][ray->map_x] == '1' || data->map[ray->map_y][ray->map_x] == 'D' || data->map[ray->map_y][ray->map_x] == 'd')
 			hit = 1;
-		// if (data->map[ray->map_y][ray->map_x] == '1')
-		// 	hit = 1;
 	}
 	if (ray->side == -1)
 		ray->perp_dist = 0;

@@ -122,6 +122,7 @@ int	engine(t_data *data)
 	if (!data->pause)
 	{
 		check_for_movement(data);
+		update_door_animation(data);
 		while (x < W_W)
 		{
 			p_addr = data->ximg->addr + (x * (data->ximg->bpp >> 3)); 
@@ -186,6 +187,11 @@ int main(int ac, char **av)
 	data.ray = &ray;
 	data.hand_status = 0;
 	data.hand_timer = 0;
+	data.door_animation_state = 0;
+	data.door_animation_frame = 0;
+	data.door_animation_timer = 0;
+	data.door_pos_x = -1;
+	data.door_pos_y = -1;
 	data.hand_width = W_W;
 	data.hand_height = W_H;
 	data.walk_animation_time = 0.0f;
