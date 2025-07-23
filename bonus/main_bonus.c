@@ -1,4 +1,3 @@
-
 #include "cub3D_bonus.h"
 
 void	print_data(t_data *data, t_parse *parse)
@@ -22,29 +21,12 @@ void	print_data(t_data *data, t_parse *parse)
 	ft_printf("-----------------------------\n");
 }
 
-void	draw_remaining_background(t_data *data, char *p_addr)
-{
-	int y;
-
-	y = 0;
-	while (y < data->ray->draw_start)
-	{
-		*((unsigned int *)(p_addr + (y * data->ximg->l_l))) = data->txtr->c_clr;
-		y++;
-	}
-	y = data->ray->draw_end;
-	while (y < data->ximg->height)
-	{
-		*((unsigned int *)(p_addr + (y * data->ximg->l_l))) = data->txtr->f_clr;
-		y++;
-	}
-}
-
 void	put_image_to_image(t_data *data, t_oimg *in, int x, int y)
 {
 	int				i;
 	int				j;
-	unsigned int	color;
+	int	color;
+	// char			*dst_addr;
 
 	i = 0;
 	j = 0;
@@ -54,12 +36,27 @@ void	put_image_to_image(t_data *data, t_oimg *in, int x, int y)
 		i = 0;
 		while (i < in->width)
 		{
-			color = *(unsigned int *)(in->addr
-					+ (j * in->l_l)
-					+ (i * (in->bpp / 8)));
+			// color = *(unsigned int *)(in->addr
+			// 		+ (j * in->l_l)
+			// 		+ (i * (in->bpp >> 3)));
 			if ((x + i) >= 0 && (x + i) < data->ximg->width
 				&& (y + j) >= 0 && (y + j) < data->ximg->height)
-				my_pixel_put(x + i, y + j, data, color);
+				{
+					color = *(unsigned int *)(in->addr
+							+ (j * in->l_l)
+							+ (i * (in->bpp >> 3)));
+					my_pixel_put(x + i, y + j, data, color);
+				}
+				// {
+				// 	color = *(unsigned int *)(in->addr
+				// 			+ (j * in->l_l)
+				// 			+ (i * (in->bpp >> 3)));
+				// 	if (color != 0x75ff75)
+				// 	{
+				// 		dst_addr = data->ximg->addr + (y + j) * data->ximg->l_l + (x + i) * (data->ximg->bpp >> 3);
+				// 		*((unsigned int *)dst_addr) = color;
+				// 	}
+				// }
 			i++;
 		}
 		j++;
@@ -135,8 +132,8 @@ int	engine(t_data *data)
 			draw_wall_column(data, p_addr);
 			x++;
 		}
+		hand_open_door(data);
 		map_rendering(data, data->txtr);
-		put_image_to_image(data, data->hand, W_W - data->hand->width, W_H - data->hand->height);
 		mlx_put_image_to_window(data->xdis, data->xwin, data->ximg->ptr, 0, 0);
 		print_menu(data);
 	}
@@ -187,12 +184,27 @@ int main(int ac, char **av)
 	ray = (t_ray){0};
 	data.txtr = &txtr;
 	data.ray = &ray;
+	data.hand_status = 0;
+	data.hand_timer = 0;
+	data.hand_width = W_W;
+	data.hand_height = W_H;
+	data.walk_animation_time = 0.0f;
 	data.xdis = mlx_init();
 	
-	data.hand = malloc(1 * sizeof(t_oimg));
-	*data.hand = (t_oimg){0};
-	data.hand->ptr = mlx_xpm_file_to_image(data.xdis, "texture/hand.xpm", &data.hand->width, &data.hand->height);
-	data.hand->addr = mlx_get_data_addr(data.hand->ptr, &data.hand->bpp, &data.hand->l_l, &data.hand->endian);
+	data.hand_sword = malloc(1 * sizeof(t_oimg));
+	*data.hand_sword = (t_oimg){0};
+	data.hand_sword->ptr = mlx_xpm_file_to_image(data.xdis, "texture/hand_sword.xpm", &data.hand_sword->width, &data.hand_sword->height);
+	data.hand_sword->addr = mlx_get_data_addr(data.hand_sword->ptr, &data.hand_sword->bpp, &data.hand_sword->l_l, &data.hand_sword->endian);
+
+	data.right_hand = malloc(1 * sizeof(t_oimg));
+	*data.right_hand = (t_oimg){0};
+	data.right_hand->ptr = mlx_xpm_file_to_image(data.xdis, "texture/right_hand.xpm", &data.right_hand->width, &data.right_hand->height);
+	data.right_hand->addr = mlx_get_data_addr(data.right_hand->ptr, &data.right_hand->bpp, &data.right_hand->l_l, &data.right_hand->endian);
+
+	data.left_hand = malloc(1 * sizeof(t_oimg));
+	*data.left_hand = (t_oimg){0};
+	data.left_hand->ptr = mlx_xpm_file_to_image(data.xdis, "texture/left_hand.xpm", &data.left_hand->width, &data.left_hand->height);
+	data.left_hand->addr = mlx_get_data_addr(data.left_hand->ptr, &data.left_hand->bpp, &data.left_hand->l_l, &data.left_hand->endian);
 
 	data.door = malloc(1 * sizeof(t_oimg));
 	*data.door = (t_oimg){0};

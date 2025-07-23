@@ -15,6 +15,7 @@
 
 # include <X11/keysym.h>
 # include <math.h>
+# include <string.h>
 # include <sys/time.h>
 # include "../my_libft/libft.h"
 # include "../minilibx-linux/mlx.h"
@@ -149,7 +150,12 @@ typedef struct s_data
 	t_ray	*ray;
 	t_oimg	*ximg;
 	t_oimg	*door;
-	t_oimg	*hand;
+	t_oimg	*hand_sword;
+	t_oimg	*right_hand;
+	t_oimg	*left_hand;
+	int		hand_height;
+	int		hand_width;
+	float	walk_animation_time;
 	void	*xdis;
 	void	*xwin;
 	char	**file;
@@ -160,6 +166,8 @@ typedef struct s_data
 	int		rotating;
 	int		show_menu;
 	bool	pause;
+	int		hand_status;
+	int		hand_timer;
 }			t_data;
 
 void	print_data(t_data *data, t_parse *parse);
@@ -228,7 +236,7 @@ int		get_texture_x_coordinate(t_draw *temp, t_data *data);
 t_oimg	*get_texture(t_data *data);
 
 // draw_utils.c
-void	set_background(t_data *data);
+void	draw_remaining_background(t_data *data, char *p_addr);
 void	my_pixel_put(int x, int y, t_data *data, int color);
 void	compute_projection(t_data *data);
 
@@ -237,7 +245,6 @@ void	check_for_movement(t_data *data);
 void	reset(t_ray *ray);
 void	key_rotate(t_ray *ray, double rot);
 void	move(t_data *data, t_ray *ray, int keycode);
-void	set_new_pos(t_vctr *new_pos, t_ray *ray, int keycode);
 int mouse_move(int x, int y,t_data *data);
 
 // free_mem.c
@@ -248,5 +255,9 @@ void	free_images(t_data *data);
 void	print_menu(t_data *data);
 t_oimg	*wall_animation(t_txtr *txtr, int n_img, int ipf);
 void	pause_game(t_data *data);
-void	open_door(t_ray *ray, char **map);
+void	open_door(t_data *data, t_ray *ray, char **map);
+void	hand_open_door(t_data *data);
+void	hand_animation(t_data *data, t_ray *ray, t_vctr *new_pos);
+void	put_image_to_image(t_data *data, t_oimg *in, int x, int y);
+
 #endif

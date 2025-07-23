@@ -53,7 +53,7 @@ int	handle_key_press(int keycode, t_data *data)
 	if (keycode == 65361 || keycode == 65363)
 		data->rotating = keycode;
 	if (keycode == 101)
-		open_door(data->ray, data->map);
+		open_door(data, data->ray, data->map);
 	return (0);
 }
 

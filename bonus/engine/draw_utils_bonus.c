@@ -6,7 +6,7 @@
 /*   By: igilani <igilani@student.42firenze.it>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 17:31:22 by lmenoni           #+#    #+#             */
-/*   Updated: 2025/07/22 19:10:23 by igilani          ###   ########.fr       */
+/*   Updated: 2025/07/23 19:33:50 by igilani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,16 @@
 void	my_pixel_put(int x, int y, t_data *data, int color)
 {
 	//Se il colore e' <X>, allora non disegnare il pixel. Cosi rimane cio' che c'era prima (trasparenza)
-	int	offset;
+	// char *dst_addr;
 
-	offset = (y * data->ximg->l_l) + (x * (data->ximg->bpp >> 3));
-	if (color == (int)0x75ff75)
+	if (color == 0x75ff75)
 		return ;
-	else
-		*((unsigned int *)(data->ximg->addr + offset)) = color;
+	// dst_addr = data->ximg->addr + y * data->ximg->l_l + x * (data->ximg->bpp >> 3);
+	*((unsigned int *)
+	(data->ximg->addr + y
+		* data->ximg->l_l + x * (data->ximg->bpp >> 3))) = color;
+	// offset = (y * data->ximg->l_l) + (x * (data->ximg->bpp >> 3));
+	// *((unsigned int *)(data->ximg->addr + offset)) = color;
 }
 
 void	compute_projection(t_data *data)
@@ -43,23 +46,20 @@ void	compute_projection(t_data *data)
 		data->ray->draw_end = data->ximg->height - 1;
 }
 
-void	set_background(t_data *data)
+void	draw_remaining_background(t_data *data, char *p_addr)
 {
-	int	x;
-	int	y;
+	int y;
 
 	y = 0;
+	while (y < data->ray->draw_start)
+	{
+		*((unsigned int *)(p_addr + (y * data->ximg->l_l))) = data->txtr->c_clr;
+		y++;
+	}
+	y = data->ray->draw_end;
 	while (y < data->ximg->height)
 	{
-		x = 0;
-		while (x < data->ximg->width)
-		{
-			if (y < data->ximg->height / 2)
-				my_pixel_put(x, y, data, data->txtr->c_clr);
-			else if (y >= data->ximg->height / 2)
-				my_pixel_put(x, y, data, data->txtr->f_clr);
-			x++;
-		}
+		*((unsigned int *)(p_addr + (y * data->ximg->l_l))) = data->txtr->f_clr;
 		y++;
 	}
 }
