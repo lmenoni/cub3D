@@ -26,7 +26,7 @@ void	put_image_to_image(t_data *data, t_oimg *in, int x, int y)
 	int				i;
 	int				j;
 	int	color;
-	// char			*dst_addr;
+	char			*dst_addr;
 
 	i = 0;
 	j = 0;
@@ -36,27 +36,18 @@ void	put_image_to_image(t_data *data, t_oimg *in, int x, int y)
 		i = 0;
 		while (i < in->width)
 		{
-			// color = *(unsigned int *)(in->addr
-			// 		+ (j * in->l_l)
-			// 		+ (i * (in->bpp >> 3)));
 			if ((x + i) >= 0 && (x + i) < data->ximg->width
 				&& (y + j) >= 0 && (y + j) < data->ximg->height)
 				{
 					color = *(unsigned int *)(in->addr
 							+ (j * in->l_l)
 							+ (i * (in->bpp >> 3)));
-					my_pixel_put(x + i, y + j, data, color);
+					if (color != 0x75ff75)
+					{
+						dst_addr = data->ximg->addr + (y + j) * data->ximg->l_l + (x + i) * (data->ximg->bpp >> 3);
+						*((unsigned int *)dst_addr) = color;
+					}
 				}
-				// {
-				// 	color = *(unsigned int *)(in->addr
-				// 			+ (j * in->l_l)
-				// 			+ (i * (in->bpp >> 3)));
-				// 	if (color != 0x75ff75)
-				// 	{
-				// 		dst_addr = data->ximg->addr + (y + j) * data->ximg->l_l + (x + i) * (data->ximg->bpp >> 3);
-				// 		*((unsigned int *)dst_addr) = color;
-				// 	}
-				// }
 			i++;
 		}
 		j++;
@@ -122,7 +113,7 @@ int	engine(t_data *data)
 	if (!data->pause)
 	{
 		check_for_movement(data);
-		update_door_animation(data);
+		// update_door_animation(data);
 		while (x < W_W)
 		{
 			p_addr = data->ximg->addr + (x * (data->ximg->bpp >> 3)); 
@@ -131,11 +122,6 @@ int	engine(t_data *data)
 			compute_projection(data, data->ray->perp_dist);
 			draw_remaining_background(data, p_addr);
 			draw_wall_column(data, p_addr, false);
-			// if (data->ray->side_door != -1)
-			// {
-			// 	compute_projection(data, data->ray->perp_dist_door);
-			// 	draw_wall_column(data, p_addr, true);
-			// }
 			x++;
 		}
 		hand_open_door(data);
@@ -192,9 +178,6 @@ int main(int ac, char **av)
 	data.ray = &ray;
 	data.hand_status = 0;
 	data.hand_timer = 0;
-	data.door_animation_state = 0;
-	data.door_animation_frame = 0;
-	data.door_animation_timer = 0;
 	data.door_pos_x = -1;
 	data.door_pos_y = -1;
 	data.hand_width = W_W;

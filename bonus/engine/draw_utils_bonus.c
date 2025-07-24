@@ -12,13 +12,11 @@
 
 #include "../cub3D_bonus.h"
 
-void	my_pixel_put(int x, int y, t_data *data, int color)
-{
-	if (color == 0x75ff75)
-		return ;
-	*((unsigned int *)(data->ximg->addr + y
-		* data->ximg->l_l + x * (data->ximg->bpp >> 3))) = color;
-}
+// void	my_pixel_put(int x, int y, t_data *data, int color)
+// {
+// 	if (color != 0x75ff75)
+// 		*((unsigned int *)(data->ximg->addr + y * data->ximg->l_l + x * (data->ximg->bpp >> 3))) = color;
+// }
 
 void	compute_projection(t_data *data, double perp_dist)
 {

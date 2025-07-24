@@ -19,72 +19,22 @@ void	open_door(t_data *data, t_ray *ray, char **map)
 
 	x = (int)floor(ray->p_pos.x + ray->p_dir.x);
 	y = (int)floor(ray->p_pos.y + ray->p_dir.y);
-	if (map[y][x] == 'D' && data->door_animation_state == 0)
+	if (map[y][x] == 'D')
 	{
 		data->hand_status = 1;
 		data->hand_timer = 60;
-		data->door_animation_state = 1;
-		data->door_animation_frame = 0;
-		data->door_animation_timer = 0;
 		data->door_pos_x = x;
 		data->door_pos_y = y;
+		map[y][x] = 'd';
 	}
-	else if (map[y][x] == 'd' && data->door_animation_state == 0)
+	else if (map[y][x] == 'd' && map[(int)floor(ray->p_pos.y)][(int)floor(ray->p_pos.x)] != 'd')
 	{
 		data->hand_status = 2;
 		data->hand_timer = 60;
-		data->door_animation_state = 2;
-		data->door_animation_frame = 15;
-		data->door_animation_timer = 0;
 		data->door_pos_x = x;
 		data->door_pos_y = y;
+		map[y][x] = 'D';
 	}
-}
-
-void	update_door_animation(t_data *data)
-{
-	if (data->door_animation_state == 0)
-		return ;
-	
-	data->door_animation_timer++;
-	if (data->door_animation_timer >= 5)
-	{
-		data->door_animation_timer = 0;
-		
-		if (data->door_animation_state == 1)
-		{
-			data->door_animation_frame++;
-			if (data->door_animation_frame >= 16)
-			{
-				data->door_animation_frame = 15;
-				data->door_animation_state = 0;
-				if (data->door_pos_x >= 0 && data->door_pos_y >= 0)
-					data->map[data->door_pos_y][data->door_pos_x] = 'd';
-				data->door_pos_x = -1;
-				data->door_pos_y = -1;
-			}
-		}
-		else if (data->door_animation_state == 2)
-		{
-			data->door_animation_frame--;
-			if (data->door_animation_frame < 0)
-			{
-				data->door_animation_frame = 0;
-				data->door_animation_state = 0;
-				if (data->door_pos_x >= 0 && data->door_pos_y >= 0)
-					data->map[data->door_pos_y][data->door_pos_x] = 'D';
-				data->door_pos_x = -1;
-				data->door_pos_y = -1;
-			}
-		}
-	}
-}
-
-t_oimg	*get_door_frame(t_data *data)
-{
-	if (!data->txtr->door_arr)
-		return (NULL);
-	return (&data->txtr->door_arr[data->door_animation_frame]);
 }
 
 void hand_open_door(t_data *data)

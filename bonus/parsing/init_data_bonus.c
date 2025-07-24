@@ -97,6 +97,11 @@ bool	parse_textures(t_txtr *tx, t_parse *parse, void *xdis)
 	tx->s_img = get_img_ptr(parse->s_path, xdis);
 	tx->e_img = get_img_ptr(parse->e_path, xdis);
 	tx->w_img = get_img_ptr(parse->w_path, xdis);
+	tx->s_door = get_img_ptr("texture/south_wall_door.xpm", xdis);
+	tx->n_door = get_img_ptr("texture/north_wall_door.xpm", xdis);
+	tx->e_door = get_img_ptr("texture/east_wall_door.xpm", xdis);
+	tx->w_door = get_img_ptr("texture/west_wall_door.xpm", xdis);
+	tx->door = get_img_ptr("texture/door.xpm", xdis);
 	tx->player_n = get_img_ptr(parse->pimg_n, xdis);
 	tx->player_s = get_img_ptr(parse->pimg_s, xdis);
 	tx->player_e = get_img_ptr(parse->pimg_e, xdis);
@@ -104,13 +109,13 @@ bool	parse_textures(t_txtr *tx, t_parse *parse, void *xdis)
 	tx->empty = get_img_ptr(parse->empty_img, xdis);
 	if (!get_isma_animation(tx, tx->isma_arr, xdis))
 		return (false);
-	if (!get_door_animation(tx, tx->door_arr, xdis))
-		return (false);
 	if (!tx->n_img || !tx->s_img
 		|| !tx->e_img || !tx->w_img
 		|| !tx->player_n || !tx->player_s
 		|| !tx->player_e || !tx->player_w
-		|| !tx->empty)
+		|| !tx->n_door || !tx->s_door
+		|| !tx->e_door || !tx->w_door
+		|| !tx->empty || !tx->door)
 		return (false);
 	return (true);
 }

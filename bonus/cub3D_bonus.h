@@ -27,7 +27,7 @@
 # define W_W 1280
 # define W_H 768
 # define ROT_SPEED 0.003
-# define MOV_SPEED 0.01
+# define MOV_SPEED 0.02
 # define MAP_POS 0
 # define CHR_OK "01NSWEDO \t\n\r\v\f"
 # define WHITE 0xFFFFFF
@@ -143,9 +143,12 @@ typedef struct s_txtr
 	t_oimg	*player_w;
 	t_oimg	*empty;
 	t_oimg	*isma_arr;
+	t_oimg	*door;
+	t_oimg	*w_door;
+	t_oimg	*e_door;
+	t_oimg	*s_door;
+	t_oimg	*n_door;
 	int		n_isma;
-	t_oimg	*door_arr;
-	int		n_door;
 	int		f_clr;
 	int		c_clr;
 }			t_txtr;
@@ -155,7 +158,6 @@ typedef struct s_data
 	t_txtr	*txtr;
 	t_ray	*ray;
 	t_oimg	*ximg;
-	t_oimg	*door;
 	t_oimg	*hand_sword;
 	t_oimg	*right_hand;
 	t_oimg	*left_hand;
@@ -221,7 +223,7 @@ bool	invalid_char(char *s, t_data *data);
 bool	multiple_start(char c);
 void	clean_up(t_data *data, char **temp);
 
-// init_data.c
+// init_data.c{data->ray->map_x, data->ray->map_y})
 bool	init_mlx_data(t_data *data);
 bool	get_vector(t_parse *parse, t_ray *ray);
 void	get_dir_vector(char face, t_ray *ray);
@@ -245,12 +247,12 @@ int		close_window(t_data *data);
 // draw.c
 void	draw_wall_column(t_data *data, char *p_addr, bool is_door);
 void	drawing_loop(t_draw *temp, t_data *data, char *p_addr);
-int		get_texture_x_coordinate(t_draw *temp, t_data *data, double dist);
+int		get_texture_x_coordinate(t_draw *temp, t_data *data, double dist, int side);
 t_oimg	*get_texture(t_data *data, int side, t_vctr map);
 
 // draw_utils.c
 void	draw_remaining_background(t_data *data, char *p_addr);
-void	my_pixel_put(int x, int y, t_data *data, int color);
+// void	my_pixel_put(int x, int y, t_data *data, int color);
 void	compute_projection(t_data *data, double perp_dist);
 
 // handle_keys_utils.c
@@ -267,11 +269,11 @@ void	free_images(t_data *data);
 
 void	print_menu(t_data *data);
 t_oimg	*wall_animation(t_txtr *txtr, int n_img, int ipf);
-t_oimg	*door_animation(t_txtr *txtr, int frame_index);
+// t_oimg	*door_animation(t_txtr *txtr, int frame_index);
 void	pause_game(t_data *data);
 void	open_door(t_data *data, t_ray *ray, char **map);
-void	update_door_animation(t_data *data);
-t_oimg	*get_door_frame(t_data *data);
+// void	update_door_animation(t_data *data);
+// t_oimg	*get_door_frame(t_data *data);
 void	hand_open_door(t_data *data);
 void	hand_animation(t_data *data, t_ray *ray, t_vctr *new_pos);
 void	put_image_to_image(t_data *data, t_oimg *in, int x, int y);

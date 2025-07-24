@@ -15,7 +15,7 @@
 
 # Configurazioni principali
 CC	  = cc
-CFLAGS  = -Wall -Wextra -Werror -fPIE -O3
+CFLAGS  = -Wall -Wextra -Werror -fPIE -O3 -g
 NAME	= cub3D
 NAME_BONUS = cub3B
 

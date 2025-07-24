@@ -19,20 +19,30 @@ t_oimg	*get_texture_meme(t_data *data)
 	data->txtr->c_clr = 0X000000;//0X110e11
 	data->txtr->f_clr = 0X000000;
 	if (data->map[data->ray->map_y][data->ray->map_x] == 'D')
-		return(&data->txtr->door_arr[0]);
+		return(data->txtr->door);
 	if (data->map[data->ray->map_y][data->ray->map_x] == 'd')
-		return(&data->txtr->door_arr[15]);
+		return(data->txtr->door);
 	return (isma_arr); // NORTH
 }
 
 t_oimg	*get_texture(t_data *data, int side, t_vctr map)
 {
-	// if (data->door_animation_state > 0 && map.x == data->door_pos_x && map.y == data->door_pos_y)
-    // 	return(get_door_frame(data));
 	if (data->map[(int)map.y][(int)map.x] == 'D')
-		return(&data->txtr->door_arr[0]);
-	// if (data->map[(int)map.y][(int)map.x] == 'd')
-	// 	return(&data->txtr->door_arr[15]);
+		return(data->txtr->door);
+	if (side == 0) // Colpito muro verticale (est-ovest)
+	{
+		if (data->ray->ray_dir.x > 0 && data->map[data->ray->map_y][data->ray->map_x - 1] == 'd')
+			return (data->txtr->e_door); // EAST
+		else if (data->map[data->ray->map_y][data->ray->map_x + 1] == 'd')
+			return (data->txtr->w_door); // WEST
+	}
+	else if (side == 1)
+	{
+		if (data->ray->ray_dir.y > 0 && data->map[data->ray->map_y - 1][data->ray->map_x] == 'd')
+			return (data->txtr->s_door); // SOUTH
+		else if (data->ray->map_y + 1 < data->map_h && data->map[data->ray->map_y + 1][data->ray->map_x] == 'd')
+			return (data->txtr->n_door); // NORTH
+	}
 	if (side == 0) // Colpito muro verticale (est-ovest)
 	{
 		if (data->ray->ray_dir.x > 0)
@@ -44,14 +54,14 @@ t_oimg	*get_texture(t_data *data, int side, t_vctr map)
 	return (data->txtr->n_img); // NORTH
 }
 
-int	get_texture_x_coordinate(t_draw *temp, t_data *data, double dist)
+int	get_texture_x_coordinate(t_draw *temp, t_data *data, double dist, int side)
 {
 	double	wall_x;
 	int		tex_x;
 
 	wall_x = 0;
 	tex_x = 0;
-	if (data->ray->side == 0)
+	if (side == 0)
 		wall_x = data->ray->p_pos.y + dist
 			* data->ray->ray_dir.y;
 	else
@@ -59,12 +69,34 @@ int	get_texture_x_coordinate(t_draw *temp, t_data *data, double dist)
 			* data->ray->ray_dir.x;
 	wall_x -= floor(wall_x);
 	tex_x = (int)(wall_x * (double)temp->texture->width);
-	if (data->ray->side == 0 && data->ray->ray_dir.x > 0)
+	if (side == 0 && data->ray->ray_dir.x > 0)
 		tex_x = temp->texture->width - tex_x - 1;
-	if (data->ray->side == 1 && data->ray->ray_dir.y < 0)
+	if (side == 1 && data->ray->ray_dir.y < 0)
 		tex_x = temp->texture->width - tex_x - 1;
 	return (tex_x);
 }
+
+// int	get_texture_x_coordinate(t_draw *temp, t_data *data, double dist)
+// {
+// 	double	wall_x;
+// 	int		tex_x;
+
+// 	wall_x = 0;
+// 	tex_x = 0;
+// 	if (data->ray->side == 0)
+// 		wall_x = data->ray->p_pos.y + dist
+// 			* data->ray->ray_dir.y;
+// 	else
+// 		wall_x = data->ray->p_pos.x + dist
+// 			* data->ray->ray_dir.x;
+// 	wall_x -= floor(wall_x);
+// 	tex_x = (int)(wall_x * (double)temp->texture->width);
+// 	if (data->ray->side == 0 && data->ray->ray_dir.x > 0)
+// 		tex_x = temp->texture->width - tex_x - 1;
+// 	if (data->ray->side == 1 && data->ray->ray_dir.y < 0)
+// 		tex_x = temp->texture->width - tex_x - 1;
+// 	return (tex_x);
+// }
 
 void	drawing_loop(t_draw *temp, t_data *data, char *p_addr)
 {
@@ -73,7 +105,6 @@ void	drawing_loop(t_draw *temp, t_data *data, char *p_addr)
 
 	y = data->ray->draw_start;
 	height_mask = temp->texture->height - 1;
-	
 	while (y < data->ray->draw_end)
 	{
 		temp->tex_y = (int)temp->tex_pos & (height_mask);
@@ -101,7 +132,7 @@ void	draw_wall_column(t_data *data, char *p_addr, bool is_door)
 	// if (is_door)
 	// 	temp.tex_x = get_texture_x_coordinate(&temp, data, data->ray->perp_dist_door);
 	// else
-	temp.tex_x = get_texture_x_coordinate(&temp, data, data->ray->perp_dist);
+	temp.tex_x = get_texture_x_coordinate(&temp, data, data->ray->perp_dist, data->ray->side);
 	temp.step = 1.0 * temp.texture->height / data->ray->draw_len;
 	temp.tex_pos = (data->ray->draw_start - W_H / 2
 			+ data->ray->draw_len / 2) * temp.step;
