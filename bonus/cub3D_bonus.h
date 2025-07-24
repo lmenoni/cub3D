@@ -116,11 +116,15 @@ typedef struct s_ray
 	double		cam_len; // Lunghezza della camera per il calcolo del raggio
 	double		move_speed; // Velocità di movimento
 	double		perp_dist; // Distanza corretta tra player e muro
+	double		perp_dist_door;
 	int			map_x; // Posizione X colpita nella mappa
 	int			map_y; // Posizione Y colpita nella mappa
+	int			map_x_door;
+	int			map_y_door;
 	int			step_x; // Direzione (+1 o -1) per l'avanzamento su X
 	int			step_y; // Direzione (+1 o -1) per l'avanzamento su Y
 	int			side; // Indica se il raggio ha colpito un muro verticale
+	int			side_door;
 	int			draw_start; // Inizio della linea da disegnare
 	int			draw_end; // Fine della linea da disegnare
 	int			draw_len;
@@ -239,15 +243,15 @@ int		handle_key_release(int keycode, t_data *data);
 int		close_window(t_data *data);
 
 // draw.c
-void	draw_wall_column(t_data *data, char *p_addr);
+void	draw_wall_column(t_data *data, char *p_addr, bool is_door);
 void	drawing_loop(t_draw *temp, t_data *data, char *p_addr);
-int		get_texture_x_coordinate(t_draw *temp, t_data *data);
-t_oimg	*get_texture(t_data *data);
+int		get_texture_x_coordinate(t_draw *temp, t_data *data, double dist);
+t_oimg	*get_texture(t_data *data, int side, t_vctr map);
 
 // draw_utils.c
 void	draw_remaining_background(t_data *data, char *p_addr);
 void	my_pixel_put(int x, int y, t_data *data, int color);
-void	compute_projection(t_data *data);
+void	compute_projection(t_data *data, double perp_dist);
 
 // handle_keys_utils.c
 void	check_for_movement(t_data *data);

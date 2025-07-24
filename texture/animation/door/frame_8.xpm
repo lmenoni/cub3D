@@ -134,8 +134,8 @@ static const char *frame_8[] = {
 "p. c #6EEF6D",
 "a. c #6FEF6D",
 "s. c #6FEE6D",
-"d. c #70EF6D",
-"f. c #70EF6D",
+"d. c #75FF75",
+"f. c #75FF75",
 "g. c #75FF75",
 "h. c #75FF75",
 /* pixels */

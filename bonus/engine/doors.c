@@ -6,7 +6,7 @@
 /*   By: igilani <igilani@student.42firenze.it>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 18:28:40 by igilani           #+#    #+#             */
-/*   Updated: 2025/07/24 00:02:19 by igilani          ###   ########.fr       */
+/*   Updated: 2025/07/24 13:21:26 by igilani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,22 +24,20 @@ void	open_door(t_data *data, t_ray *ray, char **map)
 		data->hand_status = 1;
 		data->hand_timer = 60;
 		data->door_animation_state = 1;
-		data->door_animation_frame = 0; // Inizia dal primo frame
+		data->door_animation_frame = 0;
 		data->door_animation_timer = 0;
 		data->door_pos_x = x;
 		data->door_pos_y = y;
-		// Non cambiare subito la mappa, aspetta che l'animazione finisca
 	}
 	else if (map[y][x] == 'd' && data->door_animation_state == 0)
 	{
 		data->hand_status = 2;
 		data->hand_timer = 60;
 		data->door_animation_state = 2;
-		data->door_animation_frame = 15; // Inizia dall'ultimo frame
+		data->door_animation_frame = 15;
 		data->door_animation_timer = 0;
 		data->door_pos_x = x;
 		data->door_pos_y = y;
-		// Non cambiare subito la mappa, aspetta che l'animazione finisca
 	}
 }
 
@@ -49,36 +47,32 @@ void	update_door_animation(t_data *data)
 		return ;
 	
 	data->door_animation_timer++;
-	if (data->door_animation_timer >= 5) // Velocità più veloce per 16 frame
+	if (data->door_animation_timer >= 5)
 	{
 		data->door_animation_timer = 0;
 		
-		if (data->door_animation_state == 1) // Apertura: da 0 a 15
+		if (data->door_animation_state == 1)
 		{
 			data->door_animation_frame++;
 			if (data->door_animation_frame >= 16)
 			{
 				data->door_animation_frame = 15;
 				data->door_animation_state = 0;
-				// Cambia lo stato della porta solo quando l'animazione è finita
 				if (data->door_pos_x >= 0 && data->door_pos_y >= 0)
 					data->map[data->door_pos_y][data->door_pos_x] = 'd';
-				// Reset delle posizioni per permettere nuove animazioni
 				data->door_pos_x = -1;
 				data->door_pos_y = -1;
 			}
 		}
-		else if (data->door_animation_state == 2) // Chiusura: da 15 a 0
+		else if (data->door_animation_state == 2)
 		{
 			data->door_animation_frame--;
 			if (data->door_animation_frame < 0)
 			{
 				data->door_animation_frame = 0;
 				data->door_animation_state = 0;
-				// Cambia lo stato della porta solo quando l'animazione è finita
 				if (data->door_pos_x >= 0 && data->door_pos_y >= 0)
 					data->map[data->door_pos_y][data->door_pos_x] = 'D';
-				// Reset delle posizioni per permettere nuove animazioni
 				data->door_pos_x = -1;
 				data->door_pos_y = -1;
 			}

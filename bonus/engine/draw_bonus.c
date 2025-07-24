@@ -6,7 +6,7 @@
 /*   By: igilani <igilani@student.42firenze.it>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 17:30:55 by lmenoni           #+#    #+#             */
-/*   Updated: 2025/07/24 00:13:54 by igilani          ###   ########.fr       */
+/*   Updated: 2025/07/24 16:56:30 by igilani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,22 @@ t_oimg	*get_texture_meme(t_data *data)
 	isma_arr = wall_animation(data->txtr, data->txtr->n_isma, 20000);
 	data->txtr->c_clr = 0X000000;//0X110e11
 	data->txtr->f_clr = 0X000000;
-	return (isma_arr); // NORTH
-}
-
-t_oimg	*get_texture(t_data *data)
-{
-	if (data->door_animation_state > 0 && data->ray->map_x == data->door_pos_x && data->ray->map_y == data->door_pos_y)
-    	return(get_door_frame(data));
 	if (data->map[data->ray->map_y][data->ray->map_x] == 'D')
 		return(&data->txtr->door_arr[0]);
 	if (data->map[data->ray->map_y][data->ray->map_x] == 'd')
 		return(&data->txtr->door_arr[15]);
-	if (data->ray->side == 0) // Colpito muro verticale (est-ovest)
+	return (isma_arr); // NORTH
+}
+
+t_oimg	*get_texture(t_data *data, int side, t_vctr map)
+{
+	// if (data->door_animation_state > 0 && map.x == data->door_pos_x && map.y == data->door_pos_y)
+    // 	return(get_door_frame(data));
+	if (data->map[(int)map.y][(int)map.x] == 'D')
+		return(&data->txtr->door_arr[0]);
+	// if (data->map[(int)map.y][(int)map.x] == 'd')
+	// 	return(&data->txtr->door_arr[15]);
+	if (side == 0) // Colpito muro verticale (est-ovest)
 	{
 		if (data->ray->ray_dir.x > 0)
 			return (data->txtr->e_img); // EAST
@@ -40,7 +44,7 @@ t_oimg	*get_texture(t_data *data)
 	return (data->txtr->n_img); // NORTH
 }
 
-int	get_texture_x_coordinate(t_draw *temp, t_data *data)
+int	get_texture_x_coordinate(t_draw *temp, t_data *data, double dist)
 {
 	double	wall_x;
 	int		tex_x;
@@ -48,10 +52,10 @@ int	get_texture_x_coordinate(t_draw *temp, t_data *data)
 	wall_x = 0;
 	tex_x = 0;
 	if (data->ray->side == 0)
-		wall_x = data->ray->p_pos.y + data->ray->perp_dist
+		wall_x = data->ray->p_pos.y + dist
 			* data->ray->ray_dir.y;
 	else
-		wall_x = data->ray->p_pos.x + data->ray->perp_dist
+		wall_x = data->ray->p_pos.x + dist
 			* data->ray->ray_dir.x;
 	wall_x -= floor(wall_x);
 	tex_x = (int)(wall_x * (double)temp->texture->width);
@@ -83,18 +87,21 @@ void	drawing_loop(t_draw *temp, t_data *data, char *p_addr)
 	}
 }
 
-void	draw_wall_column(t_data *data, char *p_addr)
+void	draw_wall_column(t_data *data, char *p_addr, bool is_door)
 {
 	t_draw	temp;
 
 	temp = (t_draw){0};
-	if (data->ray->side == -1)
+	if ((is_door && data->ray->side_door == -1) || data->ray->side == -1)
 		return ;
 	if (ISMA == 1)
 		temp.texture = get_texture_meme(data);
 	else
-		temp.texture = get_texture(data);
-	temp.tex_x = get_texture_x_coordinate(&temp, data); 
+		temp.texture = get_texture(data, data->ray->side, (t_vctr){data->ray->map_x, data->ray->map_y});
+	// if (is_door)
+	// 	temp.tex_x = get_texture_x_coordinate(&temp, data, data->ray->perp_dist_door);
+	// else
+	temp.tex_x = get_texture_x_coordinate(&temp, data, data->ray->perp_dist);
 	temp.step = 1.0 * temp.texture->height / data->ray->draw_len;
 	temp.tex_pos = (data->ray->draw_start - W_H / 2
 			+ data->ray->draw_len / 2) * temp.step;

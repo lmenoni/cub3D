@@ -128,9 +128,14 @@ int	engine(t_data *data)
 			p_addr = data->ximg->addr + (x * (data->ximg->bpp >> 3)); 
 			prepare_ray(data->ray, x);
 			perform_dda(data, data->ray);
-			compute_projection(data);
+			compute_projection(data, data->ray->perp_dist);
 			draw_remaining_background(data, p_addr);
-			draw_wall_column(data, p_addr);
+			draw_wall_column(data, p_addr, false);
+			// if (data->ray->side_door != -1)
+			// {
+			// 	compute_projection(data, data->ray->perp_dist_door);
+			// 	draw_wall_column(data, p_addr, true);
+			// }
 			x++;
 		}
 		hand_open_door(data);
@@ -211,11 +216,6 @@ int main(int ac, char **av)
 	*data.left_hand = (t_oimg){0};
 	data.left_hand->ptr = mlx_xpm_file_to_image(data.xdis, "texture/left_hand.xpm", &data.left_hand->width, &data.left_hand->height);
 	data.left_hand->addr = mlx_get_data_addr(data.left_hand->ptr, &data.left_hand->bpp, &data.left_hand->l_l, &data.left_hand->endian);
-
-	data.door = malloc(1 * sizeof(t_oimg));
-	*data.door = (t_oimg){0};
-	data.door->ptr = mlx_xpm_file_to_image(data.xdis, "texture/door.xpm", &data.door->width, &data.door->height);
-	data.door->addr = mlx_get_data_addr(data.door->ptr, &data.door->bpp, &data.door->l_l, &data.door->endian);
 	
 	if (!parsing(&data, ac, av))
 		return (free_data(&data), 1);

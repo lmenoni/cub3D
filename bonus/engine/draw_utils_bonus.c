@@ -6,7 +6,7 @@
 /*   By: igilani <igilani@student.42firenze.it>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 17:31:22 by lmenoni           #+#    #+#             */
-/*   Updated: 2025/07/23 19:33:50 by igilani          ###   ########.fr       */
+/*   Updated: 2025/07/24 15:51:48 by igilani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,29 +14,22 @@
 
 void	my_pixel_put(int x, int y, t_data *data, int color)
 {
-	//Se il colore e' <X>, allora non disegnare il pixel. Cosi rimane cio' che c'era prima (trasparenza)
-	// char *dst_addr;
-
 	if (color == 0x75ff75)
 		return ;
-	// dst_addr = data->ximg->addr + y * data->ximg->l_l + x * (data->ximg->bpp >> 3);
-	*((unsigned int *)
-	(data->ximg->addr + y
+	*((unsigned int *)(data->ximg->addr + y
 		* data->ximg->l_l + x * (data->ximg->bpp >> 3))) = color;
-	// offset = (y * data->ximg->l_l) + (x * (data->ximg->bpp >> 3));
-	// *((unsigned int *)(data->ximg->addr + offset)) = color;
 }
 
-void	compute_projection(t_data *data)
+void	compute_projection(t_data *data, double perp_dist)
 {
-	if (data->ray->perp_dist == 0)
+	if (perp_dist == 0)
 	{
 		data->ray->draw_len = data->ximg->height;
 		data->ray->draw_start = W_H / 2;
 		data->ray->draw_end = W_H / 2;
 		return ;
 	}
-	data->ray->draw_len = (int)(data->ximg->height / data->ray->perp_dist);
+	data->ray->draw_len = (int)(data->ximg->height / perp_dist);
 	data->ray->draw_start = (-data->ray->draw_len / 2)
 		+ (data->ximg->height / 2);
 	if (data->ray->draw_start < 0)

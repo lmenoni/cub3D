@@ -6,7 +6,7 @@
 #    By: igilani <igilani@student.42firenze.it>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/03 15:09:24 by igilani           #+#    #+#              #
-#    Updated: 2025/07/22 18:41:06 by igilani          ###   ########.fr        #
+#    Updated: 2025/07/24 16:43:45 by igilani          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -114,7 +114,7 @@ bonus: $(NAME_BONUS)
 	fi
 
 meme: CFLAGS += -D ISMA=1
-meme: $(NAME_BONUS)
+meme: fclean $(NAME_BONUS)
 	@if [ $(BUILD) -eq 1 ]; then \
 		echo "$(GREEN)✔ Build meme completato$(RESET)"; \
 	else \
