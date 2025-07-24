@@ -54,7 +54,7 @@ bool	get_isma_animation(t_txtr *tx, t_oimg *isma_arr, void *xdis)
 		return (ft_printf_fd(2, E_ALLOC), false);
 	while (frame < 48)
 	{
-		temp_path = "texture/animation/isma/frame_";
+		temp_path = "texture/animation/frame_";
 		temp_n = ft_itoa(frame);
 		temp_path = ft_strjoin(temp_path, temp_n);
 		free(temp_n);
