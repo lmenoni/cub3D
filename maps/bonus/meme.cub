@@ -1,13 +1,13 @@
-NO    texture/north_wall.xpm
-SO    texture/leo.xpm
-EA    texture/isma_natale.xpm
-WE    texture/leo_sburo.xpm
+NO    texture/meme/rom.xpm
+SO    texture/meme/leo.xpm
+EA    texture/meme/isma_natale.xpm
+WE    texture/meme/leo_sburo.xpm
 
-PN    texture/player_n.xpm
-PS    texture/player_s.xpm
-PE    texture/player_e.xpm
-PW    texture/player_w.xpm
-E     texture/empty.xpm
+PN    texture/minimaps/player_n.xpm
+PS    texture/minimaps/player_s.xpm
+PE    texture/minimaps/player_e.xpm
+PW    texture/minimaps/player_w.xpm
+E     texture/minimaps/empty.xpm
 
 F 41,2,10
 C 55,44,28

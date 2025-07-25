@@ -6,7 +6,7 @@
 /*   By: igilani <igilani@student.42firenze.it>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 17:19:15 by lmenoni           #+#    #+#             */
-/*   Updated: 2025/07/23 22:59:45 by igilani          ###   ########.fr       */
+/*   Updated: 2025/07/25 13:43:35 by igilani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,41 @@ t_oimg	*get_img_ptr(char *path, void *mlx)
 	return (temp);
 }
 
+bool	get_portal_animation(t_txtr *tx, t_oimg *portal_arr, void *xdis)
+{
+	int		temp_fd;
+	char	*temp_path;
+	int		frame;
+	char	*temp_n;
+
+	temp_fd = 0;
+	frame = 0;
+	temp_path = NULL;
+	temp_n = NULL;
+	portal_arr = malloc(48 * sizeof(t_oimg));
+	if (!portal_arr)
+		return (ft_printf_fd(2, E_ALLOC), false);
+	while (frame < 48)
+	{
+		temp_path = "texture/animation/portal/frame_";
+		temp_n = ft_itoa(frame);
+		temp_path = ft_strjoin(temp_path, temp_n);
+		free(temp_n);
+		temp_path = ft_buffjoin(temp_path, ".xpm");
+		temp_fd = open(temp_path, O_RDONLY);
+		if (temp_fd == -1)
+			return (free(temp_path), perror(FILE_OPEN), free(tx->portal_arr), false);
+		close(temp_fd);
+		portal_arr[frame].ptr = mlx_xpm_file_to_image(xdis, temp_path, &portal_arr[frame].width, &portal_arr[frame].height);
+		portal_arr[frame].addr = mlx_get_data_addr(portal_arr[frame].ptr, &portal_arr[frame].bpp, &portal_arr[frame].l_l, &portal_arr[frame].endian);
+		free(temp_path);
+		frame++;
+	}
+	tx->n_portal = 48;
+	tx->portal_arr = portal_arr;
+	return (true);
+}
+
 bool	get_isma_animation(t_txtr *tx, t_oimg *isma_arr, void *xdis)
 {
 	int		temp_fd;
@@ -54,7 +89,7 @@ bool	get_isma_animation(t_txtr *tx, t_oimg *isma_arr, void *xdis)
 		return (ft_printf_fd(2, E_ALLOC), false);
 	while (frame < 48)
 	{
-		temp_path = "texture/animation/frame_";
+		temp_path = "texture/animation/isma/frame_";
 		temp_n = ft_itoa(frame);
 		temp_path = ft_strjoin(temp_path, temp_n);
 		free(temp_n);
@@ -97,17 +132,19 @@ bool	parse_textures(t_txtr *tx, t_parse *parse, void *xdis)
 	tx->s_img = get_img_ptr(parse->s_path, xdis);
 	tx->e_img = get_img_ptr(parse->e_path, xdis);
 	tx->w_img = get_img_ptr(parse->w_path, xdis);
-	tx->s_door = get_img_ptr("texture/south_wall_door.xpm", xdis);
-	tx->n_door = get_img_ptr("texture/north_wall_door.xpm", xdis);
-	tx->e_door = get_img_ptr("texture/east_wall_door.xpm", xdis);
-	tx->w_door = get_img_ptr("texture/west_wall_door.xpm", xdis);
-	tx->door = get_img_ptr("texture/door.xpm", xdis);
+	tx->s_door = get_img_ptr("texture/doors/south_wall_door.xpm", xdis);
+	tx->n_door = get_img_ptr("texture/doors/north_wall_door.xpm", xdis);
+	tx->e_door = get_img_ptr("texture/doors/east_wall_door.xpm", xdis);
+	tx->w_door = get_img_ptr("texture/doors/west_wall_door.xpm", xdis);
+	tx->door = get_img_ptr("texture/doors/door.xpm", xdis);
 	tx->player_n = get_img_ptr(parse->pimg_n, xdis);
 	tx->player_s = get_img_ptr(parse->pimg_s, xdis);
 	tx->player_e = get_img_ptr(parse->pimg_e, xdis);
 	tx->player_w = get_img_ptr(parse->pimg_w, xdis);
 	tx->empty = get_img_ptr(parse->empty_img, xdis);
 	if (!get_isma_animation(tx, tx->isma_arr, xdis))
+		return (false);
+	if (!get_portal_animation(tx, tx->portal_arr, xdis))
 		return (false);
 	if (!tx->n_img || !tx->s_img
 		|| !tx->e_img || !tx->w_img

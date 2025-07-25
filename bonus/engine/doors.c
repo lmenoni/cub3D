@@ -6,7 +6,7 @@
 /*   By: igilani <igilani@student.42firenze.it>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 18:28:40 by igilani           #+#    #+#             */
-/*   Updated: 2025/07/24 13:21:26 by igilani          ###   ########.fr       */
+/*   Updated: 2025/07/25 13:53:48 by igilani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,12 @@ void	open_door(t_data *data, t_ray *ray, char **map)
 	{
 		data->hand_status = 1;
 		data->hand_timer = 60;
-		data->door_pos_x = x;
-		data->door_pos_y = y;
 		map[y][x] = 'd';
 	}
 	else if (map[y][x] == 'd' && map[(int)floor(ray->p_pos.y)][(int)floor(ray->p_pos.x)] != 'd')
 	{
 		data->hand_status = 2;
 		data->hand_timer = 60;
-		data->door_pos_x = x;
-		data->door_pos_y = y;
 		map[y][x] = 'D';
 	}
 }

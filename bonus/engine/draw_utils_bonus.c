@@ -6,17 +6,11 @@
 /*   By: igilani <igilani@student.42firenze.it>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 17:31:22 by lmenoni           #+#    #+#             */
-/*   Updated: 2025/07/24 15:51:48 by igilani          ###   ########.fr       */
+/*   Updated: 2025/07/25 12:50:36 by igilani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3D_bonus.h"
-
-// void	my_pixel_put(int x, int y, t_data *data, int color)
-// {
-// 	if (color != 0x75ff75)
-// 		*((unsigned int *)(data->ximg->addr + y * data->ximg->l_l + x * (data->ximg->bpp >> 3))) = color;
-// }
 
 void	compute_projection(t_data *data, double perp_dist)
 {

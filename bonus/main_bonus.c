@@ -113,7 +113,6 @@ int	engine(t_data *data)
 	if (!data->pause)
 	{
 		check_for_movement(data);
-		// update_door_animation(data);
 		while (x < W_W)
 		{
 			p_addr = data->ximg->addr + (x * (data->ximg->bpp >> 3)); 
@@ -131,9 +130,9 @@ int	engine(t_data *data)
 	}
 	else
 	{
-		t_oimg *pause_frame;
-		pause_frame = wall_animation(data->txtr, data->txtr->n_isma, 350);
-		mlx_put_image_to_window(data->xdis, data->xwin, pause_frame->ptr, ((W_W - pause_frame->width) / 2), ((W_H - pause_frame->height) / 2));
+		put_image_to_image(data, data->right_hand, W_W - data->right_hand->width, W_H - data->right_hand->height);
+		put_image_to_image(data, data->left_hand, 0, W_H - data->left_hand->height);
+		mlx_put_image_to_window(data->xdis, data->xwin, data->ximg->ptr, 0, 0);
 	}
 	return (0);
 }
@@ -178,8 +177,8 @@ int main(int ac, char **av)
 	data.ray = &ray;
 	data.hand_status = 0;
 	data.hand_timer = 0;
-	data.door_pos_x = -1;
-	data.door_pos_y = -1;
+	// data.door_pos_x = -1;
+	// data.door_pos_y = -1;
 	data.hand_width = W_W;
 	data.hand_height = W_H;
 	data.walk_animation_time = 0.0f;
@@ -187,17 +186,17 @@ int main(int ac, char **av)
 	
 	data.hand_sword = malloc(1 * sizeof(t_oimg));
 	*data.hand_sword = (t_oimg){0};
-	data.hand_sword->ptr = mlx_xpm_file_to_image(data.xdis, "texture/hand_sword.xpm", &data.hand_sword->width, &data.hand_sword->height);
+	data.hand_sword->ptr = mlx_xpm_file_to_image(data.xdis, "texture/meme/leo_sburo_verde.xpm", &data.hand_sword->width, &data.hand_sword->height);
 	data.hand_sword->addr = mlx_get_data_addr(data.hand_sword->ptr, &data.hand_sword->bpp, &data.hand_sword->l_l, &data.hand_sword->endian);
 
 	data.right_hand = malloc(1 * sizeof(t_oimg));
 	*data.right_hand = (t_oimg){0};
-	data.right_hand->ptr = mlx_xpm_file_to_image(data.xdis, "texture/right_hand.xpm", &data.right_hand->width, &data.right_hand->height);
+	data.right_hand->ptr = mlx_xpm_file_to_image(data.xdis, "texture/hands/right_hand.xpm", &data.right_hand->width, &data.right_hand->height);
 	data.right_hand->addr = mlx_get_data_addr(data.right_hand->ptr, &data.right_hand->bpp, &data.right_hand->l_l, &data.right_hand->endian);
 
 	data.left_hand = malloc(1 * sizeof(t_oimg));
 	*data.left_hand = (t_oimg){0};
-	data.left_hand->ptr = mlx_xpm_file_to_image(data.xdis, "texture/left_hand.xpm", &data.left_hand->width, &data.left_hand->height);
+	data.left_hand->ptr = mlx_xpm_file_to_image(data.xdis, "texture/hands/left_hand.xpm", &data.left_hand->width, &data.left_hand->height);
 	data.left_hand->addr = mlx_get_data_addr(data.left_hand->ptr, &data.left_hand->bpp, &data.left_hand->l_l, &data.left_hand->endian);
 	
 	if (!parsing(&data, ac, av))

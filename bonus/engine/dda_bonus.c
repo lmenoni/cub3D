@@ -95,11 +95,9 @@ void	perform_dda(t_data *data, t_ray *ray)
 
 	hit = 0;
 	rendered = 0;
-	ray->perp_dist_door = 0;
 	ray->side_door = -1;
 	while (hit == 0 && rendered <= 30)
 	{
-		// ray->perp_dist_door = 0;
 		take_step(ray);
 		if (render_outside(data, ray, &rendered))
 			continue ;
@@ -107,23 +105,8 @@ void	perform_dda(t_data *data, t_ray *ray)
 			rendered = 0;
 		if (data->map[ray->map_y][ray->map_x] == '1' || data->map[ray->map_y][ray->map_x] == 'D')
 			hit = 1;
-		else if (data->map[ray->map_y][ray->map_x] == 'd')
-		{
-			ray->perp_dist_door = 1;
-			// ray->side_door = ray->side;
-			// ray->map_x_door = ray->map_x;
-			// ray->map_y_door = ray->map_y;
-			// if (ray->side_door == -1)
-			// 	ray->perp_dist_door = 0;
-			// if (ray->side_door == 0)
-			// 	ray->perp_dist_door = (ray->map_x - ray->p_pos.x
-			// 		+ ((1 - ray->step_x) / 2)) / ray->ray_dir.x;
-			// else
-			// 	ray->perp_dist_door = (ray->map_y - ray->p_pos.y
-			// 		+ ((1 - ray->step_y) / 2)) / ray->ray_dir.y;
-		}
-		else
-			ray->perp_dist_door = 0;
+		else if (data->map[ray->map_y][ray->map_x] == 'd' && ISMA == 1)
+			hit = 1;
 	}
 	if (ray->side == -1)
 		ray->perp_dist = 0;

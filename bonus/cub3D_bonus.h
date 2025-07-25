@@ -116,7 +116,6 @@ typedef struct s_ray
 	double		cam_len; // Lunghezza della camera per il calcolo del raggio
 	double		move_speed; // Velocità di movimento
 	double		perp_dist; // Distanza corretta tra player e muro
-	double		perp_dist_door;
 	int			map_x; // Posizione X colpita nella mappa
 	int			map_y; // Posizione Y colpita nella mappa
 	int			map_x_door;
@@ -143,12 +142,14 @@ typedef struct s_txtr
 	t_oimg	*player_w;
 	t_oimg	*empty;
 	t_oimg	*isma_arr;
+	t_oimg	*portal_arr;
 	t_oimg	*door;
 	t_oimg	*w_door;
 	t_oimg	*e_door;
 	t_oimg	*s_door;
 	t_oimg	*n_door;
 	int		n_isma;
+	int		n_portal;
 	int		f_clr;
 	int		c_clr;
 }			t_txtr;
@@ -179,8 +180,8 @@ typedef struct s_data
 	int		door_animation_state;
 	int		door_animation_frame;
 	int		door_animation_timer;
-	int		door_pos_x;
-	int		door_pos_y;
+	// int		door_pos_x;
+	// int		door_pos_y;
 }			t_data;
 
 void	print_data(t_data *data, t_parse *parse);
@@ -277,5 +278,7 @@ void	open_door(t_data *data, t_ray *ray, char **map);
 void	hand_open_door(t_data *data);
 void	hand_animation(t_data *data, t_ray *ray, t_vctr *new_pos);
 void	put_image_to_image(t_data *data, t_oimg *in, int x, int y);
+t_oimg	*portal_animation(t_txtr *txtr, int n_img, int ipf);
+int convert_purple_to_green(int color);
 
 #endif
