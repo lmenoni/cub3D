@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3D_bonus.h                                            :+:      :+:    :+:   */
+/*   cub3D_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmenoni <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -29,7 +29,7 @@
 # define ROT_SPEED 0.003
 # define MOV_SPEED 0.02
 # define MAP_POS 0
-# define CHR_OK "01NSWEDO \t\n\r\v\f"
+# define CHR_OK "01NSWED \t\n\r\v\f"
 # define WHITE 0xFFFFFF
 # define GREY 0x808080
 # define YELLOW 0xFFFF00
@@ -67,6 +67,7 @@ typedef struct s_parse
 	char	*pimg_e;
 	char	*pimg_w;
 	char	*empty_img;
+	char	*pause_img;
 	char	*f_clr;
 	char	*c_clr;
 	int		e_set;
@@ -104,28 +105,28 @@ typedef struct s_vctr
 
 typedef struct s_ray
 {
-	t_vctr		p_pos_ori; // Posizione iniziale del player
-	t_vctr		p_dir_ori; // Direzione iniziale del player
+	t_vctr		p_pos_ori;
+	t_vctr		p_dir_ori;
 	t_vctr		plane_ori;
-	t_vctr		p_pos; // Posizione attuale del giocatore sulla mappa
-	t_vctr		p_dir; // Direzione in cui il giocatore sta guardando
-	t_vctr		plane; // Piano per il campo visivo (FOV)
-	t_vctr		ray_dir; // Direzione del raggio
-	t_vctr		delta_dist; // Distanza da percorrere per passare da una griglia all'altra
-	t_vctr		side_dist; //Distanza iniziale da percorrere per il primo impatto con un lato
-	double		cam_len; // Lunghezza della camera per il calcolo del raggio
-	double		move_speed; // Velocità di movimento
-	double		perp_dist; // Distanza corretta tra player e muro
-	int			map_x; // Posizione X colpita nella mappa
-	int			map_y; // Posizione Y colpita nella mappa
+	t_vctr		p_pos;
+	t_vctr		p_dir;
+	t_vctr		plane;
+	t_vctr		ray_dir;
+	t_vctr		delta_dist;
+	t_vctr		side_dist;
+	double		cam_len;
+	double		move_speed;
+	double		perp_dist;
+	int			map_x;
+	int			map_y;
 	int			map_x_door;
 	int			map_y_door;
-	int			step_x; // Direzione (+1 o -1) per l'avanzamento su X
-	int			step_y; // Direzione (+1 o -1) per l'avanzamento su Y
-	int			side; // Indica se il raggio ha colpito un muro verticale
+	int			step_x;
+	int			step_y;
+	int			side;
 	int			side_door;
-	int			draw_start; // Inizio della linea da disegnare
-	int			draw_end; // Fine della linea da disegnare
+	int			draw_start;
+	int			draw_end;
 	int			draw_len;
 	int			fps;
 }				t_ray;
@@ -148,6 +149,10 @@ typedef struct s_txtr
 	t_oimg	*e_door;
 	t_oimg	*s_door;
 	t_oimg	*n_door;
+	t_oimg	*pause;
+	t_oimg	*hand_sword;
+	t_oimg	*right_hand;
+	t_oimg	*left_hand;
 	int		n_isma;
 	int		n_portal;
 	int		f_clr;
@@ -159,12 +164,9 @@ typedef struct s_data
 	t_txtr	*txtr;
 	t_ray	*ray;
 	t_oimg	*ximg;
-	t_oimg	*hand_sword;
-	t_oimg	*right_hand;
-	t_oimg	*left_hand;
-	int		hand_height;
-	int		hand_width;
-	float	walk_animation_time;
+	int		hand_hh;
+	int		hand_wh;
+	float	walk_anim_time;
 	void	*xdis;
 	void	*xwin;
 	char	**file;
@@ -177,14 +179,7 @@ typedef struct s_data
 	bool	pause;
 	int		hand_status;
 	int		hand_timer;
-	int		door_animation_state;
-	int		door_animation_frame;
-	int		door_animation_timer;
-	// int		door_pos_x;
-	// int		door_pos_y;
 }			t_data;
-
-void	print_data(t_data *data, t_parse *parse);
 
 // handle_file.c
 char	**read_file(char *path);
@@ -199,11 +194,15 @@ char	*clean_value(char	*line);
 bool	all_set(t_parse *parse);
 
 // extract_elements.c
-bool	get_element(char *line, t_parse *parse, int nc);
 bool	parse_line(char *line, t_parse *parse, int line_n);
 bool	extract_paths(t_parse *parse);
 bool	extract_data(t_parse *parse, t_data *data);
 bool	get_data(char **file, t_data *data, t_parse *parse);
+
+//	get_elements_2_bonus.c
+bool	get_element(char *line, t_parse *parse, int nc);
+bool	map_elements(char *temp, char *line, t_parse *parse, int nc);
+bool	singular_char(char *line, t_parse *parse, int nc);
 
 // extract_colors.c
 bool	check_int(char **comp, int *r, int *g, int *b);
@@ -224,14 +223,29 @@ bool	invalid_char(char *s, t_data *data);
 bool	multiple_start(char c);
 void	clean_up(t_data *data, char **temp);
 
-// init_data.c{data->ray->map_x, data->ray->map_y})
+// init_data.c
 bool	init_mlx_data(t_data *data);
 bool	get_vector(t_parse *parse, t_ray *ray);
 void	get_dir_vector(char face, t_ray *ray);
-bool	parse_textures(t_txtr *tx, t_parse *parse, void *xdis);
+void	init_data(t_data *data);
+
+// init_data_animation_bonus.c
 bool	get_isma_animation(t_txtr *tx, t_oimg *isma_arr, void *xdis);
-bool	get_door_animation(t_txtr *tx, t_oimg *door_arr, void *xdis);
+bool	get_portal_animation(t_txtr *tx, t_oimg *door_arr, void *xdis);
+bool	fill_animation_arr(t_oimg *arr, int size, char *path, void *xdis);
+char	*get_temp_ani_path(char *beginning, int frame);
+
+// parse_textures.c
+bool	parse_textures(t_txtr *tx, t_parse *parse, void *xdis);
+void	get_modifiable_images(t_txtr *tx, t_parse *parse, void *xdis);
+void	get_standard_images(t_txtr *tx, void *xdis);
+bool	check_all_file_type(t_parse *parse);
 t_oimg	*get_img_ptr(char *path, void *mlx);
+
+// render_map.c
+void	map_rendering(t_data *data, t_txtr *txtr);
+void	render_map(t_data *data, t_oimg *player, t_txtr *txtr);
+void	render_tile_row(t_data *data, int j, int y, t_oimg *player);
 
 // dda.c
 void	perform_dda(t_data *data, t_ray *ray);
@@ -248,37 +262,52 @@ int		close_window(t_data *data);
 // draw.c
 void	draw_wall_column(t_data *data, char *p_addr, bool is_door);
 void	drawing_loop(t_draw *temp, t_data *data, char *p_addr);
-int		get_texture_x_coordinate(t_draw *temp, t_data *data, double dist, int side);
-t_oimg	*get_texture(t_data *data, int side, t_vctr map);
+int		get_texture_x_coordinate(t_draw *t, t_data *d, double dist, int side);
+t_oimg	*get_texture(t_data *data, t_ray *ray, int side, t_vctr map);
 
 // draw_utils.c
 void	draw_remaining_background(t_data *data, char *p_addr);
-// void	my_pixel_put(int x, int y, t_data *data, int color);
 void	compute_projection(t_data *data, double perp_dist);
+void	put_image_to_image(t_data *data, t_oimg *in, int x, int y);
+int		get_in_color(t_oimg *in, int j, int i);
 
 // handle_keys_utils.c
 void	check_for_movement(t_data *data);
 void	reset(t_ray *ray);
 void	key_rotate(t_ray *ray, double rot);
 void	move(t_data *data, t_ray *ray, int keycode);
-int mouse_move(int x, int y,t_data *data);
+int		mouse_move(int x, int y, t_data *data);
+
+// handle_keys_utils_2_bonus.c
+void	pause_render(t_data *data);
+bool	is_valid(t_vctr *pos, t_data *data);
+void	reset(t_ray *ray);
+void	pause_game(t_data *data);
 
 // free_mem.c
 void	free_data(t_data *data);
 void	free_images(t_data *data);
+void	free_img_arr(t_oimg *arr, int size, void *xdis);
 
+// free_mem_2_bonus.c
+void	free_minimap(t_data *data);
+void	free_utils_images(t_txtr *tx, void *xdis);
+void	free_door_images(t_txtr *tx, void *xdis);
+
+// parsing_map_utils_2_bonus.c
+bool	check_invalid_door(char **map);
+bool	check_door_sides(char **map, int j, int i);
 
 void	print_menu(t_data *data);
 t_oimg	*wall_animation(t_txtr *txtr, int n_img, int ipf);
-// t_oimg	*door_animation(t_txtr *txtr, int frame_index);
 void	pause_game(t_data *data);
 void	open_door(t_data *data, t_ray *ray, char **map);
-// void	update_door_animation(t_data *data);
-// t_oimg	*get_door_frame(t_data *data);
-void	hand_open_door(t_data *data);
+void	hand_open_door(t_data *data, t_txtr *tx);
 void	hand_animation(t_data *data, t_ray *ray, t_vctr *new_pos);
 void	put_image_to_image(t_data *data, t_oimg *in, int x, int y);
 t_oimg	*portal_animation(t_txtr *txtr, int n_img, int ipf);
-int convert_purple_to_green(int color);
+int		convert_purple_to_green(int color);
+t_oimg	*get_door_texture(t_data *data, t_ray *ray, int side, t_vctr map);
+t_oimg	*get_texture_meme(t_data *data, t_vctr map);
 
 #endif

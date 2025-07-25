@@ -12,43 +12,6 @@
 
 #include "../cub3D_bonus.h"
 
-bool	get_element(char *line, t_parse *parse, int nc)
-{
-	char	*temp;
-
-	temp = ft_strdup(line);
-	if (!temp)
-		return (ft_printf_fd(2, E_ALLOC), false);
-	temp[nc] = '\0';
-	if (nc == 2 && ft_strcmp(temp, "NO") == 0 && !parse->n_path)
-		parse->n_path = line;
-	else if (nc == 2 && ft_strcmp(temp, "SO") == 0 && !parse->s_path)
-		parse->s_path = line;
-	else if (nc == 2 && ft_strcmp(temp, "EA") == 0 && !parse->e_path)
-		parse->e_path = line;
-	else if (nc == 2 && ft_strcmp(temp, "WE") == 0 && !parse->w_path)
-		parse->w_path = line;
-	else if (nc == 2 && ft_strcmp(temp, "PN") == 0 && !parse->pimg_n)
-		parse->pimg_n = line;
-	else if (nc == 2 && ft_strcmp(temp, "PS") == 0 && !parse->pimg_s)
-		parse->pimg_s = line;
-	else if (nc == 2 && ft_strcmp(temp, "PE") == 0 && !parse->pimg_e)
-		parse->pimg_e = line;
-	else if (nc == 2 && ft_strcmp(temp, "PW") == 0 && !parse->pimg_w)
-		parse->pimg_w = line;
-	else if (nc == 1 && line[0] == 'E' && !parse->empty_img)
-		parse->empty_img = line;
-	else if (nc == 1 && line[0] == 'F' && !parse->f_clr)
-		parse->f_clr = line;
-	else if (nc == 1 && line[0] == 'C' && !parse->c_clr)
-		parse->c_clr = line;
-	else
-		return (free(temp), false);
-	parse->e_set++;
-	free(temp);
-	return (true);
-}
-
 bool	parse_line(char *line, t_parse *parse, int line_n)
 {
 	int	i;
@@ -66,6 +29,29 @@ bool	parse_line(char *line, t_parse *parse, int line_n)
 	return (true);
 }
 
+bool	extract_utils_paths(t_parse *parse)
+{
+	parse->pimg_n = clean_value(&parse->pimg_n[2]);
+	if (!parse->pimg_n)
+		return (false);
+	parse->pimg_s = clean_value(&parse->pimg_s[2]);
+	if (!parse->pimg_s)
+		return (false);
+	parse->pimg_e = clean_value(&parse->pimg_e[2]);
+	if (!parse->pimg_e)
+		return (false);
+	parse->pimg_w = clean_value(&parse->pimg_w[2]);
+	if (!parse->pimg_w)
+		return (false);
+	parse->empty_img = clean_value(&parse->empty_img[2]);
+	if (!parse->empty_img)
+		return (false);
+	parse->pause_img = clean_value(&parse->pause_img[2]);
+	if (!parse->pause_img)
+		return (false);
+	return (true);
+}
+
 bool	extract_paths(t_parse *parse)
 {
 	parse->n_path = clean_value(&parse->n_path[2]);
@@ -80,20 +66,7 @@ bool	extract_paths(t_parse *parse)
 	parse->w_path = clean_value(&parse->w_path[2]);
 	if (!parse->w_path)
 		return (false);
-	parse->pimg_n = clean_value(&parse->pimg_n[2]);
-	if(!parse->pimg_n)
-		return (false);
-	parse->pimg_s = clean_value(&parse->pimg_s[2]);
-	if(!parse->pimg_s)
-		return (false);
-	parse->pimg_e = clean_value(&parse->pimg_e[2]);
-	if(!parse->pimg_e)
-		return (false);
-	parse->pimg_w = clean_value(&parse->pimg_w[2]);
-	if(!parse->pimg_w)
-		return (false);
-	parse->empty_img = clean_value(&parse->empty_img[2]);
-	if(!parse->empty_img)
+	if (!extract_utils_paths(parse))
 		return (false);
 	return (true);
 }
@@ -127,7 +100,7 @@ bool	get_data(char **file, t_data *data, t_parse *parse)
 	{
 		if (!is_empty(file[i]))
 		{
-			if (parse->e_set == 11)
+			if (parse->e_set == 12)
 			{
 				data->map = &file[i];
 				break ;

@@ -21,7 +21,7 @@
 
 # define W_W 1280
 # define W_H 768
-# define ROT_SPEED 0.03
+# define ROT_SPEED 0.003
 # define MOV_SPEED 0.03
 
 # define E_ARG "ERROR\nInvalid n of arguments.\n"
@@ -88,25 +88,25 @@ typedef struct s_vctr
 
 typedef struct s_ray
 {
-	t_vctr		p_pos_ori; // Posizione iniziale del player
-	t_vctr		p_dir_ori; // Direzione iniziale del player
+	t_vctr		p_pos_ori;
+	t_vctr		p_dir_ori;
 	t_vctr		plane_ori;
-	t_vctr		p_pos; // Posizione attuale del giocatore sulla mappa
-	t_vctr		p_dir; // Direzione in cui il giocatore sta guardando
-	t_vctr		plane; // Piano per il campo visivo (FOV)
-	t_vctr		ray_dir; // Direzione del raggio
-	t_vctr		delta_dist; // Distanza da percorrere per passare da una griglia all'altra
-	t_vctr		side_dist; //Distanza iniziale da percorrere per il primo impatto con un lato
-	double		cam_len; // Lunghezza della camera per il calcolo del raggio
-	double		move_speed; // Velocità di movimento
-	double		perp_dist; // Distanza corretta tra player e muro
-	int			map_x; // Posizione X colpita nella mappa
-	int			map_y; // Posizione Y colpita nella mappa
-	int			step_x; // Direzione (+1 o -1) per l'avanzamento su X
-	int			step_y; // Direzione (+1 o -1) per l'avanzamento su Y
-	int			side; // Indica se il raggio ha colpito un muro verticale
-	int			draw_start; // Inizio della linea da disegnare
-	int			draw_end; // Fine della linea da disegnare
+	t_vctr		p_pos;
+	t_vctr		p_dir;
+	t_vctr		plane;
+	t_vctr		ray_dir;
+	t_vctr		delta_dist;
+	t_vctr		side_dist;
+	double		cam_len;
+	double		move_speed;
+	double		perp_dist;
+	int			map_x;
+	int			map_y;
+	int			step_x;
+	int			step_y;
+	int			side;
+	int			draw_start;
+	int			draw_end;
 	int			draw_len;
 }				t_ray;
 
@@ -134,8 +134,6 @@ typedef struct s_data
 	int		moving;
 	int		rotating;
 }			t_data;
-
-void	print_data(t_data *data, t_parse *parse);
 
 // handle_file.c
 char	**read_file(char *path);

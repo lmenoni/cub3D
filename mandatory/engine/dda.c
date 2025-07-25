@@ -52,7 +52,7 @@ void	prepare_ray(t_ray *ray, int x)
 	if (ray->ray_dir.y == 0)
 		ray->delta_dist.y = 1e30;
 	else
-   		ray->delta_dist.y = fabs(1 / ray->ray_dir.y);
+		ray->delta_dist.y = fabs(1 / ray->ray_dir.y);
 	prepare_steps(ray);
 }
 

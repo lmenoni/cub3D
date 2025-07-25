@@ -65,7 +65,8 @@ bool	all_set(t_parse *parse)
 		|| !parse->pimg_n || !parse->pimg_s
 		|| !parse->pimg_e || !parse->pimg_w
 		|| !parse->empty_img
-		|| !parse->f_clr || !parse->c_clr)
+		|| !parse->f_clr || !parse->c_clr
+		|| !parse->pause_img)
 	{
 		ft_printf_fd(2, ELE_EMPTY);
 		return (false);

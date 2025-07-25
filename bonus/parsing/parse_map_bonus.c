@@ -70,7 +70,7 @@ bool	incased(char **map, t_data *data, t_parse *parse)
 	if (!temp)
 		return (ft_printf_fd(2, E_ALLOC), false);
 	if (!bool_fill(temp, data, parse->p_y, parse->p_x))
-		return (ft_freemat((void **)temp, ft_matlen(temp)),  false);
+		return (ft_freemat((void **)temp, ft_matlen(temp)), false);
 	clean_up(data, temp);
 	ft_freemat((void **)temp, ft_matlen(temp));
 	return (true);
@@ -87,5 +87,7 @@ bool	parse_map(char **map, t_data *data, t_parse *parse)
 		return (ft_printf_fd(2, MAP_NSTART), false);
 	if (!incased(data->map, data, parse))
 		return (ft_printf_fd(2, MAP_INC), false);
+	if (!check_invalid_door(data->map))
+		return (false);
 	return (true);
 }

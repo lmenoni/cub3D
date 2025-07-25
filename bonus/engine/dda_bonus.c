@@ -52,7 +52,7 @@ void	prepare_ray(t_ray *ray, int x)
 	if (ray->ray_dir.y == 0)
 		ray->delta_dist.y = 1e30;
 	else
-   		ray->delta_dist.y = fabs(1 / ray->ray_dir.y);
+		ray->delta_dist.y = fabs(1 / ray->ray_dir.y);
 	prepare_steps(ray);
 }
 
@@ -91,19 +91,14 @@ bool	render_outside(t_data *data, t_ray *ray, int *rendered)
 void	perform_dda(t_data *data, t_ray *ray)
 {
 	int	hit;
-	int	rendered;
 
 	hit = 0;
-	rendered = 0;
 	ray->side_door = -1;
-	while (hit == 0 && rendered <= 30)
+	while (hit == 0)
 	{
 		take_step(ray);
-		if (render_outside(data, ray, &rendered))
-			continue ;
-		else
-			rendered = 0;
-		if (data->map[ray->map_y][ray->map_x] == '1' || data->map[ray->map_y][ray->map_x] == 'D')
+		if (data->map[ray->map_y][ray->map_x] == '1'
+			|| data->map[ray->map_y][ray->map_x] == 'D')
 			hit = 1;
 		else if (data->map[ray->map_y][ray->map_x] == 'd' && ISMA == 1)
 			hit = 1;

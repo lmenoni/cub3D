@@ -6,7 +6,7 @@
 /*   By: igilani <igilani@student.42firenze.it>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 17:31:22 by lmenoni           #+#    #+#             */
-/*   Updated: 2025/07/15 16:36:08 by igilani          ###   ########.fr       */
+/*   Updated: 2025/07/25 18:02:57 by igilani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,26 +43,19 @@ void	set_background(t_data *data)
 {
 	int	x;
 	int	y;
-	int offset = 0;
+	int	offset;
 
 	y = 0;
+	offset = 0;
 	while (y < data->ximg->height)
 	{
 		x = 0;
 		while (x < data->ximg->width)
 		{
 			if (y < data->ximg->height / 2)
-			{
-					offset = (y * data->ximg->l_l) + (x * (data->ximg->bpp / 8));
-	*((unsigned int *)(data->ximg->addr + offset)) = data->txtr->c_clr;
-			}
-				// my_pixel_put(x, y, data, data->txtr->c_clr);
+				my_pixel_put(x, y, data, data->txtr->c_clr);
 			else if (y >= data->ximg->height / 2)
-			{
-					offset = (y * data->ximg->l_l) + (x * (data->ximg->bpp / 8));
-	*((unsigned int *)(data->ximg->addr + offset)) = data->txtr->f_clr;
-			}
-				// my_pixel_put(x, y, data, data->txtr->f_clr);
+				my_pixel_put(x, y, data, data->txtr->f_clr);
 			x++;
 		}
 		y++;

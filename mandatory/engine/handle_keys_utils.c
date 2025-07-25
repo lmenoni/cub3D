@@ -6,7 +6,7 @@
 /*   By: igilani <igilani@student.42firenze.it>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 17:30:34 by lmenoni           #+#    #+#             */
-/*   Updated: 2025/07/17 20:01:00 by igilani          ###   ########.fr       */
+/*   Updated: 2025/07/25 18:03:24 by igilani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,6 @@ void	check_for_movement(t_data *data)
 
 void	move(t_ray *ray, int keycode)
 {
-	// Questo serve per sistemare il movimento del player sul muro, gliding
-	// curr_x = p_pos.x;
-	// curr_y = p_pos.y;
-
-	// curr_x => new
-	// if (map[curr_y][curr_x] == '1')
-	// 	p_pos_x = curr_x;
-
-	// curr_y => new
-	// if (map[curr_y][curr_x] != '1')
-	// 	p_pos_y = curr_y;
-	
 	if (keycode == 119)
 	{
 		ray->p_pos.x += ray->p_dir.x * ray->move_speed;

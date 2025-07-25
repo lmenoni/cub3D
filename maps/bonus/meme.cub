@@ -8,6 +8,7 @@ PS    texture/minimaps/player_s.xpm
 PE    texture/minimaps/player_e.xpm
 PW    texture/minimaps/player_w.xpm
 E     texture/minimaps/empty.xpm
+P     texture/pause.xpm
 
 F 41,2,10
 C 55,44,28
