@@ -6,7 +6,7 @@
 /*   By: igilani <igilani@student.42firenze.it>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 17:31:22 by lmenoni           #+#    #+#             */
-/*   Updated: 2025/07/25 17:51:44 by igilani          ###   ########.fr       */
+/*   Updated: 2025/08/04 15:02:52 by igilani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,10 @@ void	draw_remaining_background(t_data *data, char *p_addr)
 {
 	int	y;
 
+	if (data->ray->draw_start < 0 || data->ray->draw_start > data->ximg->height)
+		return ;
+	if (data->ray->draw_end < 0 || data->ray->draw_end > data->ximg->height)
+		return ;
 	y = 0;
 	while (y < data->ray->draw_start)
 	{

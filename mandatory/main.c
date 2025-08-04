@@ -17,6 +17,10 @@ void	draw_remaining_background(t_data *data, int x)
 	int	y;
 	int	offset;
 
+	if (data->ray->draw_start < 0 || data->ray->draw_start > data->ximg->height)
+		return ;
+	if (data->ray->draw_end < 0 || data->ray->draw_end > data->ximg->height)
+		return ;
 	y = 0;
 	while (y < data->ray->draw_start)
 	{
