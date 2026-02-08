@@ -21,6 +21,10 @@
 CC      = cc
 CFLAGS  = -Wall -Wextra -Werror -fPIE -O3 -g
 
+# Flags extra per target speciali
+EXTRA_FLAGS_BONUS = -D ISMA=0
+EXTRA_FLAGS_MEME  = -D ISMA=1
+
 # Nomi eseguibili
 NAME        = cub3D
 NAME_BONUS  = cub3B
@@ -76,8 +80,8 @@ SRC_ENGINE_BONUS = bonus/engine/dda_bonus.c \
 				   bonus/engine/render_map.c
 
 # Headers
-HEADERS = mandatory/cub3D.h
-HEADERS_BONUS = bonus/cub3D_bonus.h
+HEADERS = src/mandatory/cub3D.h
+HEADERS_BONUS = src/bonus/cub3D_bonus.h
 
 # Combined sources
 SRC       = $(SRC_MAIN) $(SRC_PARSE) $(SRC_ENGINE)
@@ -91,8 +95,8 @@ OBJ_DIR       = obj
 OBJ_DIR_BONUS = obj/bonus
 OBJ_DIR_MEME  = obj/meme
 
-LIB_DIR = my_libft
-MLX_DIR = minilibx-linux
+LIB_DIR = src/my_libft
+MLX_DIR = src/minilibx-linux
 
 # ========================================================================== #
 #                                 OBJECT FILES                              #
@@ -139,7 +143,6 @@ all: $(NAME)
 		fi \
 	fi
 
-bonus: CFLAGS += -D ISMA=0
 bonus: $(NAME_BONUS)
 	@if [ $(BUILD) -eq 1 ]; then \
 		echo "$(GREEN)✔ Build bonus completato$(RESET)"; \
@@ -149,7 +152,6 @@ bonus: $(NAME_BONUS)
 		fi \
 	fi
 
-meme: CFLAGS += -D ISMA=1
 meme: $(NAME_MEME)
 	@if [ $(BUILD) -eq 1 ]; then \
 		echo "$(GREEN)✔ Build meme completato$(RESET)"; \
@@ -183,23 +185,23 @@ $(THA_LIB):
 #                                 COMPILATION RULES                         #
 # ========================================================================== #
 
-$(OBJ_DIR)/mandatory/%.o: mandatory/%.c $(HEADERS)
+$(OBJ_DIR)/mandatory/%.o: src/mandatory/%.c $(HEADERS)
 	@mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) -c $< -o $@ || { \
 		echo "$(ERROR) Errore nella compilazione di $<$(RESET)"; \
 		exit 1; \
 	}
 
-$(OBJ_DIR_BONUS)/bonus/%.o: bonus/%.c $(HEADERS_BONUS)
+$(OBJ_DIR_BONUS)/bonus/%.o: src/bonus/%.c $(HEADERS_BONUS)
 	@mkdir -p $(dir $@)
-	@$(CC) $(CFLAGS) -c $< -o $@ || { \
+	@$(CC) $(CFLAGS) $(EXTRA_FLAGS_BONUS) -c $< -o $@ || { \
 		echo "$(ERROR) Errore nella compilazione di $<$(RESET)"; \
 		exit 1; \
 	}
 
-$(OBJ_DIR_MEME)/bonus/%.o: bonus/%.c $(HEADERS_BONUS)
+$(OBJ_DIR_MEME)/bonus/%.o: src/bonus/%.c $(HEADERS_BONUS)
 	@mkdir -p $(dir $@)
-	@$(CC) $(CFLAGS) -c $< -o $@ || { \
+	@$(CC) $(CFLAGS) $(EXTRA_FLAGS_MEME) -c $< -o $@ || { \
 		echo "$(ERROR) Errore nella compilazione di $<$(RESET)"; \
 		exit 1; \
 	}

@@ -1,14 +1,14 @@
-NO    texture/walls/north_wall.xpm
-SO    texture/walls/south_wall.xpm
-EA    texture/walls/east_wall.xpm
-WE    texture/walls/west_wall.xpm
+NO    src/texture/walls/north_wall.xpm
+SO    src/texture/walls/south_wall.xpm
+EA    src/texture/walls/east_wall.xpm
+WE    src/texture/walls/west_wall.xpm
 
-PN    texture/minimaps/player_n.xpm
-PS    texture/minimaps/player_s.xpm
-PE    texture/minimaps/player_e.xpm
-PW    texture/minimaps/player_w.xpm
-E     texture/minimaps/empty.xpm
-P     texture/pause.xpm
+PN    src/texture/minimaps/player_n.xpm
+PS    src/texture/minimaps/player_s.xpm
+PE    src/texture/minimaps/player_e.xpm
+PW    src/texture/minimaps/player_w.xpm
+E     src/texture/minimaps/empty.xpm
+P     src/texture/pause.xpm
 
 F 41,2,10
 C 55,44,28

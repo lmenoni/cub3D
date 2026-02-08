@@ -43,10 +43,8 @@ void	set_background(t_data *data)
 {
 	int	x;
 	int	y;
-	int	offset;
 
 	y = 0;
-	offset = 0;
 	while (y < data->ximg->height)
 	{
 		x = 0;

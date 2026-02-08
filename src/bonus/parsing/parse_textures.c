@@ -65,14 +65,14 @@ bool	check_all_file_type(t_parse *parse)
 
 void	get_standard_images(t_txtr *tx, void *xdis)
 {
-	tx->s_door = get_img_ptr("texture/doors/south_wall_door.xpm", xdis);
-	tx->n_door = get_img_ptr("texture/doors/north_wall_door.xpm", xdis);
-	tx->e_door = get_img_ptr("texture/doors/east_wall_door.xpm", xdis);
-	tx->w_door = get_img_ptr("texture/doors/west_wall_door.xpm", xdis);
-	tx->door = get_img_ptr("texture/doors/door.xpm", xdis);
-	tx->hand_sword = get_img_ptr("texture/hands/hand_sword.xpm", xdis);
-	tx->left_hand = get_img_ptr("texture/hands/left_hand.xpm", xdis);
-	tx->right_hand = get_img_ptr("texture/hands/right_hand.xpm", xdis);
+	tx->s_door = get_img_ptr("src/texture/doors/south_wall_door.xpm", xdis);
+	tx->n_door = get_img_ptr("src/texture/doors/north_wall_door.xpm", xdis);
+	tx->e_door = get_img_ptr("src/texture/doors/east_wall_door.xpm", xdis);
+	tx->w_door = get_img_ptr("src/texture/doors/west_wall_door.xpm", xdis);
+	tx->door = get_img_ptr("src/texture/doors/door.xpm", xdis);
+	tx->hand_sword = get_img_ptr("src/texture/hands/hand_sword.xpm", xdis);
+	tx->left_hand = get_img_ptr("src/texture/hands/left_hand.xpm", xdis);
+	tx->right_hand = get_img_ptr("src/texture/hands/right_hand.xpm", xdis);
 }
 
 void	get_modifiable_images(t_txtr *tx, t_parse *parse, void *xdis)
@@ -95,9 +95,9 @@ bool	parse_textures(t_txtr *tx, t_parse *parse, void *xdis)
 		return (false);
 	get_standard_images(tx, xdis);
 	get_modifiable_images(tx, parse, xdis);
-	if (!get_isma_animation(tx, tx->isma_arr, xdis))
+	if (ISMA == 1 && !get_isma_animation(tx, tx->isma_arr, xdis))
 		return (false);
-	if (!get_portal_animation(tx, tx->portal_arr, xdis))
+	if (ISMA == 1 && !get_portal_animation(tx, tx->portal_arr, xdis))
 		return (false);
 	if (!tx->n_img || !tx->s_img
 		|| !tx->e_img || !tx->w_img

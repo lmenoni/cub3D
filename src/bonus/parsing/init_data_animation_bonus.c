@@ -66,7 +66,7 @@ bool	get_isma_animation(t_txtr *tx, t_oimg *isma_arr, void *xdis)
 	if (!isma_arr)
 		return (ft_printf_fd(2, E_ALLOC), false);
 	if (!fill_animation_arr(isma_arr, 48
-			, "texture/animation/isma/frame_", xdis))
+			, "src/texture/animation/isma/frame_", xdis))
 		return (false);
 	tx->n_isma = 48;
 	tx->isma_arr = isma_arr;
