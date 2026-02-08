@@ -1,8 +1,6 @@
-# Ignore nested git repositories and external libraries
-# Prevent accidentally committing nested .git directories
+# Ignore nested git repositories inside src/ (keep their files)
+# This prevents accidentally committing nested .git directories (e.g., src/minilibx-linux/.git, src/my_libft/.git)
 src/*/.git/
-src/minilibx-linux/
-src/my_libft/
 
 # Common build artifacts
 obj/
