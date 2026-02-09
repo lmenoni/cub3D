@@ -169,19 +169,6 @@ Developed collaboratively by a 2 person team as part of the 42 Network curriculu
 
 ---
 
-## 🔍 How to Review the Code
-
-The codebase is designed to be readable and maintainable:
-
-1. **Start with `main.c`** to understand the game loop structure
-2. **Review `raycasting.c`** for the core algorithm implementation
-3. **Check `input.c` and `rendering.c`** for I/O and graphics handling
-4. **Examine helper functions** in `utils.c` for mathematical implementations
-
-All functions are documented with clear comments explaining the "why" behind implementation decisions.
-
----
-
 ## 📝 Notes & Future Enhancements
 
 This project was completed according to the 42 Network curriculum requirements with 100% specification compliance. While fully functional, potential enhancements for a production environment could include:
