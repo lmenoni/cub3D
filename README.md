@@ -58,7 +58,7 @@ This project showcases:
 
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone git@github.com:lmenoni/cub3D.git
 cd cub3D
 
 # Build the project
