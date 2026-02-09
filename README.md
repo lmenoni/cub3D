@@ -62,10 +62,10 @@ git clone git@github.com:lmenoni/cub3D.git
 cd cub3D
 
 # Build the project
-make
+make bonus
 
 # Run the engine
-./cub3D maps/maze.cub
+./cub3B src/maps/bonus/test.cub
 ```
 
 ### Map Format
