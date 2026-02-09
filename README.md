@@ -47,6 +47,20 @@ This project showcases:
 
 ---
 
+## 📸 Screenshots & Demo
+
+![Maze](./screenshots/image_1.png)
+
+![Video](./screenshots/video_1.gif)
+
+### Example Gameplay Features
+- Smooth real-time movement through 3D environment
+- Responsive door interaction and wall animations
+- Detailed mini-map with player orientation indicator
+- High-quality texture mapping with proper perspective correction
+
+---
+
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -154,20 +168,6 @@ cub3D/
 ## 🤝 Team
 
 Developed collaboratively by a 2 person team as part of the 42 Network curriculum. The project involved pair programming, code reviews, and shared problem-solving on complex graphics and algorithm challenges.
-
----
-
-## 📸 Screenshots & Demo
-
-![Maze](./screenshots/image_1.png)
-
-![Video](./screenshots/video_1.gif)
-
-### Example Gameplay Features
-- Smooth real-time movement through 3D environment
-- Responsive door interaction and wall animations
-- Detailed mini-map with player orientation indicator
-- High-quality texture mapping with proper perspective correction
 
 ---
 
