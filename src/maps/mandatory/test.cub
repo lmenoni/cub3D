@@ -1,11 +1,11 @@
-NO    texture/walls/north_wall.xpm
-EA    texture/walls/east_wall.xpm
+NO    src/texture/walls/north_wall.xpm
+EA    src/texture/walls/east_wall.xpm
 
 F 41,2,10
-SO    texture/walls/south_wall.xpm
+SO    src/texture/walls/south_wall.xpm
 
 C 55,44,28
-WE    texture/walls/west_wall.xpm
+WE   src/texture/walls/west_wall.xpm
 
 1111111111111111111111111111111111111111111111111111
 1000000000000000000000000000000000000000000000100001

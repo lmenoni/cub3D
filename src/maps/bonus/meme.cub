@@ -1,14 +1,14 @@
-NO    texture/meme/rom.xpm
-SO    texture/meme/leo.xpm
-EA    texture/meme/isma_natale.xpm
-WE    texture/meme/leo_sburo.xpm
+NO    src/texture/meme/rom.xpm
+SO    src/texture/meme/leo.xpm
+EA    src/texture/meme/isma_natale.xpm
+WE    src/texture/meme/leo_sburo.xpm
 
-PN    texture/minimaps/player_n.xpm
-PS    texture/minimaps/player_s.xpm
-PE    texture/minimaps/player_e.xpm
-PW    texture/minimaps/player_w.xpm
-E     texture/minimaps/empty.xpm
-P     texture/pause.xpm
+PN    src/texture/minimaps/player_n.xpm
+PS    src/texture/minimaps/player_s.xpm
+PE    src/texture/minimaps/player_e.xpm
+PW    src/texture/minimaps/player_w.xpm
+E     src/texture/minimaps/empty.xpm
+P     src/texture/pause.xpm
 
 F 41,2,10
 C 55,44,28

@@ -53,7 +53,7 @@ bool	get_portal_animation(t_txtr *tx, t_oimg *portal_arr, void *xdis)
 	if (!portal_arr)
 		return (ft_printf_fd(2, E_ALLOC), false);
 	if (!fill_animation_arr(portal_arr, 82
-			, "texture/animation/portal/frame_", xdis))
+			, "src/texture/animation/portal/frame_", xdis))
 		return (false);
 	tx->n_portal = 82;
 	tx->portal_arr = portal_arr;
