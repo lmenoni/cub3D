@@ -159,9 +159,9 @@ Developed collaboratively by a 2 person team as part of the 42 Network curriculu
 
 ## 📸 Screenshots & Demo
 
-[Include links to screenshots or video demonstrations here]
 ![Maze](./screenshots/image_1.png)
-![Video](./screenshots/video_1.webm)
+
+![Video](./screenshots/video_1.gif)
 
 ### Example Gameplay Features
 - Smooth real-time movement through 3D environment
